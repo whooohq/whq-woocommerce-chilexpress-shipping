@@ -1,13 +1,17 @@
 # WooCommerce Chilexpress Shipping
 **Contributors:** whooo, jhoynerk, tcattd
-**Tags:** woocommerce, shipping, chile, chilexpress
-**Stable tag:** 1.0.1
-**Requires at least:** 4.4
-**Tested up to:** 4.8
-**License:** GPLv2 or later
-**License URI:** http://www.gnu.org/licenses/gpl-2.0.txt
 
-Añade a Chilexpress como método de envío para WooCommerce.
+**Tags:** woocommerce, shipping, chile, chilexpress
+
+**Stable tag:** 1.0.1
+
+**Requires at least:** 4.4
+
+**Tested up to:** 4.8
+
+**License:** GPLv2 or later
+
+**License URI:** http://www.gnu.org/licenses/gpl-2.0.txt
 
 
 ## Description
