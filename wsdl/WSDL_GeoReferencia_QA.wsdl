@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WL5G3N0:definitions name="CorpGR" targetNamespace="http://www.chilexpress.cl/CorpGR/" xmlns:WL5G3N0="http://schemas.xmlsoap.org/wsdl/" xmlns:WL5G3N1="http://www.chilexpress.cl/CorpGR/" xmlns:WL5G3N2="http://schemas.xmlsoap.org/wsdl/soap/">
+  <WL5G3N0:types>
+    <xsd:schema targetNamespace="http://www.chilexpress.cl/CorpGR/" xmlns:Q1="http://www.chilexpress.cl/PX000014/CorpGR_ConsultarCoberturaRequest" xmlns:Q10="http://www.chilexpress.cl/PX000014/CorpGR_ConsultarDireccionResponse" xmlns:Q11="http://www.chilexpress.cl/PX000014/CorpGR_ConsultarOficinasRequest" xmlns:Q12="http://www.chilexpress.cl/PX000014/CorpGR_ConsultarOficinasResponse" xmlns:Q13="http://www.chilexpress.cl/PX000014/CorpGR_ConsultarOficinas_REGRequest" xmlns:Q14="http://www.chilexpress.cl/PX000014/CorpGR_ConsultarOficinas_REGResponse" xmlns:Q15="http://www.chilexpress.cl/common/HeaderRequest" xmlns:Q16="http://www.chilexpress.cl/common/HeaderResponse" xmlns:Q2="http://www.chilexpress.cl/PX000014/CorpGR_ConsultarCoberturaResponse" xmlns:Q3="http://www.chilexpress.cl/PX000014/CorpGR_ConsultarRegionRequest" xmlns:Q4="http://www.chilexpress.cl/PX000014/CorpGR_ConsultarRegionResponse" xmlns:Q5="http://www.chilexpress.cl/PX000014/CorpGR_ConsultarCalleRequest" xmlns:Q6="http://www.chilexpress.cl/PX000014/CorpGR_ConsultarCalleResponse" xmlns:Q7="http://www.chilexpress.cl/PX000014/CorpGR_ConsultarNumeroRequest" xmlns:Q8="http://www.chilexpress.cl/PX000014/CorpGR_ConsultarNumeroResponse" xmlns:Q9="http://www.chilexpress.cl/PX000014/CorpGR_ConsultarDireccionRequest" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.chilexpress.cl/CorpGR/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <!--Esquema_Coberturas -->
+      <xsd:import namespace="http://www.chilexpress.cl/PX000014/CorpGR_ConsultarCoberturaRequest" schemaLocation="http://qaws.ssichilexpress.cl:80/GeoReferencia?SCHEMA%2FPX_CorpGeoReferencia%2FPX000014_GeoReferencia%2FSpecification%2FWSDL%2FPX000014_CorpGR_ConsultarCoberturaRequest"/>
+      <xsd:import namespace="http://www.chilexpress.cl/PX000014/CorpGR_ConsultarCoberturaResponse" schemaLocation="http://qaws.ssichilexpress.cl:80/GeoReferencia?SCHEMA%2FPX_CorpGeoReferencia%2FPX000014_GeoReferencia%2FSpecification%2FWSDL%2FPX000014_CorpGR_ConsultarCoberturaResponse"/>
+      <!--Esquema_Regiones -->
+      <xsd:import namespace="http://www.chilexpress.cl/PX000014/CorpGR_ConsultarRegionRequest" schemaLocation="http://qaws.ssichilexpress.cl:80/GeoReferencia?SCHEMA%2FPX_CorpGeoReferencia%2FPX000014_GeoReferencia%2FSpecification%2FWSDL%2FPX000014_CorpGR_ConsultarRegionRequest"/>
+      <xsd:import namespace="http://www.chilexpress.cl/PX000014/CorpGR_ConsultarRegionResponse" schemaLocation="http://qaws.ssichilexpress.cl:80/GeoReferencia?SCHEMA%2FPX_CorpGeoReferencia%2FPX000014_GeoReferencia%2FSpecification%2FWSDL%2FPX000014_CorpGR_ConsultarRegionResponse"/>
+      <!--Esquema_Calles -->
+      <xsd:import namespace="http://www.chilexpress.cl/PX000014/CorpGR_ConsultarCalleRequest" schemaLocation="http://qaws.ssichilexpress.cl:80/GeoReferencia?SCHEMA%2FPX_CorpGeoReferencia%2FPX000014_GeoReferencia%2FSpecification%2FWSDL%2FPX000014_CorpGR_ConsultarCalleRequest"/>
+      <xsd:import namespace="http://www.chilexpress.cl/PX000014/CorpGR_ConsultarCalleResponse" schemaLocation="http://qaws.ssichilexpress.cl:80/GeoReferencia?SCHEMA%2FPX_CorpGeoReferencia%2FPX000014_GeoReferencia%2FSpecification%2FWSDL%2FPX000014_CorpGR_ConsultarCalleResponse"/>
+      <!--Esquema_Numeros -->
+      <xsd:import namespace="http://www.chilexpress.cl/PX000014/CorpGR_ConsultarNumeroRequest" schemaLocation="http://qaws.ssichilexpress.cl:80/GeoReferencia?SCHEMA%2FPX_CorpGeoReferencia%2FPX000014_GeoReferencia%2FSpecification%2FWSDL%2FPX000014_CorpGR_ConsultarNumeroRequest"/>
+      <xsd:import namespace="http://www.chilexpress.cl/PX000014/CorpGR_ConsultarNumeroResponse" schemaLocation="http://qaws.ssichilexpress.cl:80/GeoReferencia?SCHEMA%2FPX_CorpGeoReferencia%2FPX000014_GeoReferencia%2FSpecification%2FWSDL%2FPX000014_CorpGR_ConsultarNumeroResponse"/>
+      <!--Esquema_Valida_Direccion -->
+      <xsd:import namespace="http://www.chilexpress.cl/PX000014/CorpGR_ConsultarDireccionRequest" schemaLocation="http://qaws.ssichilexpress.cl:80/GeoReferencia?SCHEMA%2FPX_CorpGeoReferencia%2FPX000014_GeoReferencia%2FSpecification%2FWSDL%2FPX000014_CorpGR_ConsultarDireccionRequest"/>
+      <xsd:import namespace="http://www.chilexpress.cl/PX000014/CorpGR_ConsultarDireccionResponse" schemaLocation="http://qaws.ssichilexpress.cl:80/GeoReferencia?SCHEMA%2FPX_CorpGeoReferencia%2FPX000014_GeoReferencia%2FSpecification%2FWSDL%2FPX000014_CorpGR_ConsultarDireccionResponse"/>
+      <!--Esquema_Oficina-->
+      <xsd:import namespace="http://www.chilexpress.cl/PX000014/CorpGR_ConsultarOficinasRequest" schemaLocation="http://qaws.ssichilexpress.cl:80/GeoReferencia?SCHEMA%2FPX_CorpGeoReferencia%2FPX000014_GeoReferencia%2FSpecification%2FWSDL%2FPX000014_CorpGR_ConsultarOficinasRequest"/>
+      <xsd:import namespace="http://www.chilexpress.cl/PX000014/CorpGR_ConsultarOficinasResponse" schemaLocation="http://qaws.ssichilexpress.cl:80/GeoReferencia?SCHEMA%2FPX_CorpGeoReferencia%2FPX000014_GeoReferencia%2FSpecification%2FWSDL%2FPX000014_CorpGR_ConsultarOficinasResponse"/>
+      <!--Esquema_Oficina-->
+      <xsd:import namespace="http://www.chilexpress.cl/PX000014/CorpGR_ConsultarOficinas_REGRequest" schemaLocation="http://qaws.ssichilexpress.cl:80/GeoReferencia?SCHEMA%2FPX_CorpGeoReferencia%2FPX000014_GeoReferencia%2FSpecification%2FWSDL%2FPX000014_CorpGR_ConsultarOficinas_REGRequest"/>
+      <xsd:import namespace="http://www.chilexpress.cl/PX000014/CorpGR_ConsultarOficinas_REGResponse" schemaLocation="http://qaws.ssichilexpress.cl:80/GeoReferencia?SCHEMA%2FPX_CorpGeoReferencia%2FPX000014_GeoReferencia%2FSpecification%2FWSDL%2FPX000014_CorpGR_ConsultarOficinas_REGResponse"/>
+      <xsd:import namespace="http://www.chilexpress.cl/common/HeaderRequest" schemaLocation="http://qaws.ssichilexpress.cl:80/GeoReferencia?SCHEMA%2FUT_EsquemasComunes%2FSpecifications%2FXSD%2FCommon%2FHeaderRequest"/>
+      <xsd:import namespace="http://www.chilexpress.cl/common/HeaderResponse" schemaLocation="http://qaws.ssichilexpress.cl:80/GeoReferencia?SCHEMA%2FUT_EsquemasComunes%2FSpecifications%2FXSD%2FCommon%2FHeaderResponse"/>
+      <xsd:element name="headerRequest" type="Q15:datosHeaderRequest"/>
+      <xsd:element name="headerResponse" type="Q16:datosHeaderResponse"/>
+      <!--Cobertura-->
+      <xsd:element name="ConsultarCoberturas">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="reqObtenerCobertura" type="Q1:ConsultarCoberturasRequest"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="ConsultarCoberturasResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="respObtenerCobertura" type="Q2:ConsultarCoberturasResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <!--Region-->
+      <xsd:element name="ConsultarRegiones">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="reqObtenerRegion" type="Q3:ConsultarRegionesRequest"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="ConsultarRegionesResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="respObtenerRegion" type="Q4:ConsultarRegionesResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <!--Calles-->
+      <xsd:element name="ConsultarCalles">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="reqObtenerCalle" type="Q5:ConsultarCallesRequest"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="ConsultarCallesResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="respObtenerCalle" type="Q6:ConsultarCallesResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <!--Numeros-->
+      <xsd:element name="ConsultarNumeros">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="reqObtenerNumero" type="Q7:ConsultarNumerosRequest"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="ConsultarNumerosResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="respObtenerNumero" type="Q8:ConsultarNumerosResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <!--Valida_Direccion-->
+      <xsd:element name="ConsultarDirecciones">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="reqObtenerDireccion" type="Q9:ConsultarDireccionesRequest"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="ConsultarDireccionesResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="respObtenerDireccion" type="Q10:ConsultarDireccionesResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <!--Oficinas-->
+      <xsd:element name="ConsultarOficinas">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="reqObtenerOficinas" type="Q11:ConsultarOficinasRequest"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="ConsultarOficinasResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="respObtenerOficinas" type="Q12:ConsultarOficinasResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <!--Oficinas x REGION-->
+      <xsd:element name="ConsultarOficinas_REG">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="reqObtenerOficinas_REG" type="Q13:ConsultarOficinas_REGRequest"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="ConsultarOficinas_REGResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="respObtenerOficinas_REG" type="Q14:ConsultarOficinas_REGResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </WL5G3N0:types>
+  <WL5G3N0:message name="ConsultarCoberturasRequest">
+    <WL5G3N0:part element="WL5G3N1:ConsultarCoberturas" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarCoberturasResponse">
+    <WL5G3N0:part element="WL5G3N1:ConsultarCoberturasResponse" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarRegionesRequest">
+    <WL5G3N0:part element="WL5G3N1:ConsultarRegiones" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarRegionesResponse">
+    <WL5G3N0:part element="WL5G3N1:ConsultarRegionesResponse" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarCallesRequest">
+    <WL5G3N0:part element="WL5G3N1:ConsultarCalles" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarCallesResponse">
+    <WL5G3N0:part element="WL5G3N1:ConsultarCallesResponse" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarNumerosRequest">
+    <WL5G3N0:part element="WL5G3N1:ConsultarNumeros" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarNumerosResponse">
+    <WL5G3N0:part element="WL5G3N1:ConsultarNumerosResponse" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarDireccionesRequest">
+    <WL5G3N0:part element="WL5G3N1:ConsultarDirecciones" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarDireccionesResponse">
+    <WL5G3N0:part element="WL5G3N1:ConsultarDireccionesResponse" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarOficinasRequest">
+    <WL5G3N0:part element="WL5G3N1:ConsultarOficinas" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarOficinasResponse">
+    <WL5G3N0:part element="WL5G3N1:ConsultarOficinasResponse" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarOficinas_REGRequest">
+    <WL5G3N0:part element="WL5G3N1:ConsultarOficinas_REG" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarOficinas_REGResponse">
+    <WL5G3N0:part element="WL5G3N1:ConsultarOficinas_REGResponse" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="headerRequestMessage">
+    <WL5G3N0:part element="WL5G3N1:headerRequest" name="headerRequest"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="headerResponseMessage">
+    <WL5G3N0:part element="WL5G3N1:headerResponse" name="headerResponse"/>
+  </WL5G3N0:message>
+  <WL5G3N0:portType name="CorpGR">
+    <WL5G3N0:operation name="ConsultarCoberturas">
+      <WL5G3N0:input message="WL5G3N1:ConsultarCoberturasRequest"/>
+      <WL5G3N0:output message="WL5G3N1:ConsultarCoberturasResponse"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ConsultarRegiones">
+      <WL5G3N0:input message="WL5G3N1:ConsultarRegionesRequest"/>
+      <WL5G3N0:output message="WL5G3N1:ConsultarRegionesResponse"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ConsultarCalles">
+      <WL5G3N0:input message="WL5G3N1:ConsultarCallesRequest"/>
+      <WL5G3N0:output message="WL5G3N1:ConsultarCallesResponse"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ConsultarNumeros">
+      <WL5G3N0:input message="WL5G3N1:ConsultarNumerosRequest"/>
+      <WL5G3N0:output message="WL5G3N1:ConsultarNumerosResponse"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ConsultarDirecciones">
+      <WL5G3N0:input message="WL5G3N1:ConsultarDireccionesRequest"/>
+      <WL5G3N0:output message="WL5G3N1:ConsultarDireccionesResponse"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ConsultarOficinas">
+      <WL5G3N0:input message="WL5G3N1:ConsultarOficinasRequest"/>
+      <WL5G3N0:output message="WL5G3N1:ConsultarOficinasResponse"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ConsultarOficinas_REG">
+      <WL5G3N0:input message="WL5G3N1:ConsultarOficinas_REGRequest"/>
+      <WL5G3N0:output message="WL5G3N1:ConsultarOficinas_REGResponse"/>
+    </WL5G3N0:operation>
+  </WL5G3N0:portType>
+  <WL5G3N0:binding name="CorpGRSOAP" type="WL5G3N1:CorpGR">
+    <WL5G3N2:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <WL5G3N0:operation name="ConsultarCoberturas">
+      <WL5G3N2:operation soapAction="http://www.chilexpress.cl/CorpGR/ConsultarCoberturas"/>
+      <WL5G3N0:input>
+        <WL5G3N2:header message="WL5G3N1:headerRequestMessage" part="headerRequest" use="literal"/>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:header message="WL5G3N1:headerResponseMessage" part="headerResponse" use="literal"/>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ConsultarRegiones">
+      <WL5G3N2:operation soapAction="http://www.chilexpress.cl/CorpGR/ConsultarRegiones"/>
+      <WL5G3N0:input>
+        <WL5G3N2:header message="WL5G3N1:headerRequestMessage" part="headerRequest" use="literal"/>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:header message="WL5G3N1:headerResponseMessage" part="headerResponse" use="literal"/>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ConsultarCalles">
+      <WL5G3N2:operation soapAction="http://www.chilexpress.cl/CorpGR/ConsultarCalles"/>
+      <WL5G3N0:input>
+        <WL5G3N2:header message="WL5G3N1:headerRequestMessage" part="headerRequest" use="literal"/>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:header message="WL5G3N1:headerResponseMessage" part="headerResponse" use="literal"/>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ConsultarNumeros">
+      <WL5G3N2:operation soapAction="http://www.chilexpress.cl/CorpGR/ConsultarNumeros"/>
+      <WL5G3N0:input>
+        <WL5G3N2:header message="WL5G3N1:headerRequestMessage" part="headerRequest" use="literal"/>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:header message="WL5G3N1:headerResponseMessage" part="headerResponse" use="literal"/>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ConsultarDirecciones">
+      <WL5G3N2:operation soapAction="http://www.chilexpress.cl/CorpGR/ConsultarDirecciones"/>
+      <WL5G3N0:input>
+        <WL5G3N2:header message="WL5G3N1:headerRequestMessage" part="headerRequest" use="literal"/>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:header message="WL5G3N1:headerResponseMessage" part="headerResponse" use="literal"/>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ConsultarOficinas">
+      <WL5G3N2:operation soapAction="http://www.chilexpress.cl/CorpGR/ConsultarOficinas"/>
+      <WL5G3N0:input>
+        <WL5G3N2:header message="WL5G3N1:headerRequestMessage" part="headerRequest" use="literal"/>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:header message="WL5G3N1:headerResponseMessage" part="headerResponse" use="literal"/>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ConsultarOficinas_REG">
+      <WL5G3N2:operation soapAction="http://www.chilexpress.cl/CorpGR/ConsultarOficinas_REG"/>
+      <WL5G3N0:input>
+        <WL5G3N2:header message="WL5G3N1:headerRequestMessage" part="headerRequest" use="literal"/>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:header message="WL5G3N1:headerResponseMessage" part="headerResponse" use="literal"/>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+  </WL5G3N0:binding>
+  <WL5G3N0:service name="CorpGRSOAPQSService">
+    <WL5G3N0:port binding="WL5G3N1:CorpGRSOAP" name="CorpGRSOAPQSPort">
+      <WL5G3N2:address location="http://qaws.ssichilexpress.cl/GeoReferencia"/>
+    </WL5G3N0:port>
+  </WL5G3N0:service>
+</WL5G3N0:definitions>
