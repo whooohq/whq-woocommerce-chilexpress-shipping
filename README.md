@@ -1,5 +1,5 @@
 # WooCommerce Chilexpress Shipping
-**Contributors:** whooo, jhoynerk, tcattd
+**Contributors:** [whooo](https://github.com/whooohq), [jhoynerk](https://github.com/jhoynerk), [tcattd](https://github.com/tcattd)
 
 **Tags:** woocommerce, shipping, chile, chilexpress
 
@@ -11,7 +11,7 @@
 
 **License:** GPLv2 or later
 
-**License URI:** http://www.gnu.org/licenses/gpl-2.0.txt
+**License URI:** [http://www.gnu.org/licenses/gpl-2.0.txt](http://www.gnu.org/licenses/gpl-2.0.txt)
 
 
 ## Description
