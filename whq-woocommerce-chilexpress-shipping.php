@@ -32,28 +32,28 @@ if ( in_array( 'woocommerce/woocommerce.php', $whq_wcchp_active_plugins) ) {
 		'chilexpress_soap_pass'  => 'U$$vr2$tS2T',
 	);
 
-	if (file_exists(trailingslashit( plugin_dir_path(__FILE__) ) . 'includes/activation.php')) {
-		include_once trailingslashit( plugin_dir_path(__FILE__) ) . 'includes/activation.php';
+	if (file_exists($whq_wcchp_default['plugin_path'] . 'includes/activation.php')) {
+		include_once $whq_wcchp_default['plugin_path'] . 'includes/activation.php';
 	}
 
-	if (file_exists(trailingslashit( plugin_dir_path(__FILE__) ) . 'includes/woocommerce.php')) {
-		include_once trailingslashit( plugin_dir_path(__FILE__) ) . 'includes/woocommerce.php';
+	if (file_exists($whq_wcchp_default['plugin_path'] . 'includes/woocommerce.php')) {
+		include_once $whq_wcchp_default['plugin_path'] . 'includes/woocommerce.php';
 	}
 
-	if (file_exists(trailingslashit( plugin_dir_path(__FILE__) ) . 'includes/scripts.php')) {
-		include_once trailingslashit( plugin_dir_path(__FILE__) ) . 'includes/scripts.php';
+	if (file_exists($whq_wcchp_default['plugin_path'] . 'includes/scripts.php')) {
+		include_once $whq_wcchp_default['plugin_path'] . 'includes/scripts.php';
 	}
 
-	if (file_exists(trailingslashit( plugin_dir_path(__FILE__) ) . 'includes/ajax.php')) {
-		include_once trailingslashit( plugin_dir_path(__FILE__) ) . 'includes/ajax.php';
+	if (file_exists($whq_wcchp_default['plugin_path'] . 'includes/ajax.php')) {
+		include_once $whq_wcchp_default['plugin_path'] . 'includes/ajax.php';
 	}
 
-	if (file_exists(trailingslashit( plugin_dir_path(__FILE__) ) . 'includes/soap_call.php')) {
-		include_once trailingslashit( plugin_dir_path(__FILE__) ) . 'includes/soap_call.php';
+	if (file_exists($whq_wcchp_default['plugin_path'] . 'includes/soap_call.php')) {
+		include_once $whq_wcchp_default['plugin_path'] . 'includes/soap_call.php';
 	}
 
-	if (file_exists(trailingslashit( plugin_dir_path(__FILE__) ) . 'classes/WC_WHQ_Chilexpress_Shipping.php')) {
-		include_once trailingslashit( plugin_dir_path(__FILE__) ) . 'classes/WC_WHQ_Chilexpress_Shipping.php';
+	if (file_exists($whq_wcchp_default['plugin_path'] . 'classes/WC_WHQ_Chilexpress_Shipping.php')) {
+		include_once $whq_wcchp_default['plugin_path'] . 'classes/WC_WHQ_Chilexpress_Shipping.php';
 
 		add_action( 'plugins_loaded', 'whq_wcchp_init_class' );
 		add_action( 'woocommerce_cart_calculate_fees', array('WC_WHQ_Chilexpress_Shipping', 'add_cart_fee') );
