@@ -18,40 +18,42 @@ Text Domain: whq-wcchp
  * Esteban Cuevas [ https://github.com/TCattd ]
  */
 
-define( 'WHQ_WCCHP_CHILEXPRESS_URL', 'http://www.chilexpress.cl' );
-define( 'WHQ_WCCHP_CHILEXPRESS_SOAP_PUBLIC_USER', 'UsrTestServicios' );
-define( 'WHQ_WCCHP_CHILEXPRESS_SOAP_PUBLIC_PASS', 'U$$vr2$tS2T' );
-define( 'WHQ_WCCHP_PLUGIN_FILE', __FILE__ );
-define( 'WHQ_WCCHP_PLUGIN_PATH', trailingslashit( plugin_dir_path(__FILE__) ) );
-define( 'WHQ_WCCHP_PLUGIN_URL', trailingslashit( plugin_dir_url(__FILE__) ) );
-
 /**
  * Check if WooCommerce is active
  */
 $whq_wcchp_active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins' ) );
 if ( in_array( 'woocommerce/woocommerce.php', $whq_wcchp_active_plugins) ) {
-	if (file_exists(WHQ_WCCHP_PLUGIN_PATH . 'includes/activation.php')) {
-		include_once WHQ_WCCHP_PLUGIN_PATH . 'includes/activation.php';
+	$whq_wcchp_default = array(
+		'plugin_file'            => __FILE__,
+		'plugin_path'            => trailingslashit( plugin_dir_path(__FILE__) ),
+		'plugin_url'             => trailingslashit( plugin_dir_url(__FILE__) ),
+		'chilexpress_url'        => 'http://www.chilexpress.cl',
+		'chilexpress_soap_login' => 'UsrTestServicios',
+		'chilexpress_soap_pass'  => 'U$$vr2$tS2T',
+	);
+
+	if (file_exists(trailingslashit( plugin_dir_path(__FILE__) ) . 'includes/activation.php')) {
+		include_once trailingslashit( plugin_dir_path(__FILE__) ) . 'includes/activation.php';
 	}
 
-	if (file_exists(WHQ_WCCHP_PLUGIN_PATH . 'includes/woocommerce.php')) {
-		include_once WHQ_WCCHP_PLUGIN_PATH . 'includes/woocommerce.php';
+	if (file_exists(trailingslashit( plugin_dir_path(__FILE__) ) . 'includes/woocommerce.php')) {
+		include_once trailingslashit( plugin_dir_path(__FILE__) ) . 'includes/woocommerce.php';
 	}
 
-	if (file_exists(WHQ_WCCHP_PLUGIN_PATH . 'includes/scripts.php')) {
-		include_once WHQ_WCCHP_PLUGIN_PATH . 'includes/scripts.php';
+	if (file_exists(trailingslashit( plugin_dir_path(__FILE__) ) . 'includes/scripts.php')) {
+		include_once trailingslashit( plugin_dir_path(__FILE__) ) . 'includes/scripts.php';
 	}
 
-	if (file_exists(WHQ_WCCHP_PLUGIN_PATH . 'includes/ajax.php')) {
-		include_once WHQ_WCCHP_PLUGIN_PATH . 'includes/ajax.php';
+	if (file_exists(trailingslashit( plugin_dir_path(__FILE__) ) . 'includes/ajax.php')) {
+		include_once trailingslashit( plugin_dir_path(__FILE__) ) . 'includes/ajax.php';
 	}
 
-	if (file_exists(WHQ_WCCHP_PLUGIN_PATH . 'includes/soap_call.php')) {
-		include_once WHQ_WCCHP_PLUGIN_PATH . 'includes/soap_call.php';
+	if (file_exists(trailingslashit( plugin_dir_path(__FILE__) ) . 'includes/soap_call.php')) {
+		include_once trailingslashit( plugin_dir_path(__FILE__) ) . 'includes/soap_call.php';
 	}
 
-	if (file_exists(WHQ_WCCHP_PLUGIN_PATH . 'classes/WC_WHQ_Chilexpress_Shipping.php')) {
-		include_once WHQ_WCCHP_PLUGIN_PATH . 'classes/WC_WHQ_Chilexpress_Shipping.php';
+	if (file_exists(trailingslashit( plugin_dir_path(__FILE__) ) . 'classes/WC_WHQ_Chilexpress_Shipping.php')) {
+		include_once trailingslashit( plugin_dir_path(__FILE__) ) . 'classes/WC_WHQ_Chilexpress_Shipping.php';
 
 		add_action( 'plugins_loaded', 'whq_wcchp_init_class' );
 		add_action( 'woocommerce_cart_calculate_fees', array('WC_WHQ_Chilexpress_Shipping', 'add_cart_fee') );

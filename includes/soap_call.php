@@ -4,15 +4,17 @@ if (!defined('ABSPATH')) {
 }
 
 function whq_wcchp_call_soap($ns, $url, $route, $method, $data = '') {
+	global $whq_wcchp_default;
+
 	$soap_login    = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_login' );
 	$soap_password = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_password' );
 
 	if( empty($soap_login) ) {
-		$soap_login    = WHQ_WCCHP_CHILEXPRESS_SOAP_PUBLIC_USER;
+		$soap_login    = $whq_wcchp_default['chilexpress_soap_login'];
 	}
 
 	if( empty($soap_password) ) {
-		$soap_password = WHQ_WCCHP_CHILEXPRESS_SOAP_PUBLIC_PASS;
+		$soap_password = $whq_wcchp_default['chilexpress_soap_pass'];
 	}
 
 	try {
@@ -43,8 +45,10 @@ function whq_wcchp_call_soap($ns, $url, $route, $method, $data = '') {
 }
 
 function whq_wcchp_get_tarificacion($destination, $origin, $weight, $length, $width, $height) {
-	$ns     = WHQ_WCCHP_CHILEXPRESS_URL . '/TarificaCourier/';
-	$url    = WHQ_WCCHP_PLUGIN_URL . 'wsdl/WSDL_Tarificacion_QA.wsdl';
+	global $whq_wcchp_default;
+
+	$ns     = $whq_wcchp_default['chilexpress_url'] . '/TarificaCourier/';
+	$url    = $whq_wcchp_default['plugin_url'] . 'wsdl/WSDL_Tarificacion_QA.wsdl';
 	$route  = 'TarificarCourier';
 	$method = 'reqValorizarCourier';
 	$parameters = [ 'CodCoberturaOrigen' => $origin,
