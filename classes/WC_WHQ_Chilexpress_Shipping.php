@@ -66,7 +66,7 @@ function whq_wcchp_init_class() {
 					'enabled' => array(
 						'title'   => __( 'Habilitar/Deshabilitar', 'whq-wcchp' ),
 						'type'    => 'checkbox',
-						'label'   => __( 'Habilitar envíos via Chilexpress', 'whq-wcchp' ),
+						'label'   => __( 'Habilitar envíos vía Chilexpress', 'whq-wcchp' ),
 						'default' => 'yes'
 					),
 					'title' => array(
@@ -322,13 +322,13 @@ function whq_wcchp_init_class() {
 					'soap_login' => array(
 						'title'       => __( 'SOAP Login', 'whq-wcchp' ),
 						'type'        => 'text',
-						'description' => __( 'Login a utilizar en las llamadas al SOAP de Chilexpress. Dejar en blanco para utilizar datos de conexión por defecto (públicos) que Chilexpress provee.', 'whq-wcchp' ),
+						'description' => __( '(Opcional) Usuario a utilizar en las llamadas al SOAP de Chilexpress. Dejar en blanco para utilizar datos de conexión por defecto (públicos) que Chilexpress provee.', 'whq-wcchp' ),
 						'default'     => __( '', 'whq-wcchp' ),
 					),
 					'soap_password' => array(
 						'title'       => __( 'SOAP Password', 'whq-wcchp' ),
 						'type'        => 'password',
-						'description' => __( 'Password a utilizar en las llamadas al SOAP de Chilexpress. Dejar en blanco para utilizar datos de conexión por defecto (públicos) que Chilexpress provee.', 'whq-wcchp' ),
+						'description' => __( '(Opcional) Contraseña a utilizar en las llamadas al SOAP de Chilexpress. Dejar en blanco para utilizar datos de conexión por defecto (públicos) que Chilexpress provee.', 'whq-wcchp' ),
 						'default'     => __( '', 'whq-wcchp' ),
 					),
 				);
