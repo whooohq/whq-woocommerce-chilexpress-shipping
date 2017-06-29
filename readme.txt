@@ -23,6 +23,7 @@ El soporte al plugin se realiza directamente en [GitHub](https://github.com/whoo
 1. Sube el plugin a tu WordPress y actívalo (requiere WooCommerce activo previamente).
 2. Luego ve a WooCommerce -> Ajustes -> Envío -> Chilexpress.
 3. Configura las opciones. Importante asignar la ciudad de origen (desde donde despacharás los envíos).
+Dejar el usuario y password (de la API de Chilexpress) en blanco para utilizar los datos de conexión por defecto (públicos) que Chilexpress provee.
 4. Listo.
 
 Ahora tus clientes podrán seleccionar Chilexpress para el envío de sus productos (dentro de Chile) y recibir el cálculo de costo de envío automáticamente.

@@ -33,8 +33,8 @@ function whq_wcchp_init_class() {
 				$this->enabled         = $this->get_option( 'enabled' );
 				$this->title           = $this->get_option( 'title' );
 				$this->shipping_origin = $this->get_option( 'shipping_origin' );
-				//$this->soap_login      = $this->get_option( 'soap_login' );
-				//$this->soap_password   = $this->get_option( 'soap_password' );
+				$this->soap_login      = $this->get_option( 'soap_login' );
+				$this->soap_password   = $this->get_option( 'soap_password' );
 				$this->availability    = true;
 
 				add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
@@ -319,18 +319,18 @@ function whq_wcchp_init_class() {
 										'YUMB' => 'YUMBEL',
 										'YUNG' => 'YUNGAY']
 					),
-					/*'soap_login' => array(
+					'soap_login' => array(
 						'title'       => __( 'SOAP Login', 'whq-wcchp' ),
 						'type'        => 'text',
-						'description' => __( 'Login a utilizar en las llamadas al SOAP de Chilexpress', 'whq-wcchp' ),
-						'default'     => __( 'UsrTestServicios', 'whq-wcchp' ),
+						'description' => __( 'Login a utilizar en las llamadas al SOAP de Chilexpress. Dejar en blanco para utilizar datos de conexión por defecto (públicos) que Chilexpress provee.', 'whq-wcchp' ),
+						'default'     => __( '', 'whq-wcchp' ),
 					),
 					'soap_password' => array(
 						'title'       => __( 'SOAP Password', 'whq-wcchp' ),
 						'type'        => 'password',
-						'description' => __( 'Password a utilizar en las llamadas al SOAP de Chilexpress', 'whq-wcchp' ),
+						'description' => __( 'Password a utilizar en las llamadas al SOAP de Chilexpress. Dejar en blanco para utilizar datos de conexión por defecto (públicos) que Chilexpress provee.', 'whq-wcchp' ),
 						'default'     => __( '', 'whq-wcchp' ),
-					),*/
+					),
 				);
 			}
 

@@ -19,8 +19,8 @@ Text Domain: whq-wcchp
  */
 
 define( 'WHQ_WCCHP_CHILEXPRESS_URL', 'http://www.chilexpress.cl' );
-define( 'WHQ_WCCHP_CHILEXPRESS_SOAP_USER', 'UsrTestServicios' );
-define( 'WHQ_WCCHP_CHILEXPRESS_SOAP_PASS', 'U$$vr2$tS2T' );
+define( 'WHQ_WCCHP_CHILEXPRESS_SOAP_PUBLIC_USER', 'UsrTestServicios' );
+define( 'WHQ_WCCHP_CHILEXPRESS_SOAP_PUBLIC_PASS', 'U$$vr2$tS2T' );
 define( 'WHQ_WCCHP_PLUGIN_FILE', __FILE__ );
 define( 'WHQ_WCCHP_PLUGIN_PATH', trailingslashit( plugin_dir_path(__FILE__) ) );
 define( 'WHQ_WCCHP_PLUGIN_URL', trailingslashit( plugin_dir_url(__FILE__) ) );

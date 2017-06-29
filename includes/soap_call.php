@@ -4,10 +4,16 @@ if (!defined('ABSPATH')) {
 }
 
 function whq_wcchp_call_soap($ns, $url, $route, $method, $data = '') {
-	//$soap_login    = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_login' );
-	$soap_login    = WHQ_WCCHP_CHILEXPRESS_SOAP_USER;
-	//$soap_password = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_password' );
-	$soap_password = WHQ_WCCHP_CHILEXPRESS_SOAP_PASS;
+	$soap_login    = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_login' );
+	$soap_password = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_password' );
+
+	if( empty($soap_login) ) {
+		$soap_login    = WHQ_WCCHP_CHILEXPRESS_SOAP_PUBLIC_USER;
+	}
+
+	if( empty($soap_password) ) {
+		$soap_password = WHQ_WCCHP_CHILEXPRESS_SOAP_PUBLIC_PASS;
+	}
 
 	try {
 		$client_options = array(
