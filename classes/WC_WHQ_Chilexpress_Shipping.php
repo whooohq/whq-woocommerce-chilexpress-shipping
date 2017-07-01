@@ -360,7 +360,6 @@ function whq_wcchp_init_class() {
 			 */
 			public function calculate_shipping( $package = array() ) {
 				$weight     = 0;
-				$dimensions = 0;
 				$length     = 0;
 				$width      = 0;
 				$height     = 0;
@@ -371,7 +370,6 @@ function whq_wcchp_init_class() {
 					$length     = (int) absint( $length + $_product->length * $values['quantity'] );
 					$width      = (int) absint( $width + $_product->width * $values['quantity'] );
 					$height     = (int) absint( $height + $_product->height * $values['quantity'] );
-					$dimensions = (int) absint( $dimensions + (($_product->length * $values['quantity']) * $_product->width * $_product->height) );
 				}
 
 				if ( $_POST['s_city'] != null ) {
