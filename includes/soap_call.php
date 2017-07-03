@@ -17,7 +17,7 @@ function whq_wcchp_call_soap($ns, $url, $route, $method, $data = '') {
 		$soap_password = $whq_wcchp_default['chilexpress_soap_pass'];
 	}
 
-	$transient_id = 'whq_wcchp_' . $route . '_' . $method;
+	$transient_id = 'whq_wcchp_' . $route . '_' . $method . '_' . md5( json_encode( $data ) ); // https://stackoverflow.com/a/7723730/920648
 
 	if ( false === ( $result = get_transient( $transient_id ) ) ) {
 
