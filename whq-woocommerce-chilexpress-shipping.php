@@ -25,6 +25,7 @@ $whq_wcchp_active_plugins = apply_filters( 'active_plugins', get_option( 'active
 if ( in_array( 'woocommerce/woocommerce.php', $whq_wcchp_active_plugins) ) {
 	$whq_wcchp_default = array(
 		'plugin_file'            => __FILE__,
+		'plugin_basename'        => plugin_basename(__FILE__),
 		'plugin_path'            => trailingslashit( plugin_dir_path(__FILE__) ),
 		'plugin_url'             => trailingslashit( plugin_dir_url(__FILE__) ),
 		'chilexpress_url'        => 'http://www.chilexpress.cl',
@@ -34,6 +35,10 @@ if ( in_array( 'woocommerce/woocommerce.php', $whq_wcchp_active_plugins) ) {
 
 	if (file_exists($whq_wcchp_default['plugin_path'] . 'includes/activation.php')) {
 		include_once $whq_wcchp_default['plugin_path'] . 'includes/activation.php';
+	}
+
+	if (file_exists($whq_wcchp_default['plugin_path'] . 'includes/wordpress.php')) {
+		include_once $whq_wcchp_default['plugin_path'] . 'includes/wordpress.php';
 	}
 
 	if (file_exists($whq_wcchp_default['plugin_path'] . 'includes/woocommerce.php')) {
