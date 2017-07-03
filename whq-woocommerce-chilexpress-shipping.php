@@ -2,8 +2,8 @@
 /*
 Plugin Name: WooCommerce Chilexpress Shipping
 Plugin URI: https://github.com/whooohq/whq-woocommerce-chilexpress-shipping
-Description: Sistema de cálculo de envíos en Chile para WooCommerce, utilizando Chilexpress
-Version: 1.0.1
+Description: Método de envío por Chilexpress para WooCommerce, con sistema de cálculo de envíos automático utilizando la API de Chilexpress
+Version: 1.0.2
 Author: Whooo
 Author URI: http://whooohq.com/
 License: GPLv2 or later

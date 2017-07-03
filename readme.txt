@@ -1,7 +1,7 @@
 === WooCommerce Chilexpress Shipping ===
 Contributors: whooo, jhoynerk, tcattd
 Tags: woocommerce, shipping, chile, chilexpress
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 Requires at least: 4.4
 Tested up to: 4.8
 License: GPLv2 or later
@@ -20,7 +20,8 @@ Demostración en video:
 El soporte al plugin se realiza directamente en [GitHub](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/).
 
 == Installation ==
-1. Sube el plugin a tu WordPress y actívalo (requiere WooCommerce activo previamente).
+1. Ingresa a tu Administrador (WP-Admin), luego Plugins -> Añadir Nuevo. Busca "WooCommerce Chilexpress Shipping". Presiona "Instalar ahora" y luego Actívalo.
+También puedes instalarlo de forma manual: sube el plugin a tu WordPress y actívalo.
 2. Luego ve a WooCommerce -> Ajustes -> Envío -> Chilexpress.
 3. Configura las opciones. Importante asignar la ciudad de origen (desde donde despacharás los envíos).
 Dejar el usuario y password (de la API de Chilexpress) en blanco para utilizar los datos de conexión por defecto (públicos) que Chilexpress provee.
@@ -45,6 +46,10 @@ Ayuda y aportes (pull requests) son bienvenidos.
 3. Configuración del plugin.
 
 == Changelog ==
+= 1.0.2 =
+* Implementado Select2 para los campos de región y ciudad/localidad.
+* Otras mejoras y bugfixes.
+
 = 1.0.1 =
 * Primera versión pública.
 

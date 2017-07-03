@@ -23,7 +23,7 @@ function whq_wcchp_init_class() {
 			public function __construct(){
 				$this->id = 'chilexpress';
 				$this->method_title = __( 'Chilexpress', 'whq-wcchp' );
-				$this->method_description = __( 'Utiliza la API SOAP de Chilexpress para el cálculo automático de costos de envío. Sugerencias y reporte de errores en <a href="https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues" target="_blank">GitHub</a>.', 'whq-wcchp' );
+				$this->method_description = __( 'Utiliza la API de Chilexpress para el cálculo automático de costos de envío. Sugerencias y reporte de errores en <a href="https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues" target="_blank">GitHub</a>.', 'whq-wcchp' );
 				$this->list_cities     = new WC_WHQ_Cities_CL();
 
 				// Load the settings.
@@ -83,15 +83,15 @@ function whq_wcchp_init_class() {
 						'options'     => $this->list_cities->cities
 					),
 					'soap_login' => array(
-						'title'       => __( 'SOAP Login', 'whq-wcchp' ),
+						'title'       => __( 'Chilexpress API Username', 'whq-wcchp' ),
 						'type'        => 'text',
-						'description' => __( '(Opcional) Usuario a utilizar en las llamadas al SOAP de Chilexpress. Dejar en blanco para utilizar datos de conexión por defecto (públicos) que Chilexpress provee.', 'whq-wcchp' ),
+						'description' => __( '(Opcional) Usuario a utilizar en las llamadas a la API de Chilexpress. Dejar en blanco para utilizar datos de conexión por defecto (públicos) que Chilexpress provee.', 'whq-wcchp' ),
 						'default'     => __( '', 'whq-wcchp' ),
 					),
 					'soap_password' => array(
-						'title'       => __( 'SOAP Password', 'whq-wcchp' ),
+						'title'       => __( 'Chilexpress API Password', 'whq-wcchp' ),
 						'type'        => 'password',
-						'description' => __( '(Opcional) Contraseña a utilizar en las llamadas al SOAP de Chilexpress. Dejar en blanco para utilizar datos de conexión por defecto (públicos) que Chilexpress provee.', 'whq-wcchp' ),
+						'description' => __( '(Opcional) Contraseña a utilizar en las llamadas a la API de Chilexpress. Dejar en blanco para utilizar datos de conexión por defecto (públicos) que Chilexpress provee.', 'whq-wcchp' ),
 						'default'     => __( '', 'whq-wcchp' ),
 					),
 				);
