@@ -3,7 +3,7 @@
 
 **Tags:** woocommerce, shipping, chile, chilexpress
 
-**Stable tag:** 1.0.3
+**Stable tag:** 1.0.4
 
 **License:** GPLv2 or later
 
