@@ -17,31 +17,43 @@ function whq_wcchp_call_soap($ns, $url, $route, $method, $data = '') {
 		$soap_password = $whq_wcchp_default['chilexpress_soap_pass'];
 	}
 
-	try {
-		$client_options = array(
-			'login'    => $soap_login,
-			'password' => $soap_password
-		);
-		$client = new SoapClient($url, $client_options);
+	$transient_id = 'whq_wcchp_' . $route . '_' . $method;
 
-		$time_now = date( 'Y-m-d\TH:i:s.Z\Z', time() );
-		$header_body = array(
-			'transaccion' => array(
-				'fechaHora'            => $time_now,
-				'idTransaccionNegocio' => '0',
-				'sistema'              => 'TEST',
-				'usuario'              => 'TEST'
-			)
-		);
-		$header = new SOAPHeader($ns, 'headerRequest', $header_body);
+	if ( false === ( $result = get_transient( $transient_id ) ) ) {
 
-		$client->__setSoapHeaders($header);
-		$result = $client->__soapCall($route, [$route => [$method => $data]]);
+		try {
+			$client_options = array(
+				'login'    => $soap_login,
+				'password' => $soap_password
+			);
+			$client = new SoapClient($url, $client_options);
 
-		return $result;
-	} catch(SoapFault $e) {
-		return $e;
+			$time_now = date( 'Y-m-d\TH:i:s.Z\Z', time() );
+			$header_body = array(
+				'transaccion' => array(
+					'fechaHora'            => $time_now,
+					'idTransaccionNegocio' => '0',
+					'sistema'              => 'TEST',
+					'usuario'              => 'TEST'
+				)
+			);
+			$header = new SOAPHeader($ns, 'headerRequest', $header_body);
+
+			$client->__setSoapHeaders($header);
+			$result = $client->__soapCall($route, [$route => [$method => $data]]);
+
+			if( !empty( $result ) && $result !== false ) {
+				set_transient( $transient_id, $result, 60 * 60 * 1 ); //Cached for one hour
+			}
+
+			return $result;
+		} catch(SoapFault $e) {
+			return $e;
+		}
+
 	}
+
+	return $result;
 }
 
 function whq_wcchp_get_tarificacion($destination, $origin, $weight, $length, $width, $height) {
