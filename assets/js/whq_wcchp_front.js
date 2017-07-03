@@ -56,6 +56,13 @@ jQuery(document).ready(function( $ ) {
 				}, 500);
 			}
 		});
+
+		//Fix Select2 width
+		jQuery('#ship-to-different-address-checkbox').click(function() {
+			if ( jQuery('#ship-to-different-address-checkbox').is(':checked') ) {
+				jQuery('.select2-container').css('width', '100%');
+			}
+		});
 	}
 });
 
@@ -70,15 +77,18 @@ function whq_wcchp_chile_detected() {
 		type: 'POST',
 		datatype: 'application/json',
 		success: function( response ) {
-			whq_wcchp_inputs_replace();
+			whq_wcchp_inputs_replace(); //Why WooCommerce override the first one?
 
-			jQuery('#billing_state').prop('disabled', false).empty().append('<option value=""></option>');
-			jQuery('#shipping_state').prop('disabled', false).empty().append('<option value=""></option>');
+			jQuery('#billing_state, #shipping_state').prop('disabled', false).empty().append('<option value=""></option>');
 
 			jQuery(response).each(function( i ) {
-				jQuery('#billing_state').append('<option value="'+response[i]['idRegion']+'"> '+response[i]['GlsRegion']+' </option>');
-				jQuery('#shipping_state').append('<option value="'+response[i]['idRegion']+'"> '+response[i]['GlsRegion']+' </option>');
+				jQuery('#billing_state, #shipping_state').append('<option value="'+response[i]['idRegion']+'"> '+response[i]['GlsRegion']+' </option>');
 			});
+
+			if( !jQuery('#billing_state, #shipping_state').hasClass('select2-hidden-accessible') ) {
+				jQuery('#billing_state, #shipping_state').select2();
+				jQuery('#shipping_city_field, #shipping_state_field').unblock();
+			}
 
 			if( jQuery('#ship-to-different-address-checkbox').is(':checked') ) {
 				whq_wcchp_code_reg = jQuery('#shipping_state').val();
@@ -102,27 +112,54 @@ function whq_wcchp_load_cities( whq_wcchp_code_reg ) {
 		type: 'POST',
 		datatype: 'application/json',
 		success: function( response ) {
-			jQuery('#billing_city').prop('disabled', false).empty().append('<option value=""></option>');
-			jQuery('#shipping_city').prop('disabled', false).empty().append('<option value=""></option>');
+			jQuery('#billing_city, #shipping_city').prop('disabled', false).empty().append('<option value=""></option>');
 
 			jQuery(response).each(function( i ) {
-				jQuery('#billing_city').append('<option value="'+response[i]['CodComuna']+'"> '+response[i]['GlsComuna']+' </option>');
-				jQuery('#shipping_city').append('<option value="'+response[i]['CodComuna']+'"> '+response[i]['GlsComuna']+' </option>');
+				jQuery('#billing_city, #shipping_city').append('<option value="'+response[i]['CodComuna']+'"> '+response[i]['GlsComuna']+' </option>');
 			});
+
+			jQuery('#billing_city, #shipping_city').select2();
+			jQuery('#billing_city_field, #billing_state_field').unblock()
 		}
 	});
 }
 
 function whq_wcchp_inputs_replace() {
-	jQuery("#billing_city").replaceWith('<select id="billing_city" name="billing_city" disabled="disabled"></select>');
-	jQuery("#billing_state").replaceWith('<select id="billing_state" name="billing_state" disabled="disabled"></select>');
-	jQuery("#shipping_city").replaceWith('<select id="shipping_city" name="shipping_city" disabled="disabled"></select>');
-	jQuery("#shipping_state").replaceWith( '<select id="shipping_state" name="shipping_state" disabled="disabled"></select>' );
+	if( jQuery('#billing_city, #shipping_city').is('input') ) {
+		jQuery('#billing_city_field, #billing_state_field').block({
+			message: null,
+			overlayCSS: {
+				background: '#fff',
+				opacity: 0.6
+			}
+		});
+
+		jQuery("#billing_city").replaceWith('<select id="billing_city" name="billing_city" disabled="disabled"></select>')
+		jQuery("#shipping_city").replaceWith('<select id="shipping_city" name="shipping_city" disabled="disabled"></select>');
+	}
+
+	if( jQuery('#billing_state, #shipping_state').is('input') ) {
+		jQuery('#shipping_city_field, #shipping_state_field').block({
+			message: null,
+			overlayCSS: {
+				background: '#fff',
+				opacity: 0.6
+			}
+		});
+
+		jQuery("#billing_state").replaceWith('<select id="billing_state" name="billing_state" disabled="disabled"></select>');
+		jQuery("#shipping_state").replaceWith( '<select id="shipping_state" name="shipping_state" disabled="disabled"></select>' );
+	}
 }
 
 function whq_wcchp_inputs_restore() {
-	jQuery("#billing_city").replaceWith('<input type="text" class="input-text " name="billing_city" id="billing_city" placeholder=""  value="" autocomplete="address-level2" />');
-	jQuery("#billing_state").replaceWith('<input type="text" class="input-text " value=""  placeholder="" name="billing_state" id="billing_state" autocomplete="address-level1" />');
-	jQuery("#shipping_city").replaceWith('<input type="text" class="input-text " name="shipping_city" id="shipping_city" placeholder=""  value="" autocomplete="address-level2" />');
-	jQuery("#shipping_state").replaceWith('<input type="text" class="input-text " value=""  placeholder="" name="shipping_state" id="shipping_state" autocomplete="address-level1" />');
+	if( jQuery('#billing_city, #shipping_city').is('select') ) {
+		jQuery("#billing_city").replaceWith('<input type="text" class="input-text " name="billing_city" id="billing_city" placeholder=""  value="" autocomplete="address-level2" />');
+		jQuery("#shipping_city").replaceWith('<input type="text" class="input-text " name="shipping_city" id="shipping_city" placeholder=""  value="" autocomplete="address-level2" />');
+	}
+
+	if( jQuery('#billing_state, #shipping_state').is('select') ) {
+		jQuery("#billing_state").replaceWith('<input type="text" class="input-text " value=""  placeholder="" name="billing_state" id="billing_state" autocomplete="address-level1" />');
+		jQuery("#shipping_state").replaceWith('<input type="text" class="input-text " value=""  placeholder="" name="shipping_state" id="shipping_state" autocomplete="address-level1" />');
+	}
 }
