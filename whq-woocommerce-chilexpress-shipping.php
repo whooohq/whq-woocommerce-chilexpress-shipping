@@ -52,6 +52,10 @@ if ( in_array( 'woocommerce/woocommerce.php', $whq_wcchp_active_plugins) ) {
 		include_once $whq_wcchp_default['plugin_path'] . 'includes/soap_call.php';
 	}
 
+	if (file_exists($whq_wcchp_default['plugin_path'] . 'classes/WC_WHQ_Cities_CL.php')) {
+		include_once $whq_wcchp_default['plugin_path'] . 'classes/WC_WHQ_Cities_CL.php';
+	}
+
 	if (file_exists($whq_wcchp_default['plugin_path'] . 'classes/WC_WHQ_Chilexpress_Shipping.php')) {
 		include_once $whq_wcchp_default['plugin_path'] . 'classes/WC_WHQ_Chilexpress_Shipping.php';
 
