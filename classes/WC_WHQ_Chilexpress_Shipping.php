@@ -31,12 +31,13 @@ function whq_wcchp_init_class() {
 				$this->init_settings();
 
 				// Define user set variables
-				$this->enabled         = $this->get_option( 'enabled' );
-				$this->title           = $this->get_option( 'title' );
-				$this->shipping_origin = $this->get_option( 'shipping_origin' );
-				$this->soap_login      = $this->get_option( 'soap_login' );
-				$this->soap_password   = $this->get_option( 'soap_password' );
-				$this->availability    = true;
+				$this->enabled                       = $this->get_option( 'enabled' );
+				$this->title                         = $this->get_option( 'title' );
+				$this->shipping_origin               = $this->get_option( 'shipping_origin' );
+				$this->soap_login                    = $this->get_option( 'soap_login' );
+				$this->soap_password                 = $this->get_option( 'soap_password' );
+				$this->hide_cart_shipping_calculator = $this->get_option( 'hide_cart_shipping_calculator' );
+				$this->availability                  = true;
 
 				add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
 			}
@@ -65,7 +66,7 @@ function whq_wcchp_init_class() {
 			public function init_form_fields() {
 				$this->form_fields = array(
 					'enabled' => array(
-						'title'   => __( 'Habilitar/Deshabilitar', 'whq-wcchp' ),
+						'title'   => __( 'Activar/Desactivar', 'whq-wcchp' ),
 						'type'    => 'checkbox',
 						'label'   => __( 'Habilitar envíos vía Chilexpress', 'whq-wcchp' ),
 						'default' => 'yes'
@@ -81,6 +82,13 @@ function whq_wcchp_init_class() {
 						'type'        => 'select',
 						'description' => __( 'Ciudad/Localidad de origen, desde donde se realiza el envío', 'whq-wcchp' ),
 						'options'     => $this->list_cities->cities
+					),
+					'hide_cart_shipping_calculator' => array(
+						'title'       => __( 'Ocultar calculadora de envíos', 'whq-wcchp' ),
+						'label'       => __( 'Oculta la calculadora de envíos en el carro de compras.', 'whq-wcchp' ),
+						'type'        => 'checkbox',
+						'description' => __( 'El cálculo de costo de envíos desde Chilexpress no se encuentra implementado en la calculadora rápida del carro de compras (previo al Checkout/Finalizar Compra). Activando esta opción, puedes ocultar la calculadora rápida, y solo mostrar el cálculo de los gastos de envío en el Checkout/Finalizar Compra.', 'whq-wcchp' ),
+						'default'     => 'yes'
 					),
 					'soap_login' => array(
 						'title'       => __( 'Chilexpress API Username', 'whq-wcchp' ),
