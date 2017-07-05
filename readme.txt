@@ -46,9 +46,12 @@ Ayuda y aportes (pull requests) son bienvenidos.
 3. Configuración del plugin.
 
 == Changelog ==
+= 1.0.5 =
+* Fix - https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/4
+
 = 1.0.4 =
-* Fix transient cache id
-* Fix cache busting
+* Fix - Transient cache id
+* Fix - Cache busting
 
 = 1.0.2 =
 * Implementado Select2 para los campos de región y ciudad/localidad.
