@@ -3,7 +3,7 @@
 
 **Tags:** woocommerce, shipping, chile, chilexpress
 
-**Stable tag:** 1.0.5
+**Stable tag:** 1.0.6
 
 **License:** GPLv2 or later
 
@@ -19,7 +19,7 @@ Demostración en video:
 
 [![Demostración](https://img.youtube.com/vi/8QiOibg8C8k/0.jpg)](https://www.youtube.com/watch?v=8QiOibg8C8k)
 
-El soporte al plugin se realiza directamente en [GitHub](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/).
+El soporte al plugin se realiza directamente en [GitHub](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues).
 
 
 ## Installation
@@ -28,7 +28,7 @@ Ver página oficial del plugin en [WordPress.org](https://wordpress.org/plugins/
 
 ## Frequently Asked Questions
 
-### SOAP requerido.
+### Extensión SOAP requerida.
 La conexión a la API de Chilexpress se realiza a través de SOAP. Por lo tanto, tu servidor debe tener [activada](http://php.net/manual/en/book.soap.php) aquella extensión para poder utilizar este plugin.
 
 

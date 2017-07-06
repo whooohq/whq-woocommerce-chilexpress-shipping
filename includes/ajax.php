@@ -13,7 +13,13 @@ function whq_wcchp_regions_ajax() {
 	$route  = 'ConsultarRegiones';
 	$method = 'reqObtenerRegion';
 
-	wp_send_json( whq_wcchp_call_soap($ns, $url, $route, $method)->respObtenerRegion->Regiones );
+	$regions = whq_wcchp_call_soap($ns, $url, $route, $method)->respObtenerRegion->Regiones;
+
+	whq_wcchp_array_move($regions, 14, 0);
+	whq_wcchp_array_move($regions, 10, 6);
+	whq_wcchp_array_move($regions, 14, 11);
+
+	wp_send_json( $regions );
 }
 
 add_action( 'wp_ajax_whq_wcchp_cities_ajax', 'whq_wcchp_cities_ajax' );
@@ -31,5 +37,9 @@ function whq_wcchp_cities_ajax() {
 	$parameters       = [ 'CodRegion'        => $codregion,
 					      'CodTipoCobertura' => $codtipocobertura ];
 
-	wp_send_json( whq_wcchp_call_soap($ns, $url, $route, $method, $parameters)->respObtenerCobertura->Coberturas );
+	$cities = whq_wcchp_call_soap($ns, $url, $route, $method, $parameters)->respObtenerCobertura->Coberturas;
+
+	whq_wcchp_array_move($cities, 2, 86);
+
+	wp_send_json( $cities );
 }
