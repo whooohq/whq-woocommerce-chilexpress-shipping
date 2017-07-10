@@ -75,7 +75,6 @@ jQuery(document).ready(function( $ ) {
 			if( ! jQuery('body').hasClass('wc-chilexpress-enabled') && jQuery('#shipping_method_0_chilexpress').length ) {
 				jQuery('#shipping_method_0_chilexpress').prop('disabled', true);
 				jQuery('label[for="shipping_method_0_chilexpress"]').html('Chilexpress no se encuentra disponible por el momento. Por favor, inténtelo más tarde.');
-				clearInterval( whq_wcchp_select_chilexpress );
 			}
 		}, 250);
 	}
