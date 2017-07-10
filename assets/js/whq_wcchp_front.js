@@ -49,7 +49,7 @@ jQuery(document).ready(function( $ ) {
 
 			if( whq_wcchp_location !== '' ) {
 				var whq_wcchp_select_chilexpress = setInterval(function() {
-					if( jQuery('#shipping_method_0_chilexpress').length ) {
+					if( jQuery('body').hasClass('wc-chilexpress-enabled') && jQuery('#shipping_method_0_chilexpress').length ) {
 						jQuery('#shipping_method_0_chilexpress').click();
 						clearInterval( whq_wcchp_select_chilexpress );
 					}
@@ -63,10 +63,31 @@ jQuery(document).ready(function( $ ) {
 				jQuery('.select2-container').css('width', '100%');
 			}
 		});
+
+		//No Chilexpress API available?
+		jQuery('body').on('click', '.shipping_method', function(){
+			if( !jQuery('body').hasClass('wc-chilexpress-enabled') ) {
+				jQuery('#shipping_method_0_chilexpress').prop('disabled', true);
+			}
+		});
+
+		var whq_wcchp_chilexpress_down = setInterval(function() {
+			if( ! jQuery('body').hasClass('wc-chilexpress-enabled') && jQuery('#shipping_method_0_chilexpress').length ) {
+				jQuery('#shipping_method_0_chilexpress').prop('disabled', true);
+				jQuery('label[for="shipping_method_0_chilexpress"]').html('Chilexpress no se encuentra disponible por el momento. Por favor, inténtelo más tarde.');
+				clearInterval( whq_wcchp_select_chilexpress );
+			}
+		}, 250);
 	}
 });
 
 function whq_wcchp_chile_detected() {
+	if( jQuery('body').hasClass('wc-chilexpress-enabled') ) {
+		return;
+	}
+
+	jQuery('body').addClass('wc-chilexpress-enabled');
+
 	whq_wcchp_inputs_replace();
 
 	jQuery.ajax({
@@ -77,26 +98,34 @@ function whq_wcchp_chile_detected() {
 		type: 'POST',
 		datatype: 'application/json',
 		success: function( response ) {
-			whq_wcchp_inputs_replace(); //Why WooCommerce override the first one?
+			if(response.success === false) {
+				//Chilexpress down
+				whq_wcchp_inputs_restore();
 
-			jQuery('#billing_state, #shipping_state').prop('disabled', false).empty().append('<option value=""></option>');
-
-			jQuery(response).each(function( i ) {
-				jQuery('#billing_state, #shipping_state').append('<option value="'+response[i]['idRegion']+'"> '+response[i]['GlsRegion']+' </option>');
-			});
-
-			if( !jQuery('#billing_state, #shipping_state').hasClass('select2-hidden-accessible') ) {
-				jQuery('#billing_state, #shipping_state').select2();
 				jQuery('#shipping_city_field, #shipping_state_field').unblock();
-			}
-
-			if( jQuery('#ship-to-different-address-checkbox').is(':checked') ) {
-				whq_wcchp_code_reg = jQuery('#shipping_state').val();
+				jQuery('#billing_city_field, #billing_state_field').unblock();
 			} else {
-				whq_wcchp_code_reg = jQuery('#billing_state').val();
-			}
+				whq_wcchp_inputs_replace(); //Why WooCommerce override the first one?
 
-			whq_wcchp_load_cities( whq_wcchp_code_reg );
+				jQuery('#billing_state, #shipping_state').prop('disabled', false).empty().append('<option value=""></option>');
+
+				jQuery(response.data).each(function( i ) {
+					jQuery('#billing_state, #shipping_state').append('<option value="'+response.data[i]['idRegion']+'"> '+response.data[i]['GlsRegion']+' </option>');
+				});
+
+				if( !jQuery('#billing_state, #shipping_state').hasClass('select2-hidden-accessible') ) {
+					jQuery('#billing_state, #shipping_state').select2();
+					jQuery('#shipping_city_field, #shipping_state_field').unblock();
+				}
+
+				if( jQuery('#ship-to-different-address-checkbox').is(':checked') ) {
+					whq_wcchp_code_reg = jQuery('#shipping_state').val();
+				} else {
+					whq_wcchp_code_reg = jQuery('#billing_state').val();
+				}
+
+				whq_wcchp_load_cities( whq_wcchp_code_reg );
+			}
 		}
 	});
 }
@@ -112,14 +141,16 @@ function whq_wcchp_load_cities( whq_wcchp_code_reg ) {
 		type: 'POST',
 		datatype: 'application/json',
 		success: function( response ) {
-			jQuery('#billing_city, #shipping_city').prop('disabled', false).empty().append('<option value=""></option>');
+			if(response.success === true) {
+				jQuery('#billing_city, #shipping_city').prop('disabled', false).empty().append('<option value=""></option>');
 
-			jQuery(response).each(function( i ) {
-				jQuery('#billing_city, #shipping_city').append('<option value="'+response[i]['CodComuna']+'"> '+response[i]['GlsComuna']+' </option>');
-			});
+				jQuery(response.data).each(function( i ) {
+					jQuery('#billing_city, #shipping_city').append('<option value="'+response.data[i]['CodComuna']+'"> '+response.data[i]['GlsComuna']+' </option>');
+				});
 
-			jQuery('#billing_city, #shipping_city').select2();
-			jQuery('#billing_city_field, #billing_state_field').unblock()
+				jQuery('#billing_city, #shipping_city').select2();
+				jQuery('#billing_city_field, #billing_state_field').unblock();
+			}
 		}
 	});
 }
@@ -162,4 +193,6 @@ function whq_wcchp_inputs_restore() {
 		jQuery("#billing_state").replaceWith('<input type="text" class="input-text " value=""  placeholder="" name="billing_state" id="billing_state" autocomplete="address-level1" />');
 		jQuery("#shipping_state").replaceWith('<input type="text" class="input-text " value=""  placeholder="" name="shipping_state" id="shipping_state" autocomplete="address-level1" />');
 	}
+
+	jQuery('body').removeClass('wc-chilexpress-enabled');
 }
