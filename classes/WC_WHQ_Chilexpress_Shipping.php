@@ -105,8 +105,8 @@ function whq_wcchp_init_class() {
 				);
 			}
 
-			public function get_chilexpress_option( $option_name = '' ) {
-				$options = get_option("woocommerce_chilexpress_settings");
+			public static function get_chilexpress_option( $option_name = '' ) {
+				$options = get_option( 'woocommerce_chilexpress_settings' );
 
 				return $options["$option_name"];
 			}
