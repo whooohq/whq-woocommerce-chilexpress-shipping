@@ -130,23 +130,23 @@ function whq_wcchp_init_class() {
 			 * @return void
 			 */
 			public function calculate_shipping( $package = array() ) {
-				$weight     = 0;
-				$length     = 0;
-				$width      = 0;
-				$height     = 0;
+				$weight = 0;
+				$length = 0;
+				$width  = 0;
+				$height = 0;
 
 				foreach ( $package['contents'] as $item_id => $values ) {
-					$_product   = $values['data'];
-					$weight     = (int) absint( $weight + $_product->get_weight() * $values['quantity'] );
-					$length     = (int) absint( $length + $_product->length * $values['quantity'] );
-					$width      = (int) absint( $width + $_product->width * $values['quantity'] );
-					$height     = (int) absint( $height + $_product->height * $values['quantity'] );
+					$_product = $values['data'];
+					$weight   = (int) absint( $weight + $_product->get_weight() * $values['quantity'] );
+					$length   = (int) absint( $length + $_product->get_length() * $values['quantity'] );
+					$width    = (int) absint( $width + $_product->get_width() * $values['quantity'] );
+					$height   = (int) absint( $height + $_product->get_height() * $values['quantity'] );
 				}
 
-				if ( $_POST['s_city'] != null ) {
+				if ( isset( $_POST['s_city'] ) && $_POST['s_city'] != null ) {
 					$city = $_POST['s_city'];
 				} else {
-					$city = $package["destination"]["city"];
+					$city = $package['destination']['city'];
 				}
 
 				if( $city != null ) {
