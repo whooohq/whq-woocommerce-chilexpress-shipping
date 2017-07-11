@@ -46,6 +46,9 @@ Ayuda y aportes (pull requests) son bienvenidos.
 3. Configuración del plugin.
 
 == Changelog ==
+= 1.0.8 =
+* Fix - https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/10
+
 = 1.0.7 =
 * Fix - https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/9
 
