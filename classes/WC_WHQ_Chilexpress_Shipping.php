@@ -69,7 +69,7 @@ function whq_wcchp_init_class() {
 						'title'   => __( 'Activar/Desactivar', 'whq-wcchp' ),
 						'type'    => 'checkbox',
 						'label'   => __( 'Habilitar envíos vía Chilexpress', 'whq-wcchp' ),
-						'default' => 'yes'
+						'default' => 'yes',
 					),
 					'title' => array(
 						'title'       => __( 'Título del método de envío', 'whq-wcchp' ),
@@ -81,7 +81,7 @@ function whq_wcchp_init_class() {
 						'title'       => __( 'Origen de los envios', 'whq-wcchp' ),
 						'type'        => 'select',
 						'description' => __( 'Ciudad/Localidad de origen, desde donde se realiza el envío', 'whq-wcchp' ),
-						'options'     => $this->get_cities()
+						'options'     => $this->get_cities(),
 					),
 					'locations_cache' => array(
 						'title'       => __( 'Caché de ubicaciones', 'whq-wcchp' ),
@@ -106,6 +106,10 @@ function whq_wcchp_init_class() {
 
 			public static function get_chilexpress_option( $option_name = '' ) {
 				$options = get_option( 'woocommerce_chilexpress_settings' );
+
+				if( array_key_exists( $option_name, $options) === false ) {
+					return false;
+				}
 
 				return $options["$option_name"];
 			}

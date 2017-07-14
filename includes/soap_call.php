@@ -20,7 +20,13 @@ function whq_wcchp_call_soap($ns, $url, $route, $method, $data = '') {
 
 	//Transient duration
 	if( ( $route == 'ConsultarRegiones' && $method == 'reqObtenerRegion' && $data == '' ) || ( $route == 'ConsultarCoberturas' && $method == 'reqObtenerCobertura' ) ) {
-		$locations_cache    = absint( WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'locations_cache' ) );
+		$locations_cache = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'locations_cache' );
+		if( $locations_cache === false ) {
+			$locations_cache = 24;
+		} else {
+			$locations_cache = absint( $locations_cache );
+		}
+
 		$transient_duration = 60 * 60 * $locations_cache;
 	} else {
 		$transient_duration = 60 * 60 * 1; //One hour
