@@ -15,9 +15,9 @@ function whq_wcchp_regions_ajax() {
 
 	$regions = whq_wcchp_call_soap($ns, $url, $route, $method)->respObtenerRegion->Regiones;
 
-	whq_wcchp_array_move($regions, 14, 0);
-	whq_wcchp_array_move($regions, 10, 6);
-	whq_wcchp_array_move($regions, 14, 11);
+	whq_wcchp_array_move( $regions, 14, 0 );
+	whq_wcchp_array_move( $regions, 10, 6 );
+	whq_wcchp_array_move( $regions, 14, 11 );
 
 	if( $regions === false || $regions === NULL ) {
 		wp_send_json_error( $regions );
@@ -36,10 +36,10 @@ function whq_wcchp_cities_ajax() {
 	$route  = 'ConsultarCoberturas';
 	$method = 'reqObtenerCobertura';
 
-	$codregion        = (int) absint( $_POST['codregion'] );
+	$codregion        = wp_kses( $_POST['codregion'], array() );
 	$codtipocobertura = (int) absint( $_POST['codtipocobertura'] );
 	$parameters       = [ 'CodRegion'        => $codregion,
-					      'CodTipoCobertura' => $codtipocobertura ];
+						  'CodTipoCobertura' => $codtipocobertura ];
 
 	$cities = whq_wcchp_call_soap($ns, $url, $route, $method, $parameters)->respObtenerCobertura->Coberturas;
 

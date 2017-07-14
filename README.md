@@ -3,7 +3,7 @@
 
 **Tags:** woocommerce, shipping, chile, chilexpress
 
-**Stable tag:** 1.0.9
+**Stable tag:** 1.1.0
 
 **License:** GPLv2 or later
 
@@ -17,7 +17,7 @@ Utiliza la API de Chilexpress para obtener los costos de envío de forma automá
 
 Demostración en video:
 
-[![Demostración](https://img.youtube.com/vi/8QiOibg8C8k/0.jpg)](https://www.youtube.com/watch?v=8QiOibg8C8k)
+[![Demostración](https://img.youtube.com/vi/JaLp1wmtKlk/0.jpg)](https://www.youtube.com/watch?v=JaLp1wmtKlk)
 
 El soporte al plugin se realiza directamente en [GitHub](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues).
 

@@ -6,6 +6,7 @@ if (!defined('ABSPATH')) {
 function whq_wcchp_call_soap($ns, $url, $route, $method, $data = '') {
 	global $whq_wcchp_default;
 
+	//SOAP login & password
 	$soap_login    = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_login' );
 	$soap_password = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_password' );
 
@@ -17,6 +18,15 @@ function whq_wcchp_call_soap($ns, $url, $route, $method, $data = '') {
 		$soap_password = $whq_wcchp_default['chilexpress_soap_pass'];
 	}
 
+	//Transient duration
+	if( ( $route == 'ConsultarRegiones' && $method == 'reqObtenerRegion' && $data == '' ) || ( $route == 'ConsultarCoberturas' && $method == 'reqObtenerCobertura' ) ) {
+		$locations_cache    = absint( WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'locations_cache' ) );
+		$transient_duration = 60 * 60 * $locations_cache;
+	} else {
+		$transient_duration = 60 * 60 * 1; //One hour
+	}
+
+	//Transient ID
 	$transient_id = 'whq_wcchp_' . $route . '_' . $method . '_' . md5( json_encode( $data ) ); // https://stackoverflow.com/a/7723730/920648
 
 	if ( false === ( $result = get_transient( $transient_id ) ) ) {
@@ -43,7 +53,7 @@ function whq_wcchp_call_soap($ns, $url, $route, $method, $data = '') {
 			$result = $client->__soapCall($route, [$route => [$method => $data]]);
 
 			if( !empty( $result ) && $result !== false ) {
-				set_transient( $transient_id, $result, 60 * 60 * 1 ); //Cached for one hour
+				set_transient( $transient_id, $result, $transient_duration );
 			}
 
 			return $result;

@@ -24,21 +24,21 @@ function whq_wcchp_init_class() {
 				$this->id = 'chilexpress';
 				$this->method_title = __( 'Chilexpress', 'whq-wcchp' );
 				$this->method_description = __( 'Utiliza la API de Chilexpress para el cálculo automático de costos de envío. Sugerencias y reporte de errores en <a href="https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues" target="_blank">GitHub</a>.', 'whq-wcchp' );
-				$this->list_cities     = new WC_WHQ_Cities_CL();
 
 				// Load the settings.
 				$this->init_form_fields();
 				$this->init_settings();
 
 				// Define user set variables
-				$this->enabled                       = $this->get_option( 'enabled' );
-				$this->title                         = $this->get_option( 'title' );
-				$this->shipping_origin               = $this->get_option( 'shipping_origin' );
-				$this->soap_login                    = $this->get_option( 'soap_login' );
-				$this->soap_password                 = $this->get_option( 'soap_password' );
-				$this->hide_cart_shipping_calculator = $this->get_option( 'hide_cart_shipping_calculator' );
-				$this->availability                  = true;
+				$this->enabled               = $this->get_option( 'enabled' );
+				$this->title                 = $this->get_option( 'title' );
+				$this->shipping_origin       = $this->get_option( 'shipping_origin' );
+				$this->locations_cache       = $this->get_option( 'locations_cache' );
+				$this->soap_login            = $this->get_option( 'soap_login' );
+				$this->soap_password         = $this->get_option( 'soap_password' );
+				$this->availability          = true;
 
+				// Save settings in admin if you have any defined
 				add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
 			}
 
@@ -81,14 +81,13 @@ function whq_wcchp_init_class() {
 						'title'       => __( 'Origen de los envios', 'whq-wcchp' ),
 						'type'        => 'select',
 						'description' => __( 'Ciudad/Localidad de origen, desde donde se realiza el envío', 'whq-wcchp' ),
-						'options'     => $this->list_cities->cities
+						'options'     => $this->get_cities()
 					),
-					'hide_cart_shipping_calculator' => array(
-						'title'       => __( 'Ocultar calculadora de envíos', 'whq-wcchp' ),
-						'label'       => __( 'Oculta la calculadora de envíos en el carro de compras.', 'whq-wcchp' ),
-						'type'        => 'checkbox',
-						'description' => __( 'El cálculo de costo de envíos desde Chilexpress no se encuentra implementado en la calculadora rápida del carro de compras (previo al Checkout/Finalizar Compra). Activando esta opción, puedes ocultar la calculadora rápida, y solo mostrar el cálculo de los gastos de envío en el Checkout/Finalizar Compra.', 'whq-wcchp' ),
-						'default'     => 'yes'
+					'locations_cache' => array(
+						'title'       => __( 'Caché de ubicaciones', 'whq-wcchp' ),
+						'type'        => 'number',
+						'description' => __( '(En horas) Chilexpress entrega un listado de ubicaciones (Regiones y Ciudades) dinámico. Para evitar saturar la API de Chilexpress, aquellos listados son guardados localmente en WordPress (Transients). Ingresa el número de horas a mantener en el caché el listado de regiones y cuidades. Una hora mínimo. Máximo un mes.', 'whq-wcchp' ),
+						'default'     => 24,
 					),
 					'soap_login' => array(
 						'title'       => __( 'Chilexpress API Username', 'whq-wcchp' ),
@@ -109,6 +108,31 @@ function whq_wcchp_init_class() {
 				$options = get_option( 'woocommerce_chilexpress_settings' );
 
 				return $options["$option_name"];
+			}
+
+			private function get_cities() {
+				global $whq_wcchp_default;
+
+				$url    = $whq_wcchp_default['plugin_url'] . 'wsdl/WSDL_GeoReferencia_QA.wsdl';
+				$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
+				$route  = 'ConsultarCoberturas';
+				$method = 'reqObtenerCobertura';
+
+				$codregion        = 99; //Bring it on!
+				$codtipocobertura = 2;
+				$parameters       = [ 'CodRegion'        => $codregion,
+									  'CodTipoCobertura' => $codtipocobertura ];
+
+				$cities = whq_wcchp_call_soap($ns, $url, $route, $method, $parameters)->respObtenerCobertura->Coberturas;
+
+				whq_wcchp_array_move( $cities, 2, 86 );
+
+				$cities_array = array();
+				foreach ($cities as $city) {
+					$cities_array["$city->CodComuna"] = $city->GlsComuna;
+				}
+
+				return $cities_array;
 			}
 
 			public function is_available( $package ) {
@@ -143,29 +167,35 @@ function whq_wcchp_init_class() {
 					$height   = (int) absint( $height + $_product->get_height() * $values['quantity'] );
 				}
 
-				if ( isset( $_POST['s_city'] ) && $_POST['s_city'] != null ) {
+				if ( isset( $_POST['s_city'] ) && !is_null( $_POST['s_city'] ) ) {
 					$city = $_POST['s_city'];
 				} else {
+					//And what about WC()->customer->get_shipping_city() ?
 					$city = $package['destination']['city'];
 				}
 
-				if( $city != null ) {
-					$chp_cost  = whq_wcchp_get_tarificacion($city, $this->shipping_origin, $weight, $length, $width, $height);
-					$final_cost = '0';
+				if( !is_null( $city ) ) {
+					$chp_cost   = whq_wcchp_get_tarificacion($city, $this->shipping_origin, $weight, $length, $width, $height);
+					$final_cost = 0;
 
-					if(count($chp_cost->respValorizarCourier->Servicios) == 1){
+					if( count( $chp_cost->respValorizarCourier->Servicios ) == 1 ) {
 						$final_cost = $chp_cost->respValorizarCourier->Servicios->ValorServicio;
-					}else{
-						foreach ($chp_cost->respValorizarCourier->Servicios as $key => $value) {
-							if( $value->CodServicio == 3){
+					} else {
+						foreach ( $chp_cost->respValorizarCourier->Servicios as $key => $value ) {
+							//Next working day
+							if( $value->CodServicio == 3 ) {
 								$final_cost = $value->ValorServicio;
 							}
 						}
 					}
 
+					if( empty( $final_cost ) || $final_cost <= 0 ) {
+						$final_cost = 100000; //Chilexpress haven't already calculated it? (Probably doesn't have a location yet)
+					}
+
 					$this->add_rate( array(
 						'id'    => $this->id,
-						'label' => $this->title . "",
+						'label' => $this->title . '',
 						'cost'  => $final_cost
 					));
 				}
@@ -185,6 +215,25 @@ function whq_wcchp_init_class() {
 
 			static function add_cart_fee( WC_Cart $cart ) {
 				WC()->cart->calculate_shipping();
+			}
+
+			/**
+			 * Validate the cache duration
+			 */
+			public function validate_locations_cache_field( $key, $value ) {
+				if ( isset( $value ) && $value < 1 ) {
+					WC_Admin_Settings::add_error( esc_html__( 'El caché mínimo para las localidades y regiones es de una hora.', 'woocommerce-integration-demo' ) );
+
+					$value = 1;
+				}
+
+				if ( isset( $value ) && $value > 744 ) {
+					WC_Admin_Settings::add_error( esc_html__( 'El caché máximo para las localidades y regiones es de un mes (744 horas).', 'woocommerce-integration-demo' ) );
+
+					$value = 744;
+				}
+
+				return $value;
 			}
 		}
 	}

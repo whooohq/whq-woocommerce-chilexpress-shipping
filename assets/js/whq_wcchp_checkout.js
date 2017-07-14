@@ -2,59 +2,40 @@ var whq_wcchp_location;
 var whq_wcchp_code_reg;
 
 jQuery(document).ready(function( $ ) {
-	//Only on WooCommerce's checkout
+	//Only on WooCommerce's Checkout
 	if( jQuery('.woocommerce-checkout').length ) {
 		//CL detected
 		if(jQuery('#billing_country').val() == 'CL' || jQuery('#shipping_country').val() == 'CL') {
-			whq_wcchp_chile_detected();
+			whq_wcchp_checkout_chile_detected();
 		}
 
 		//CL detected
 		jQuery('body').on('change', '#billing_country', function() {
 			if(jQuery('#billing_country').val() == 'CL') {
-				whq_wcchp_chile_detected();
+				whq_wcchp_checkout_chile_detected();
 			} else {
-				whq_wcchp_inputs_restore();
+				whq_wcchp_checkout_restore();
 			}
 		});
 
 		//CL detected
 		jQuery('body').on('change', '#shipping_country', function() {
 			if(jQuery('#shipping_country').val() == 'CL') {
-				whq_wcchp_chile_detected();
+				whq_wcchp_checkout_chile_detected();
 			} else {
-				whq_wcchp_inputs_restore();
+				whq_wcchp_checkout_restore();
 			}
 		});
 
 		//Load cities
-		/*jQuery('body').on('change', '#billing_state', function() {
-			whq_wcchp_code_reg = jQuery('#billing_state').val();
-			whq_wcchp_load_cities( whq_wcchp_code_reg );
-		});*/
-
-		//Load cities
-		/*jQuery('body').on('change', '#shipping_state', function() {
-			whq_wcchp_code_reg = jQuery('#shipping_state').val();
-			whq_wcchp_load_cities( whq_wcchp_code_reg );
-		});*/
-
-		//Mark Chilexpress as preferred shipping method
-		jQuery('body').on('change', '#billing_city, #shipping_city', function() {
+		jQuery('body').on('change', '#billing_state, #shipping_state', function() {
 			if( jQuery('#ship-to-different-address-checkbox').is(':checked') ) {
-				whq_wcchp_location = jQuery('#shipping_city').val();
+				whq_wcchp_code_reg = jQuery('#shipping_state').val();
 			} else {
-				whq_wcchp_location = jQuery('#billing_city').val();
+				whq_wcchp_code_reg = jQuery('#billing_state').val();
 			}
 
-			if( whq_wcchp_location !== '' ) {
-				var whq_wcchp_select_chilexpress = setInterval(function() {
-					if( jQuery('body').hasClass('wc-chilexpress-enabled') && jQuery('#shipping_method_0_chilexpress').length ) {
-						jQuery('#shipping_method_0_chilexpress').click();
-						clearInterval( whq_wcchp_select_chilexpress );
-					}
-				}, 500);
-			}
+			whq_wcchp_checkout_load_cities( whq_wcchp_code_reg );
 		});
 
 		//Fix Select2 width
@@ -65,7 +46,7 @@ jQuery(document).ready(function( $ ) {
 		});
 
 		//No Chilexpress API available?
-		jQuery('body').on('click', '.shipping_method', function(){
+		jQuery('body').on('click', '.shipping_method', function() {
 			if( !jQuery('body').hasClass('wc-chilexpress-enabled') ) {
 				jQuery('#shipping_method_0_chilexpress').prop('disabled', true);
 			}
@@ -80,14 +61,14 @@ jQuery(document).ready(function( $ ) {
 	}
 });
 
-function whq_wcchp_chile_detected() {
+function whq_wcchp_checkout_chile_detected() {
 	if( jQuery('body').hasClass('wc-chilexpress-enabled') ) {
 		return;
 	}
 
 	jQuery('body').addClass('wc-chilexpress-enabled');
 
-	whq_wcchp_inputs_replace();
+	whq_wcchp_checkout_inputs_replace();
 
 	jQuery.ajax({
 		url: woocommerce_params.ajax_url,
@@ -99,12 +80,12 @@ function whq_wcchp_chile_detected() {
 		success: function( response ) {
 			if(response.success === false) {
 				//Chilexpress down
-				whq_wcchp_inputs_restore();
+				whq_wcchp_checkout_restore();
 
 				jQuery('#shipping_city_field, #shipping_state_field').unblock();
 				jQuery('#billing_city_field, #billing_state_field').unblock();
 			} else {
-				whq_wcchp_inputs_replace(); //Why WooCommerce override the first one?
+				whq_wcchp_checkout_inputs_replace(); //Why WooCommerce override the first one?
 
 				jQuery('#billing_state, #shipping_state').prop('disabled', false).empty().append('<option value=""></option>');
 
@@ -114,27 +95,23 @@ function whq_wcchp_chile_detected() {
 
 				if( !jQuery('#billing_state, #shipping_state').hasClass('select2-hidden-accessible') ) {
 					jQuery('#billing_state, #shipping_state').select2();
-					jQuery('#shipping_city_field, #shipping_state_field').unblock();
+					jQuery('#billing_state_field, #shipping_state_field').unblock();
 				}
-
-				if( jQuery('#ship-to-different-address-checkbox').is(':checked') ) {
-					whq_wcchp_code_reg = jQuery('#shipping_state').val();
-				} else {
-					whq_wcchp_code_reg = jQuery('#billing_state').val();
-				}
-
-				whq_wcchp_load_cities( whq_wcchp_code_reg );
 			}
 		}
 	});
 }
 
-function whq_wcchp_load_cities( whq_wcchp_code_reg ) {
+function whq_wcchp_checkout_load_cities( region_code ) {
+	if(region_code == '') {
+		region_code = '99'; //Bring it on!
+	}
+
 	jQuery.ajax({
 		url: woocommerce_params.ajax_url,
 		data: {
 			action: 'whq_wcchp_cities_ajax',
-			codregion: '99',
+			codregion: region_code,
 			codtipocobertura: '2'
 		},
 		type: 'POST',
@@ -143,9 +120,13 @@ function whq_wcchp_load_cities( whq_wcchp_code_reg ) {
 			if(response.success === true) {
 				jQuery('#billing_city, #shipping_city').prop('disabled', false).empty().append('<option value=""></option>');
 
-				jQuery(response.data).each(function( i ) {
-					jQuery('#billing_city, #shipping_city').append('<option value="'+response.data[i]['CodComuna']+'"> '+response.data[i]['GlsComuna']+' </option>');
-				});
+				if( jQuery.isArray( response.data ) ) {
+					jQuery(response.data).each(function( i ) {
+						jQuery('#billing_city, #shipping_city').append('<option value="'+response.data[i]['CodComuna']+'"> '+response.data[i]['GlsComuna']+' </option>');
+					});
+				} else {
+					jQuery('#billing_city, #shipping_city').append('<option value="'+response.data['CodComuna']+'"> '+response.data['GlsComuna']+' </option>');
+				}
 
 				jQuery('#billing_city, #shipping_city').select2();
 				jQuery('#billing_city_field, #billing_state_field').unblock();
@@ -154,7 +135,7 @@ function whq_wcchp_load_cities( whq_wcchp_code_reg ) {
 	});
 }
 
-function whq_wcchp_inputs_replace() {
+function whq_wcchp_checkout_inputs_replace() {
 	if( jQuery('#billing_city, #shipping_city').is('input') ) {
 		jQuery('#billing_city_field, #billing_state_field').block({
 			message: null,
@@ -182,15 +163,15 @@ function whq_wcchp_inputs_replace() {
 	}
 }
 
-function whq_wcchp_inputs_restore() {
+function whq_wcchp_checkout_restore() {
 	if( jQuery('#billing_city, #shipping_city').is('select') ) {
-		jQuery("#billing_city").replaceWith('<input type="text" class="input-text " name="billing_city" id="billing_city" placeholder=""  value="" autocomplete="address-level2" />');
-		jQuery("#shipping_city").replaceWith('<input type="text" class="input-text " name="shipping_city" id="shipping_city" placeholder=""  value="" autocomplete="address-level2" />');
+		jQuery("#billing_city").replaceWith('<input type="text" class="input-text" name="billing_city" id="billing_city" placeholder=""  value="" autocomplete="address-level2" />');
+		jQuery("#shipping_city").replaceWith('<input type="text" class="input-text" name="shipping_city" id="shipping_city" placeholder=""  value="" autocomplete="address-level2" />');
 	}
 
 	if( jQuery('#billing_state, #shipping_state').is('select') ) {
-		jQuery("#billing_state").replaceWith('<input type="text" class="input-text " value=""  placeholder="" name="billing_state" id="billing_state" autocomplete="address-level1" />');
-		jQuery("#shipping_state").replaceWith('<input type="text" class="input-text " value=""  placeholder="" name="shipping_state" id="shipping_state" autocomplete="address-level1" />');
+		jQuery("#billing_state").replaceWith('<input type="text" class="input-text" value=""  placeholder="" name="billing_state" id="billing_state" autocomplete="address-level1" />');
+		jQuery("#shipping_state").replaceWith('<input type="text" class="input-text" value=""  placeholder="" name="shipping_state" id="shipping_state" autocomplete="address-level1" />');
 	}
 
 	jQuery('body').removeClass('wc-chilexpress-enabled');

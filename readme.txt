@@ -1,7 +1,7 @@
 === WooCommerce Chilexpress Shipping ===
 Contributors: whooo, jhoynerk, tcattd
 Tags: woocommerce, shipping, chile, chilexpress
-Stable tag: 1.0.9
+Stable tag: 1.1.0
 Requires at least: 4.4
 Tested up to: 4.8
 License: GPLv2 or later
@@ -15,7 +15,7 @@ Añade a Chilexpress como método de envío para WooCommerce.
 Utiliza la API de Chilexpress para obtener los costos de envío de forma automática según la región/ciudad/localidad que el usuario seleccione para envío en WooCommerce.
 
 Demostración en video:
-[youtube https://www.youtube.com/watch?v=8QiOibg8C8k]
+[youtube https://www.youtube.com/watch?v=JaLp1wmtKlk]
 
 El soporte al plugin se realiza directamente en [GitHub](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/).
 
@@ -41,28 +41,33 @@ Ayuda y aportes (pull requests) son bienvenidos.
 ¡Gracias!
 
 == Screenshots ==
-1. Cálculo automático de envío dentro de la Región Metropolitana.
-2. Cálculo automático de envío, mismo producto, a la Región del Bio-Bio.
+1. Cálculo precio de envío en Carro de Compras.
+2. Cálculo precio de envío en Finalizar Compra.
 3. Configuración del plugin.
 
 == Changelog ==
+= 1.1.0 =
+* Mejora: implementado el cálculo de precios en la calculadora rápida del carro de compras. Ver: https://www.youtube.com/watch?v=JaLp1wmtKlk
+* Mejora: caché de Regiones y Ciudades configurable. Ver opciones del plugin. Default 24 horas.
+* Fix: https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/11
+
 = 1.0.9 =
-* Fix - https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/10
-* Fix - https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/10#issuecomment-314546595
+* Fix: https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/10
+* Fix: https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/10#issuecomment-314546595
 
 = 1.0.7 =
-* Fix - https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/9
+* Fix: https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/9
 
 = 1.0.6 =
-* Fix - https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/6
-* Fix - https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/8
+* Fix: https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/6
+* Fix: https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/8
 
 = 1.0.5 =
-* Fix - https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/4
+* Fix: https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/4
 
 = 1.0.4 =
-* Fix - Transient cache id
-* Fix - Cache busting
+* Fix: Transient cache id
+* Fix: Cache busting
 
 = 1.0.2 =
 * Implementado Select2 para los campos de región y ciudad/localidad.
