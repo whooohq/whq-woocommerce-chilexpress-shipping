@@ -131,9 +131,13 @@ function whq_wcchp_init_class() {
 
 				whq_wcchp_array_move( $cities, 2, 86 );
 
-				$cities_array = array();
-				foreach ($cities as $city) {
-					$cities_array["$city->CodComuna"] = $city->GlsComuna;
+				if( is_array( $cities ) ) {
+					$cities_array = array();
+					foreach ($cities as $city) {
+						$cities_array["$city->CodComuna"] = $city->GlsComuna;
+					}
+				} else {
+					$cities_array = array( $cities );
 				}
 
 				return $cities_array;
@@ -182,19 +186,17 @@ function whq_wcchp_init_class() {
 					$chp_cost   = whq_wcchp_get_tarificacion($city, $this->shipping_origin, $weight, $length, $width, $height);
 					$final_cost = 0;
 
-					if( count( $chp_cost->respValorizarCourier->Servicios ) == 1 ) {
-						$final_cost = $chp_cost->respValorizarCourier->Servicios->ValorServicio;
-					} else {
-						foreach ( $chp_cost->respValorizarCourier->Servicios as $key => $value ) {
+					$chp_estimated = $chp_cost->respValorizarCourier->Servicios;
+
+					if( is_array( $chp_estimated ) ) {
+						foreach ( $chp_estimated as $key => $value ) {
 							//Next working day
 							if( $value->CodServicio == 3 ) {
 								$final_cost = $value->ValorServicio;
 							}
 						}
-					}
-
-					if( empty( $final_cost ) || $final_cost <= 0 ) {
-						$final_cost = 100000; //Chilexpress haven't already calculated it? (Probably doesn't have a location yet)
+					} else {
+						$final_cost = $chp_cost->respValorizarCourier->Servicios->ValorServicio;
 					}
 
 					$this->add_rate( array(

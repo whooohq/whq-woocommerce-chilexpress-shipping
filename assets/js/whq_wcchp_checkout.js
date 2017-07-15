@@ -1,5 +1,7 @@
 var whq_wcchp_location;
 var whq_wcchp_code_reg;
+var whq_wcchp_chilexpress_down;
+var whq_wcchp_chilexpress_cost;
 
 jQuery(document).ready(function( $ ) {
 	//Only on WooCommerce's Checkout
@@ -52,12 +54,42 @@ jQuery(document).ready(function( $ ) {
 			}
 		});
 
-		var whq_wcchp_chilexpress_down = setInterval(function() {
+		whq_wcchp_chilexpress_down = setInterval(function() {
 			if( ! jQuery('body').hasClass('wc-chilexpress-enabled') && jQuery('#shipping_method_0_chilexpress').length ) {
-				jQuery('#shipping_method_0_chilexpress').prop('disabled', true);
-				jQuery('label[for="shipping_method_0_chilexpress"]').html('Chilexpress no se encuentra disponible por el momento. Por favor, inténtelo más tarde.');
+				jQuery('#shipping_method_0_chilexpress').prop('disabled', true).prop('selected', false);
+
+				jQuery('form.woocommerce-checkout').prepend('<div class="whq_wcchp_chilexpress_error woocommerce-NoticeGroup woocommerce-NoticeGroup-checkout"><ul class="woocommerce-error"><li><strong>Chilexpress no se encuentra disponible por el momento. Por favor, iténtelo más tarde.</li></ul></div>');
+				jQuery('html, body').animate({ scrollTop: 0 }, 'normal');
+
+				setTimeout(function() {
+					jQuery('.whq_wcchp_chilexpress_error').fadeOut(500, function() {
+						jQuery(this).remove();
+					});
+				}, 5000);
 			}
 		}, 250);
+
+		//Shipping cost zero? https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/13
+		jQuery('body').on('click', '#place_order', function() {
+			if( jQuery('body').hasClass('wc-chilexpress-enabled') && jQuery('#shipping_method_0_chilexpress').length ) {
+				whq_wcchp_chilexpress_cost = jQuery('#shipping_method_0_chilexpress').next('label').children('.amount').text();
+
+				if( whq_wcchp_chilexpress_cost == '' && jQuery('#shipping_method_0_chilexpress').is(':checked') ) {
+					jQuery('#shipping_method_0_chilexpress').prop('disabled', true).prop('selected', false);
+
+					jQuery('form.woocommerce-checkout').prepend('<div class="whq_wcchp_chilexpress_error woocommerce-NoticeGroup woocommerce-NoticeGroup-checkout"><ul class="woocommerce-error"><li><strong>Chilexpress no se encuentra disponible por el momento. Por favor, iténtelo más tarde.</li></ul></div>');
+					jQuery('html, body').animate({ scrollTop: 0 }, 'normal');
+
+					setTimeout(function() {
+						jQuery('.whq_wcchp_chilexpress_error').fadeOut(500, function() {
+							jQuery(this).remove();
+						});
+					}, 5000);
+
+					return false;
+				}
+			}
+		});
 	}
 });
 
