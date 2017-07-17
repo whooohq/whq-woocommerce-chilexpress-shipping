@@ -166,14 +166,33 @@ function whq_wcchp_init_class() {
 				$length = 0;
 				$width  = 0;
 				$height = 0;
+				$dimensiones = array(0, 0, 0); // Largo, alto, ancho
 
 				foreach ( $package['contents'] as $item_id => $values ) {
-					$_product = $values['data'];
-					$weight   = (int) absint( $weight + $_product->get_weight() * $values['quantity'] );
-					$length   = (int) absint( $length + $_product->get_length() * $values['quantity'] );
-					$width    = (int) absint( $width + $_product->get_width() * $values['quantity'] );
-					$height   = (int) absint( $height + $_product->get_height() * $values['quantity'] );
+				  $_product = $values['data'];
+				  $largo = $_product->get_length();
+				  $ancho = $_product->get_width();
+				  $alto  = $_product->get_height();
+				  $weight = (int) absint( $weight + $_product->get_weight() * $values['quantity'] );
+					
+				  for($i=0; $i < $values['quantity']; $i++){
+					  if($dimensiones[0] === 0 and $dimensiones[1] === 0 and $dimensiones[2] === 0){
+					    $dimensiones[0] = $largo;
+					    $dimensiones[1] = $alto;
+					    $dimensiones[2] = $ancho;
+					  } else {
+					    if(abs($ancho - $dimensiones[2]) < abs($largo - $dimensiones[0])){
+					      $dimensiones[0] = $largo + $dimensiones[0];
+					    } else {
+					      $dimensiones[2] = $ancho + $dimensiones[2];
+					    }
+					  }
+				  }
 				}
+
+				$length = $dimensiones[0];
+				$height = $dimensiones[1];
+				$width  = $dimensiones[2];
 
 				if ( isset( $_POST['s_city'] ) && !is_null( $_POST['s_city'] ) ) {
 					$city = $_POST['s_city'];
