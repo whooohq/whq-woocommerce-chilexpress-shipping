@@ -6,7 +6,7 @@ Si te solicitamos mejorar algún punto de un PR en torno a los estándares, por 
 
 Para aportar directamente (PR), deberás considerar:
 
-* Todo aporte debe seguir los [estándares de código de WordPress](https://make.wordpress.org/core/handbook/best-practices/coding-standards/). Esto corre para PHP, HTML, CSS y Javascript.
+* Todo aporte debe seguir los [estándares de código de WordPress](https://make.wordpress.org/core/handbook/best-practices/coding-standards/). Esto corre para PHP, HTML, CSS y Javascript. Se facilita un archivo [.editorconfig](http://editorconfig.org/) para seguir los estándares de WordPress; si tu editor lo soporta, por favor, úsalo.
 * Si vas a incluir una librería de terceros, deberás utilizar [Composer](http://getcomposer.org/) para PHP, y [Bower](https://bower.io/) para CSS y JS. Mientras en el plugin no existe uso de librerías de terceros, sugerencias para configuración inicial de Composer y Bower son bienvenidas.
 * Para toda librería de tercero (PHP, CSS o JS) la licencia de aquella librería deberá ser compatible con la licencia GPLv2 (tal como WordPress).
 * Programa en inglés. Todo nombre de variable, función, clase, método, etc. deberá ser claro, siguiendo los [estándares de WordPress](https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#naming-conventions) y escrito en inglés. Esto es para todo, excepto los textos visibles para el usuario en el front-end (por ahora no ofrecemos traducciones en el plugin; si a futuro lo hacemos, esta regla se extenderá).
