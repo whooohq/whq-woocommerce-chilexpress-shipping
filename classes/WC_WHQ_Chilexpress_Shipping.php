@@ -175,7 +175,7 @@ function whq_wcchp_init_class() {
 				  $alto  = $_product->get_height();
 				  $weight = (int) absint( $weight + $_product->get_weight() * $values['quantity'] );
 					
-				  for($i=0; $i < $values['quantity']; $i++){
+				  for($i=1; $i < $values['quantity']; $i++){
 					  if($dimensiones[0] === 0 and $dimensiones[1] === 0 and $dimensiones[2] === 0){
 					    $dimensiones[0] = $largo;
 					    $dimensiones[1] = $alto;
