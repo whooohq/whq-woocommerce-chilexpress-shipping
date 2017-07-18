@@ -10,11 +10,11 @@ function whq_wcchp_call_soap($ns, $url, $route, $method, $data = '') {
 	$soap_login    = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_login' );
 	$soap_password = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_password' );
 
-	if( empty($soap_login) ) {
+	if( empty($soap_login) || $soap_login === false ) {
 		$soap_login    = $whq_wcchp_default['chilexpress_soap_login'];
 	}
 
-	if( empty($soap_password) ) {
+	if( empty($soap_password) || $soap_password === false ) {
 		$soap_password = $whq_wcchp_default['chilexpress_soap_pass'];
 	}
 
@@ -27,7 +27,12 @@ function whq_wcchp_call_soap($ns, $url, $route, $method, $data = '') {
 			$locations_cache = absint( $locations_cache );
 		}
 
-		$transient_duration = 60 * 60 * $locations_cache;
+		//No less than a day and more than a month
+		if( $locations_cache < 24 || $locations_cache > 744) {
+			$locations_cache = 24;
+		}
+
+		$transient_duration = 60 * 60 * $locations_cache; //Hours
 	} else {
 		$transient_duration = 60 * 60 * 1; //One hour
 	}

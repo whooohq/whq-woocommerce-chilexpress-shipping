@@ -86,7 +86,7 @@ function whq_wcchp_init_class() {
 					'locations_cache' => array(
 						'title'       => __( 'Caché de ubicaciones', 'whq-wcchp' ),
 						'type'        => 'number',
-						'description' => __( '(En horas) Chilexpress entrega un listado de ubicaciones (Regiones y Ciudades) dinámico. Para evitar saturar la API de Chilexpress, aquellos listados son guardados localmente en WordPress (Transients). Ingresa el número de horas a mantener en el caché el listado de regiones y cuidades. Una hora mínimo. Máximo un mes.', 'whq-wcchp' ),
+						'description' => __( '(En horas) Chilexpress entrega un listado de ubicaciones (Regiones y Ciudades) dinámico. Para evitar saturar la API de Chilexpress, aquellos listados son guardados localmente en WordPress (Transients). Ingresa el número de horas a mantener en el caché el listado de regiones y cuidades. Mínimo un día, máximo un mes.', 'whq-wcchp' ),
 						'default'     => 24,
 					),
 					'soap_login' => array(
@@ -227,10 +227,10 @@ function whq_wcchp_init_class() {
 			 * Validate the cache duration
 			 */
 			public function validate_locations_cache_field( $key, $value ) {
-				if ( isset( $value ) && $value < 1 ) {
-					WC_Admin_Settings::add_error( esc_html__( 'El caché mínimo para las localidades y regiones es de una hora.', 'woocommerce-integration-demo' ) );
+				if ( isset( $value ) && $value < 24 ) {
+					WC_Admin_Settings::add_error( esc_html__( 'El caché mínimo para las localidades y regiones es de un día.', 'woocommerce-integration-demo' ) );
 
-					$value = 1;
+					$value = 24;
 				}
 
 				if ( isset( $value ) && $value > 744 ) {
