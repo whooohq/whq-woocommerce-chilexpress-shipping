@@ -129,6 +129,9 @@ function whq_wcchp_checkout_chile_detected() {
 					jQuery('#billing_state, #shipping_state').select2();
 					jQuery('#billing_state_field, #shipping_state_field').unblock();
 				}
+
+				//Let user know that he/she needs to select a Region first
+				jQuery('#billing_city, #shipping_city').prop('disabled', false).empty().append('<option value="">Selecciona tu región primero, por favor.</option>');
 			}
 		}
 	});

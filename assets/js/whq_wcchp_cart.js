@@ -79,6 +79,9 @@ function whq_wcchp_cart_chile_detected() {
 
 					jQuery('#calc_shipping_state_field').unblock();
 				}
+
+				//Let user know that he/she needs to select a Region first
+				jQuery('#calc_shipping_city').prop('disabled', false).empty().append('<option value="">Selecciona tu región primero, por favor.</option>');
 			}
 		}
 	});

@@ -1,16 +1,14 @@
 # WooCommerce Chilexpress Shipping
-**Contributors:** [whooo](https://github.com/whooohq), [jhoynerk](https://github.com/jhoynerk), [tcattd](https://github.com/tcattd)
+**Contribuyentes Principales:** [whooo](https://github.com/whooohq), [jhoynerk](https://github.com/jhoynerk), [tcattd](https://github.com/tcattd)
 
-**Tags:** woocommerce, shipping, chile, chilexpress
+**Versión estable:** 1.1.4
 
-**Stable tag:** 1.1.3
+**Licencia:** GPLv2 or later
 
-**License:** GPLv2 or later
-
-**License URI:** [http://www.gnu.org/licenses/gpl-2.0.txt](http://www.gnu.org/licenses/gpl-2.0.txt)
+**URL de la Licencia:** [http://www.gnu.org/licenses/gpl-2.0.txt](http://www.gnu.org/licenses/gpl-2.0.txt)
 
 
-## Description
+## Descripción
 Añade a Chilexpress como método de envío para WooCommerce.
 
 Utiliza la API de Chilexpress para obtener los costos de envío de forma automática según la región/ciudad/localidad que el usuario seleccione para envío en WooCommerce.
