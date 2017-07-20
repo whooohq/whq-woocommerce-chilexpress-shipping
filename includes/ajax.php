@@ -3,6 +3,9 @@ if (!defined('ABSPATH')) {
 	die();
 }
 
+/**
+ * Retrieve regions from Chilexpress API
+ */
 add_action( 'wp_ajax_whq_wcchp_regions_ajax', 'whq_wcchp_regions_ajax' );
 add_action( 'wp_ajax_nopriv_whq_wcchp_regions_ajax', 'whq_wcchp_regions_ajax' );
 function whq_wcchp_regions_ajax() {
@@ -26,6 +29,9 @@ function whq_wcchp_regions_ajax() {
 	}
 }
 
+/**
+ * Retrieve Cities from Chilexpress API
+ */
 add_action( 'wp_ajax_whq_wcchp_cities_ajax', 'whq_wcchp_cities_ajax' );
 add_action( 'wp_ajax_nopriv_whq_wcchp_cities_ajax', 'whq_wcchp_cities_ajax' );
 function whq_wcchp_cities_ajax() {
@@ -50,4 +56,15 @@ function whq_wcchp_cities_ajax() {
 	} else {
 		wp_send_json_success( $cities );
 	}
+}
+
+/**
+ * Incompatible Plugin dismiss admin notice
+ */
+add_action( 'wp_ajax_whq_wcchp_incompatible_plugins_dismiss_ajax', 'whq_wcchp_dismiss_admin_notice' );
+function whq_wcchp_dismiss_admin_notice() {
+	update_option( 'whq_wcchp_incompatible_plugins', 'dismissed', 'no' );
+
+	echo '1';
+	die();
 }

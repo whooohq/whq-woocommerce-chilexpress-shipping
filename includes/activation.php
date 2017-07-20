@@ -9,6 +9,8 @@ function whq_wcchp_plugin_install() {
 }
 
 function whq_wcchp_check_requirements() {
+	global $whq_wcchp_default;
+
 	//PHP minimum version
 	if ( ! version_compare( PHP_VERSION, '5.6', '>=' ) ) {
 		deactivate_plugins( plugin_basename( $whq_wcchp_default['plugin_file'] ) );
