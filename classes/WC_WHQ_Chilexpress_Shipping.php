@@ -166,14 +166,101 @@ function whq_wcchp_init_class() {
 				$length = 0;
 				$width  = 0;
 				$height = 0;
+				$prd_package	= array();
+				$prd_package[0] = array( 0, 0, 0, 0 );
+				$prd_pkg_nbr	= 1;
+				$prd_pkg_qty	= count($package['contents']);
 
+				//Generates a package for each product in the cart.
 				foreach ( $package['contents'] as $item_id => $values ) {
 					$_product = $values['data'];
-					$weight   = (int) absint( $weight + $_product->get_weight() * $values['quantity'] );
-					$length   = (int) absint( $length + $_product->get_length() * $values['quantity'] );
-					$width    = (int) absint( $width + $_product->get_width() * $values['quantity'] );
-					$height   = (int) absint( $height + $_product->get_height() * $values['quantity'] );
+					//Calculates the final package weight.
+					$weight   = round( $weight + $_product->get_weight() * $values['quantity'],3 );
+					//Generates the package for the current product.
+					$length   = round( $_product->get_length(),1 );
+					$width    = round( $_product->get_width(),1 );
+					$height   = round( $_product->get_height(),1 );
+					$prd_package[$prd_pkg_nbr] = array(0, $length, $width, $height);
+					//Orders the product package dimensions in ascending order.
+					sort($prd_package[$prd_pkg_nbr]);
+					//Multiply the smallest product package dimension by the quantity to obtain the final product package.
+					$prd_package[$prd_pkg_nbr][1] = round( $prd_package[$prd_pkg_nbr][1] * $values['quantity'],1 );
+					//Reorders the product package dimensions in ascendind order.
+					sort($prd_package[$prd_pkg_nbr]);
+					//Calculates the volume of each product package.
+					$prd_package[$prd_pkg_nbr][0] = $prd_package[$prd_pkg_nbr][1] * $prd_package[$prd_pkg_nbr][2] * $prd_package[$prd_pkg_nbr][3];
+					error_log(print_r("SCW-PrdPkgIni({$prd_pkg_nbr}): Vl={$prd_package[$i][0]} Al={$prd_package[$prd_pkg_nbr][1]} An={$prd_package[$prd_pkg_nbr][2]} La={$prd_package[$prd_pkg_nbr][3]}", true));
+					$prd_pkg_nbr++;
 				}
+				//Orders the product packages by volume descending.
+				$aux_array = array( 0, 0, 0, 0 );
+				for ( $i=1; $i < $prd_pkg_qty; $i++ ) {
+					for ( $prd_pkg_nbr=1; $prd_pkg_nbr < $prd_pkg_qty; $prd_pkg_nbr++ ) {
+						if ( $prd_package[$prd_pkg_nbr][0] < $prd_package[$prd_pkg_nbr+1][0] ) {
+							$aux_array = $prd_package[$prd_pkg_nbr];
+							$prd_package[$prd_pkg_nbr] = $prd_package[$prd_pkg_nbr+1];
+							$prd_package[$prd_pkg_nbr+1] = $aux_array;
+						}
+					}
+				}
+				for ( $i=1; $i <= $prd_pkg_qty; $i++ ) {
+					error_log(print_r("SCW-PrdPkgVol({$i}): Vl={$prd_package[$i][0]} Al={$prd_package[$i][1]} An={$prd_package[$i][2]} La={$prd_package[$i][3]}", true));
+				}
+				//If the product packages are more than 3 then makes a new package for every two product packages to improve the final package.
+				if ( $prd_pkg_qty > 3 ) {
+					//if the prodct packages are not even then generates a new empty package.
+					if ( ($prd_pkg_qty % 2) == 1 ) {
+						$prd_pkg_qty++;
+						$prd_package[$prd_pkg_qty] = array(0, 0, 0, 0);
+					}
+					//Joins every two product packages in a new single product package.
+					$prd_pkg_nbr = 1;
+					for ( $i=1; $i < $prd_pkg_qty; $i+=2 ) {
+						$prd_package[$prd_pkg_nbr][1] = $prd_package[$i][1] + $prd_package[$i+1][1];
+						if ( $prd_package[$i][2] > $prd_package[$i+1][2] ) {
+							$prd_package[$prd_pkg_nbr][2] = $prd_package[$i][2];
+						} else {
+							$prd_package[$prd_pkg_nbr][2] = $prd_package[$i+1][2];
+						}
+						if ( $prd_package[$i][3] > $prd_package[$i+1][3] ) {
+							$prd_package[$prd_pkg_nbr][3] = $prd_package[$i][3];
+						} else {
+							$prd_package[$prd_pkg_nbr][3] = $prd_package[$i+1][3];
+						}
+						$prd_package[$prd_pkg_nbr][0] = 0;
+						//Reorders the new product package dimensions in ascendind order.
+						sort($prd_package[$prd_pkg_nbr]);
+						//Calculates the volume for the new product package.
+						$prd_package[$prd_pkg_nbr][0] = $prd_package[$prd_pkg_nbr][1] * $prd_package[$prd_pkg_nbr][2] * $prd_package[$prd_pkg_nbr][3];
+						$prd_pkg_nbr++;
+					}
+					$prd_pkg_qty = $prd_pkg_qty / 2;
+					for ($i=1; $i <= $prd_pkg_qty; $i++) {
+						error_log(print_r("SCW-PrdPkgRed({$i}): Vl={$prd_package[$i][0]} Al={$prd_package[$i][1]} An={$prd_package[$i][2]} La={$prd_package[$i][3]}", true));
+					}
+				}
+				//Generates the final package.
+				for ( $prd_pkg_nbr=1; $prd_pkg_nbr <= $prd_pkg_qty; $prd_pkg_nbr++ ) {
+					$prd_package[0][1] = $prd_package[0][1] + $prd_package[$prd_pkg_nbr][1];
+					if ( $prd_package[$prd_pkg_nbr][2] > $prd_package[0][2] ) {
+						$prd_package[0][2] = $prd_package[$prd_pkg_nbr][2];
+					}
+					if ( $prd_package[$prd_pkg_nbr][3] > $prd_package[0][3] ) {
+						$prd_package[0][3] = $prd_package[$prd_pkg_nbr][3];
+					}
+					//For each product package included reorders the resulting package by the smallest dimension.
+					sort($prd_package[0]);
+					error_log(print_r("SCW-FinPkgPrdPkg({$prd_pkg_nbr}): Al={$prd_package[0][1]} An={$prd_package[0][2]} La={$prd_package[0][3]}", true));
+				}
+				//Reorders the final package by the largest dimension, adds 2cm on each dimension (for the wrapping),
+				//rounds up each value and trasfers the values to the final variables.
+				//Future enhancement: Manage the value for the wrapping in the plugin configuration.
+				sort($prd_package[0]);
+				$length = (int) ceil($prd_package[0][3]+2);
+				$width  = (int) ceil($prd_package[0][2]+2);
+				$height = (int) ceil($prd_package[0][1]+2);
+				$prd_package[0][0] = $length * $width * $height;
+				error_log(print_r("SCW-FinalPackage: Kg={$weight} Vl={$prd_package[0][0]} La={$length} An={$width} Al={$height}", true));
 
 				if ( isset( $_POST['s_city'] ) && !is_null( $_POST['s_city'] ) ) {
 					$city = $_POST['s_city'];
