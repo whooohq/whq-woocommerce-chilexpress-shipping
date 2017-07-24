@@ -17,7 +17,7 @@ function whq_wcchp_array_move( &$array, $old_pos, $new_pos ) {
 }
 
 // https://www.elegantthemes.com/blog/tips-tricks/using-the-wordpress-debug-log
-if ( ! function_exists('write_log') ) {
+if ( ! function_exists( 'write_log' ) ) {
 	function write_log( $log ) {
 		if ( true === WP_DEBUG ) {
 			if ( is_array( $log ) || is_object( $log ) ) {
