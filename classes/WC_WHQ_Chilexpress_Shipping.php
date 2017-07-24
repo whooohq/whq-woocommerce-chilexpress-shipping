@@ -30,13 +30,14 @@ function whq_wcchp_init_class() {
 				$this->init_settings();
 
 				// Define user set variables
-				$this->enabled               = $this->get_option( 'enabled' );
-				$this->title                 = $this->get_option( 'title' );
-				$this->shipping_origin       = $this->get_option( 'shipping_origin' );
-				$this->locations_cache       = $this->get_option( 'locations_cache' );
-				$this->soap_login            = $this->get_option( 'soap_login' );
-				$this->soap_password         = $this->get_option( 'soap_password' );
-				$this->availability          = true;
+				$this->enabled         = $this->get_option( 'enabled' );
+				$this->title           = $this->get_option( 'title' );
+				$this->shipping_origin = $this->get_option( 'shipping_origin' );
+				$this->locations_cache = $this->get_option( 'locations_cache' );
+				$this->extra_wrapper   = $this->get_option( 'extra_wrapper' );
+				$this->soap_login      = $this->get_option( 'soap_login' );
+				$this->soap_password   = $this->get_option( 'soap_password' );
+				$this->availability    = true;
 
 				// Save settings in admin if you have any defined
 				add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
@@ -88,6 +89,12 @@ function whq_wcchp_init_class() {
 						'type'        => 'number',
 						'description' => __( '(En horas) Chilexpress entrega un listado de ubicaciones (Regiones y Ciudades) dinámico. Para evitar saturar la API de Chilexpress, aquellos listados son guardados localmente en WordPress (Transients). Ingresa el número de horas a mantener en el caché el listado de regiones y cuidades. Mínimo un día, máximo un mes.', 'whq-wcchp' ),
 						'default'     => 24,
+					),
+					'extra_wrapper' => array(
+						'title'       => __( 'CM extra para caja/embalaje', 'whq-wcchp' ),
+						'type'        => 'number',
+						'description' => __( '(En centímetros) El plugin permite que añadas X centímetros extra al paquete que enviarás a Chilexpress, esto, para permitirte contabilizar el posible uso de una caja (y el espacio extra que necesitarás para evitar que lo que envias se dañe). Si ya usas ese estimado extra al momento de ingresar tus productos a tu tienda, y no deseas utilizar este extra, simplemente deja el valor en cero.', 'whq-wcchp' ),
+						'default'     => 0,
 					),
 					'soap_login' => array(
 						'title'       => __( 'Chilexpress API Username', 'whq-wcchp' ),
@@ -162,105 +169,152 @@ function whq_wcchp_init_class() {
 			 * @return void
 			 */
 			public function calculate_shipping( $package = array() ) {
-				$weight = 0;
-				$length = 0;
-				$width  = 0;
-				$height = 0;
-				$prd_package	= array();
-				$prd_package[0] = array( 0, 0, 0, 0 );
-				$prd_pkg_nbr	= 1;
-				$prd_pkg_qty	= count($package['contents']);
+				$weight                   = 0;
+				$length                   = 0;
+				$width                    = 0;
+				$height                   = 0;
+				$product_package          = array();
+				$product_package[0]       = array( 0, 0, 0, 0 );
+				$product_package_number   = 1;
+				$product_package_quantity = count( $package['contents'] );
 
 				//Generates a package for each product in the cart.
 				foreach ( $package['contents'] as $item_id => $values ) {
 					$_product = $values['data'];
+
 					//Calculates the final package weight.
 					$weight   = round( $weight + $_product->get_weight() * $values['quantity'],3 );
+
 					//Generates the package for the current product.
-					$length   = round( $_product->get_length(),1 );
-					$width    = round( $_product->get_width(),1 );
-					$height   = round( $_product->get_height(),1 );
-					$prd_package[$prd_pkg_nbr] = array(0, $length, $width, $height);
+					$length = round( $_product->get_length(), 1 );
+					$width  = round( $_product->get_width(), 1 );
+					$height = round( $_product->get_height(), 1 );
+
+					$product_package[$product_package_number] = array(0, $length, $width, $height);
+
 					//Orders the product package dimensions in ascending order.
-					sort($prd_package[$prd_pkg_nbr]);
+					sort( $product_package[$product_package_number] );
+
 					//Multiply the smallest product package dimension by the quantity to obtain the final product package.
-					$prd_package[$prd_pkg_nbr][1] = round( $prd_package[$prd_pkg_nbr][1] * $values['quantity'],1 );
+					$product_package[$product_package_number][1] = round( $product_package[$product_package_number][1] * $values['quantity'], 1 );
+
 					//Reorders the product package dimensions in ascendind order.
-					sort($prd_package[$prd_pkg_nbr]);
+					sort( $product_package[$product_package_number] );
+
 					//Calculates the volume of each product package.
-					$prd_package[$prd_pkg_nbr][0] = $prd_package[$prd_pkg_nbr][1] * $prd_package[$prd_pkg_nbr][2] * $prd_package[$prd_pkg_nbr][3];
-					error_log(print_r("SCW-PrdPkgIni({$prd_pkg_nbr}): Vl={$prd_package[$i][0]} Al={$prd_package[$prd_pkg_nbr][1]} An={$prd_package[$prd_pkg_nbr][2]} La={$prd_package[$prd_pkg_nbr][3]}", true));
-					$prd_pkg_nbr++;
+					$product_package[$product_package_number][0] = $product_package[$product_package_number][1] * $product_package[$product_package_number][2] * $product_package[$product_package_number][3];
+
+					write_log( "WHQChxp-PrdPkgInit({$product_package_number}): Vl={$product_package[$product_package_number][0]} Al={$product_package[$product_package_number][1]} An={$product_package[$product_package_number][2]} La={$product_package[$product_package_number][3]}" );
+
+					$product_package_number++;
 				}
+
 				//Orders the product packages by volume descending.
-				$aux_array = array( 0, 0, 0, 0 );
-				for ( $i=1; $i < $prd_pkg_qty; $i++ ) {
-					for ( $prd_pkg_nbr=1; $prd_pkg_nbr < $prd_pkg_qty; $prd_pkg_nbr++ ) {
-						if ( $prd_package[$prd_pkg_nbr][0] < $prd_package[$prd_pkg_nbr+1][0] ) {
-							$aux_array = $prd_package[$prd_pkg_nbr];
-							$prd_package[$prd_pkg_nbr] = $prd_package[$prd_pkg_nbr+1];
-							$prd_package[$prd_pkg_nbr+1] = $aux_array;
+				$auxiliary_array = array( 0, 0, 0, 0 );
+
+				for ( $i=1; $i < $product_package_quantity; $i++ ) {
+					for ( $product_package_number=1; $product_package_number < $product_package_quantity; $product_package_number++ ) {
+						if ( $product_package[$product_package_number][0] < $product_package[$product_package_number+1][0] ) {
+							$auxiliary_array = $product_package[$product_package_number];
+
+							$product_package[$product_package_number] = $product_package[$product_package_number+1];
+
+							$product_package[$product_package_number+1] = $auxiliary_array;
 						}
 					}
 				}
-				for ( $i=1; $i <= $prd_pkg_qty; $i++ ) {
-					error_log(print_r("SCW-PrdPkgVol({$i}): Vl={$prd_package[$i][0]} Al={$prd_package[$i][1]} An={$prd_package[$i][2]} La={$prd_package[$i][3]}", true));
+
+				//To save an extra loop, we check WP_DEBUG first
+				if ( true === WP_DEBUG ) {
+					for ( $i=1; $i <= $product_package_quantity; $i++ ) {
+						write_log( "WHQChxp-PrdPkgVol({$i}): Vl={$product_package[$i][0]} Al={$product_package[$i][1]} An={$product_package[$i][2]} La={$product_package[$i][3]}" );
+					}
 				}
+
 				//If the product packages are more than 3 then makes a new package for every two product packages to improve the final package.
-				if ( $prd_pkg_qty > 3 ) {
-					//if the prodct packages are not even then generates a new empty package.
-					if ( ($prd_pkg_qty % 2) == 1 ) {
-						$prd_pkg_qty++;
-						$prd_package[$prd_pkg_qty] = array(0, 0, 0, 0);
+				if ( $product_package_quantity > 3 ) {
+					//if the product packages are not even then generates a new empty package.
+					if ( ($product_package_quantity % 2) == 1 ) {
+						$product_package_quantity++;
+						$product_package[$product_package_quantity] = array(0, 0, 0, 0);
 					}
+
 					//Joins every two product packages in a new single product package.
-					$prd_pkg_nbr = 1;
-					for ( $i=1; $i < $prd_pkg_qty; $i+=2 ) {
-						$prd_package[$prd_pkg_nbr][1] = $prd_package[$i][1] + $prd_package[$i+1][1];
-						if ( $prd_package[$i][2] > $prd_package[$i+1][2] ) {
-							$prd_package[$prd_pkg_nbr][2] = $prd_package[$i][2];
+					$product_package_number = 1;
+
+					for ( $i=1; $i < $product_package_quantity; $i+=2 ) {
+						$product_package[$product_package_number][1] = $product_package[$i][1] + $product_package[$i+1][1];
+
+						if ( $product_package[$i][2] > $product_package[$i+1][2] ) {
+							$product_package[$product_package_number][2] = $product_package[$i][2];
 						} else {
-							$prd_package[$prd_pkg_nbr][2] = $prd_package[$i+1][2];
+							$product_package[$product_package_number][2] = $product_package[$i+1][2];
 						}
-						if ( $prd_package[$i][3] > $prd_package[$i+1][3] ) {
-							$prd_package[$prd_pkg_nbr][3] = $prd_package[$i][3];
+
+						if ( $product_package[$i][3] > $product_package[$i+1][3] ) {
+							$product_package[$product_package_number][3] = $product_package[$i][3];
 						} else {
-							$prd_package[$prd_pkg_nbr][3] = $prd_package[$i+1][3];
+							$product_package[$product_package_number][3] = $product_package[$i+1][3];
 						}
-						$prd_package[$prd_pkg_nbr][0] = 0;
+
+						$product_package[$product_package_number][0] = 0;
+
 						//Reorders the new product package dimensions in ascendind order.
-						sort($prd_package[$prd_pkg_nbr]);
+						sort( $product_package[$product_package_number] );
+
 						//Calculates the volume for the new product package.
-						$prd_package[$prd_pkg_nbr][0] = $prd_package[$prd_pkg_nbr][1] * $prd_package[$prd_pkg_nbr][2] * $prd_package[$prd_pkg_nbr][3];
-						$prd_pkg_nbr++;
+						$product_package[$product_package_number][0] = $product_package[$product_package_number][1] * $product_package[$product_package_number][2] * $product_package[$product_package_number][3];
+
+						$product_package_number++;
+
 					}
-					$prd_pkg_qty = $prd_pkg_qty / 2;
-					for ($i=1; $i <= $prd_pkg_qty; $i++) {
-						error_log(print_r("SCW-PrdPkgRed({$i}): Vl={$prd_package[$i][0]} Al={$prd_package[$i][1]} An={$prd_package[$i][2]} La={$prd_package[$i][3]}", true));
+
+					$product_package_quantity = $product_package_quantity / 2;
+
+					//To save an extra loop, we check WP_DEBUG first
+					if ( true === WP_DEBUG ) {
+						for ($i=1; $i <= $product_package_quantity; $i++) {
+							write_log( "WHQChxp-PrdPkgRed({$i}): Vl={$product_package[$i][0]} Al={$product_package[$i][1]} An={$product_package[$i][2]} La={$product_package[$i][3]}" );
+						}
 					}
 				}
+
 				//Generates the final package.
-				for ( $prd_pkg_nbr=1; $prd_pkg_nbr <= $prd_pkg_qty; $prd_pkg_nbr++ ) {
-					$prd_package[0][1] = $prd_package[0][1] + $prd_package[$prd_pkg_nbr][1];
-					if ( $prd_package[$prd_pkg_nbr][2] > $prd_package[0][2] ) {
-						$prd_package[0][2] = $prd_package[$prd_pkg_nbr][2];
+				for ( $product_package_number=1; $product_package_number <= $product_package_quantity; $product_package_number++ ) {
+					$product_package[0][1] = $product_package[0][1] + $product_package[$product_package_number][1];
+
+					if ( $product_package[$product_package_number][2] > $product_package[0][2] ) {
+						$product_package[0][2] = $product_package[$product_package_number][2];
 					}
-					if ( $prd_package[$prd_pkg_nbr][3] > $prd_package[0][3] ) {
-						$prd_package[0][3] = $prd_package[$prd_pkg_nbr][3];
+
+					if ( $product_package[$product_package_number][3] > $product_package[0][3] ) {
+						$product_package[0][3] = $product_package[$product_package_number][3];
 					}
+
 					//For each product package included reorders the resulting package by the smallest dimension.
-					sort($prd_package[0]);
-					error_log(print_r("SCW-FinPkgPrdPkg({$prd_pkg_nbr}): Al={$prd_package[0][1]} An={$prd_package[0][2]} La={$prd_package[0][3]}", true));
+					sort( $product_package[0] );
+
+					write_log( "WHQChxp-FinPkgPrdPkg({$product_package_number}): Al={$product_package[0][1]} An={$product_package[0][2]} La={$product_package[0][3]}" );
 				}
-				//Reorders the final package by the largest dimension, adds 2cm on each dimension (for the wrapping),
-				//rounds up each value and trasfers the values to the final variables.
-				//Future enhancement: Manage the value for the wrapping in the plugin configuration.
-				sort($prd_package[0]);
-				$length = (int) ceil($prd_package[0][3]+2);
-				$width  = (int) ceil($prd_package[0][2]+2);
-				$height = (int) ceil($prd_package[0][1]+2);
-				$prd_package[0][0] = $length * $width * $height;
-				error_log(print_r("SCW-FinalPackage: Kg={$weight} Vl={$prd_package[0][0]} La={$length} An={$width} Al={$height}", true));
+
+				/*
+				Reorders the final package by the largest dimension, adds X cm on each dimension (for the wrapping/box),
+				Rounds up each value and trasfers the values to the final variables.
+				*/
+				sort( $product_package[0] );
+
+				$extra_wrapper = (int) absint( $this->extra_wrapper );
+
+				if( empty( $extra_wrapper ) || false === $extra_wrapper || $extra_wrapper < 0) {
+					$extra_wrapper = 0; //No valid value returned?
+				}
+
+				$length = (int) ceil( absint( $product_package[0][3] + $extra_wrapper ) );
+				$width  = (int) ceil( absint( $product_package[0][2] + $extra_wrapper ) );
+				$height = (int) ceil( absint( $product_package[0][1] + $extra_wrapper ) );
+				$product_package[0][0] = $length * $width * $height;
+
+				write_log( "WHQChxp-FinalPackage: Kg={$weight} Vl={$product_package[0][0]} La={$length} An={$width} Al={$height}" );
 
 				if ( isset( $_POST['s_city'] ) && !is_null( $_POST['s_city'] ) ) {
 					$city = $_POST['s_city'];
@@ -315,15 +369,32 @@ function whq_wcchp_init_class() {
 			 */
 			public function validate_locations_cache_field( $key, $value ) {
 				if ( isset( $value ) && $value < 24 ) {
-					WC_Admin_Settings::add_error( esc_html__( 'El caché mínimo para las localidades y regiones es de un día.', 'woocommerce-integration-demo' ) );
+					WC_Admin_Settings::add_error( esc_html__( 'El caché mínimo para las localidades y regiones es de un día.', 'whq-wcchp' ) );
 
 					$value = 24;
 				}
 
 				if ( isset( $value ) && $value > 744 ) {
-					WC_Admin_Settings::add_error( esc_html__( 'El caché máximo para las localidades y regiones es de un mes (744 horas).', 'woocommerce-integration-demo' ) );
+					WC_Admin_Settings::add_error( esc_html__( 'El caché máximo para las localidades y regiones es de un mes (744 horas).', 'whq-wcchp' ) );
 
 					$value = 744;
+				}
+
+				return $value;
+			}
+
+			/**
+			 * Validate the extra package wrapper
+			 */
+			public function validate_extra_wrapper_field( $key, $value ) {
+				if ( isset( $value ) && $value < 0 ) {
+					WC_Admin_Settings::add_error( esc_html__( 'El valor mínimo es 0 centímetros.', 'whq-wcchp' ) );
+
+					$value = 0;
+				}
+
+				if ( isset( $value ) && $value > 30 ) {
+					WC_Admin_Settings::add_error( esc_html__( '¿Estás seguro que necesitas 30 o más centímetros extra para la caja/embalaje?.', 'whq-wcchp' ) ); //Will leave the value in there, just warn the user
 				}
 
 				return $value;

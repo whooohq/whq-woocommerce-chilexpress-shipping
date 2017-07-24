@@ -1,7 +1,7 @@
 # WooCommerce Chilexpress Shipping
 **Principales Contribuyentes:** [whooo](https://github.com/whooohq), [jhoynerk](https://github.com/jhoynerk), [tcattd](https://github.com/tcattd)
 
-**Versión estable:** 1.1.6
+**Versión estable:** 1.1.7
 
 **Licencia:** GPLv2 or later
 
