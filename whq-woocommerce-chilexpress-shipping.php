@@ -24,7 +24,7 @@ Text Domain: whq-wcchp
 $whq_wcchp_active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins' ) );
 if ( in_array( 'woocommerce/woocommerce.php', $whq_wcchp_active_plugins) ) {
 	$whq_wcchp_default = array(
-		'plugin_version'         => '1.1.6',
+		'plugin_version'         => '1.1.7',
 		'plugin_file'            => __FILE__,
 		'plugin_basename'        => plugin_basename(__FILE__),
 		'plugin_path'            => trailingslashit( plugin_dir_path(__FILE__) ),
