@@ -309,9 +309,9 @@ function whq_wcchp_init_class() {
 					$extra_wrapper = 0; //No valid value returned?
 				}
 
-				$length = (int) ceil( $product_package[0][3] + $extra_wrapper );
-				$width  = (int) ceil( $product_package[0][2] + $extra_wrapper );
-				$height = (int) ceil( $product_package[0][1] + $extra_wrapper );
+				$length = ceil( $product_package[0][3] + $extra_wrapper );
+				$width  = ceil( $product_package[0][2] + $extra_wrapper );
+				$height = ceil( $product_package[0][1] + $extra_wrapper );
 				$product_package[0][0] = $length * $width * $height;
 
 				write_log( "WHQChxp-FinalPackage: Kg={$weight} Vl={$product_package[0][0]} La={$length} An={$width} Al={$height}" );
