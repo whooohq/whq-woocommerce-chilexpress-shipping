@@ -23,7 +23,7 @@ function whq_wcchp_init_class() {
 			public function __construct(){
 				$this->id = 'chilexpress';
 				$this->method_title = __( 'Chilexpress', 'whq-wcchp' );
-				$this->method_description = __( 'Utiliza la API SOAP de Chilexpress para el cálculo automático de costos de envío. Sugerencias y reporte de errores en <a href="https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues" target="_blank">GitHub</a>.', 'whq-wcchp' );
+				$this->method_description = __( 'Utiliza la API de Chilexpress para el cálculo automático de costos de envío. Sugerencias y reporte de errores en <a href="https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues" target="_blank">GitHub</a>.', 'whq-wcchp' );
 
 				// Load the settings.
 				$this->init_form_fields();
@@ -33,10 +33,13 @@ function whq_wcchp_init_class() {
 				$this->enabled         = $this->get_option( 'enabled' );
 				$this->title           = $this->get_option( 'title' );
 				$this->shipping_origin = $this->get_option( 'shipping_origin' );
-				//$this->soap_login      = $this->get_option( 'soap_login' );
-				//$this->soap_password   = $this->get_option( 'soap_password' );
+				$this->locations_cache = $this->get_option( 'locations_cache' );
+				$this->extra_wrapper   = $this->get_option( 'extra_wrapper' );
+				$this->soap_login      = $this->get_option( 'soap_login' );
+				$this->soap_password   = $this->get_option( 'soap_password' );
 				$this->availability    = true;
 
+				// Save settings in admin if you have any defined
 				add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
 			}
 
@@ -64,10 +67,10 @@ function whq_wcchp_init_class() {
 			public function init_form_fields() {
 				$this->form_fields = array(
 					'enabled' => array(
-						'title'   => __( 'Habilitar/Deshabilitar', 'whq-wcchp' ),
+						'title'   => __( 'Activar/Desactivar', 'whq-wcchp' ),
 						'type'    => 'checkbox',
-						'label'   => __( 'Habilitar envíos via Chilexpress', 'whq-wcchp' ),
-						'default' => 'yes'
+						'label'   => __( 'Habilitar envíos vía Chilexpress', 'whq-wcchp' ),
+						'default' => 'yes',
 					),
 					'title' => array(
 						'title'       => __( 'Título del método de envío', 'whq-wcchp' ),
@@ -79,265 +82,72 @@ function whq_wcchp_init_class() {
 						'title'       => __( 'Origen de los envios', 'whq-wcchp' ),
 						'type'        => 'select',
 						'description' => __( 'Ciudad/Localidad de origen, desde donde se realiza el envío', 'whq-wcchp' ),
-						'options'     => ['PAYS' => 'AISEN',
-										'ALGA' => 'ALGARROBO',
-										'AHOS' => 'ALTO HOSPICIO',
-										'ANCU' => 'ANCUD',
-										'ANDA' => 'ANDACOLLO',
-										'ANGO' => 'ANGOL',
-										'ANTO' => 'ANTOFAGASTA',
-										'ARAU' => 'ARAUCO',
-										'ARIC' => 'ARICA',
-										'BUIN' => 'BUIN',
-										'BULN' => 'BULNES',
-										'CABI' => 'CABILDO',
-										'CABR' => 'CABRERO',
-										'CALA' => 'CALAMA',
-										'CALB' => 'CALBUCO',
-										'CALD' => 'CALDERA',
-										'CTAN' => 'CALERA DE TANGO',
-										'CANE' => 'CANETE',
-										'CARA' => 'CARAHUE',
-										'CART' => 'CARTAGENA',
-										'CASA' => 'CASABLANCA',
-										'CAST' => 'CASTRO',
-										'CAUQ' => 'CAUQUENES',
-										'LOSC' => 'CERRILLOS',
-										'CNAV' => 'CERRO NAVIA',
-										'CHAN' => 'CHANARAL',
-										'CHEP' => 'CHEPICA',
-										'CHIG' => 'CHIGUAYANTE',
-										'CHCH' => 'CHILE CHICO',
-										'CHIL' => 'CHILLAN',
-										'CHIM' => 'CHIMBARONGO',
-										'CHON' => 'CHONCHI',
-										'PCIS' => 'CISNES',
-										'COCH' => 'COCHRANE',
-										'COEL' => 'COELEMU',
-										'COIC' => 'COIHUECO',
-										'COIN' => 'COINCO',
-										'COLB' => 'COLBUN',
-										'COLI' => 'COLINA',
-										'COLL' => 'COLLIPULLI',
-										'COLT' => 'COLTAUCO',
-										'COMB' => 'COMBARBALA',
-										'CONC' => 'CONCEPCION',
-										'CCHA' => 'CONCHALI',
-										'CCON' => 'CONCON',
-										'CONS' => 'CONSTITUCION',
-										'COPI' => 'COPIAPO',
-										'COQU' => 'COQUIMBO',
-										'CORO' => 'CORONEL',
-										'COYH' => 'COYHAIQUE',
-										'CURC' => 'CURACAUTIN',
-										'CRCV' => 'CURACAVI',
-										'CURA' => 'CURANILAHUE',
-										'CURI' => 'CURICO',
-										'DALC' => 'DALCAHUE',
-										'DIEG' => 'DIEGO DE ALMAGRO',
-										'DONI' => 'DONIHUE',
-										'ELBO' => 'EL BOSQUE',
-										'ECAR' => 'EL CARMEN',
-										'ELMO' => 'EL MONTE',
-										'QSCO' => 'EL QUISCO',
-										'TABO' => 'EL TABO',
-										'ECEN' => 'ESTACION CENTRAL',
-										'FRER' => 'FREIRE',
-										'FREI' => 'FREIRINA',
-										'FRUT' => 'FRUTILLAR',
-										'FUTR' => 'FUTRONO',
-										'GORB' => 'GORBEA',
-										'GRAN' => 'GRANEROS',
-										'HIJU' => 'HIJUELAS',
-										'HORP' => 'HUALAIHUE',
-										'HPEN' => 'HUALPEN',
-										'HUAS' => 'HUASCO',
-										'HUEC' => 'HUECHURABA',
-										'ILLA' => 'ILLAPEL',
-										'INDE' => 'INDEPENDENCIA',
-										'IQUI' => 'IQUIQUE',
-										'IMAI' => 'ISLA DE MAIPO',
-										'LACA' => 'LA CALERA',
-										'LACI' => 'LA CISTERNA',
-										'LACR' => 'LA CRUZ',
-										'LAFL' => 'LA FLORIDA',
-										'LAGR' => 'LA GRANJA',
-										'LALI' => 'LA LIGUA',
-										'LAPI' => 'LA PINTANA',
-										'LARE' => 'LA REINA',
-										'LASE' => 'LA SERENA',
-										'LAUN' => 'LA UNION',
-										'LRAN' => 'LAGO RANCO',
-										'LAJA' => 'LAJA',
-										'LAMP' => 'LAMPA',
-										'LANC' => 'LANCO',
-										'LCAB' => 'LAS CABRAS',
-										'LCON' => 'LAS CONDES',
-										'LAUT' => 'LAUTARO',
-										'LEBU' => 'LEBU',
-										'LIMA' => 'LIMACHE',
-										'LINA' => 'LINARES',
-										'LCHE' => 'LITUECHE',
-										'LLAN' => 'LLANQUIHUE',
-										'LLAY' => 'LLAY LLAY',
-										'LOBA' => 'LO BARNECHEA',
-										'LOES' => 'LO ESPEJO',
-										'LOPR' => 'LO PRADO',
-										'LOLO' => 'LOLOL',
-										'LONC' => 'LONCOCHE',
-										'LONG' => 'LONGAVI',
-										'ALAM' => 'LOS ALAMOS',
-										'LAND' => 'LOS ANDES',
-										'LANG' => 'LOS ANGELES',
-										'LLAG' => 'LOS LAGOS',
-										'LMUE' => 'LOS MUERMOS',
-										'LVIL' => 'LOS VILOS',
-										'LOTA' => 'LOTA',
-										'MACH' => 'MACHALI',
-										'MACU' => 'MACUL',
-										'MAFI' => 'MAFIL',
-										'MIPU' => 'MAIPU',
-										'MALO' => 'MALLOA',
-										'MARC' => 'MARCHIGUE',
-										'MARI' => 'MARIA ELENA',
-										'MAUL' => 'MAULLIN',
-										'MEJI' => 'MEJILLONES',
-										'MELI' => 'MELIPILLA',
-										'MOLI' => 'MOLINA',
-										'MOPA' => 'MONTE PATRIA',
-										'MULC' => 'MULCHEN',
-										'NACI' => 'NACIMIENTO',
-										'NANC' => 'NANCAGUA',
-										'PNAT' => 'NATALES',
-										'NEGR' => 'NEGRETE',
-										'NOGA' => 'NOGALES',
-										'NVAI' => 'NUEVA IMPERIAL',
-										'NUNO' => 'NUNOA',
-										'OLIV' => 'OLIVAR',
-										'OLMU' => 'OLMUE',
-										'OSOR' => 'OSORNO',
-										'OVAL' => 'OVALLE',
-										'PHUR' => 'PADRE HURTADO',
-										'PLCA' => 'PADRE LAS CASAS',
-										'PAIL' => 'PAILLACO',
-										'PAIN' => 'PAINE',
-										'PALM' => 'PALMILLA',
-										'PANG' => 'PANGUIPULLI',
-										'PARR' => 'PARRAL',
-										'PEDR' => 'PEDRO AGUIRRE CERDA',
-										'PEMU' => 'PEMUCO',
-										'PENA' => 'PENAFLOR',
-										'PLOL' => 'PENALOLEN',
-										'PENC' => 'PENCO',
-										'PERA' => 'PERALILLO',
-										'PEUM' => 'PEUMO',
-										'PICD' => 'PICHIDEGUA',
-										'PICH' => 'PICHILEMU',
-										'PINT' => 'PINTO',
-										'PIRQ' => 'PIRQUE',
-										'PITR' => 'PITRUFQUEN',
-										'PLAC' => 'PLACILLA SEXTA REGION',
-										'PORV' => 'PORVENIR',
-										'POZO' => 'POZO ALMONTE',
-										'PROV' => 'PROVIDENCIA',
-										'PUCH' => 'PUCHUNCAVI',
-										'PUCO' => 'PUCON',
-										'PUDA' => 'PUDAHUEL',
-										'PALT' => 'PUENTE ALTO',
-										'PMON' => 'PUERTO MONTT',
-										'PVAR' => 'PUERTO VARAS',
-										'PUNI' => 'PUNITAQUI',
-										'PUNT' => 'PUNTA ARENAS',
-										'PURE' => 'PUREN',
-										'PURR' => 'PURRANQUE',
-										'PUYG' => 'PUYEHUE',
-										'QUEL' => 'QUELLON',
-										'QUEM' => 'QUEMCHI',
-										'QILI' => 'QUILICURA',
-										'QULL' => 'QUILLON',
-										'QLTA' => 'QUILLOTA',
-										'QUIL' => 'QUILPUE',
-										'ACHA' => 'QUINCHAO',
-										'QTIL' => 'QUINTA DE TILCOCO',
-										'QNOR' => 'QUINTA NORMAL',
-										'QUIN' => 'QUINTERO',
-										'QUIR' => 'QUIRIHUE',
-										'RANC' => 'RANCAGUA',
-										'RECO' => 'RECOLETA',
-										'RNCO' => 'RENAICO',
-										'RENC' => 'RENCA',
-										'RENG' => 'RENGO',
-										'REQU' => 'REQUINOA',
-										'RIOB' => 'RIO BUENO',
-										'RNEG' => 'RIO NEGRO',
-										'ROME' => 'ROMERAL',
-										'SALA' => 'SALAMANCA',
-										'SANT' => 'SAN ANTONIO',
-										'SBER' => 'SAN BERNARDO',
-										'SCAR' => 'SAN CARLOS',
-										'SCLE' => 'SAN CLEMENTE',
-										'SFEL' => 'SAN FELIPE',
-										'SFER' => 'SAN FERNANDO',
-										'SFRA' => 'SAN FRANCISCO DE MOSTAZAL',
-										'SIGN' => 'SAN IGNACIO',
-										'SJAV' => 'SAN JAVIER',
-										'SJOA' => 'SAN JOAQUIN',
-										'SMIG' => 'SAN MIGUEL',
-										'SPAB' => 'SAN PABLO',
-										'SPAT' => 'SAN PEDRO DE ATACAMA',
-										'SPED' => 'SAN PEDRO DE LA PAZ',
-										'SRAM' => 'SAN RAMON',
-										'SANR' => 'SAN ROSENDO',
-										'SVIC' => 'SAN VICENTE DE TAGUA TAGUA',
-										'SBAR' => 'SANTA BARBARA',
-										'SCRU' => 'SANTA CRUZ',
-										'STGO' => 'SANTIAGO CENTRO',
-										'SDGO' => 'SANTO DOMINGO',
-										'SGOR' => 'SIERRA GORDA',
-										'TALA' => 'TALAGANTE',
-										'TALC' => 'TALCA',
-										'THNO' => 'TALCAHUANO',
-										'TALT' => 'TALTAL',
-										'TEMU' => 'TEMUCO',
-										'TENO' => 'TENO',
-										'TAMA' => 'TIERRA AMARILLA',
-										'TILT' => 'TIL TIL',
-										'TOCO' => 'TOCOPILLA',
-										'TOME' => 'TOME',
-										'TRAI' => 'TRAIGUEN',
-										'TUCA' => 'TUCAPEL',
-										'VALD' => 'VALDIVIA',
-										'VALL' => 'VALLENAR',
-										'VALP' => 'VALPARAISO',
-										'VICT' => 'VICTORIA',
-										'VICU' => 'VICUNA',
-										'VALG' => 'VILLA ALEGRE',
-										'VALE' => 'VILLA ALEMANA',
-										'VILL' => 'VILLARRICA',
-										'VINA' => 'VINA DEL MAR',
-										'VITA' => 'VITACURA',
-										'YUMB' => 'YUMBEL',
-										'YUNG' => 'YUNGAY']
+						'options'     => $this->get_cities(),
 					),
-					/*'soap_login' => array(
-						'title'       => __( 'SOAP Login', 'whq-wcchp' ),
+					'locations_cache' => array(
+						'title'       => __( 'Caché de ubicaciones', 'whq-wcchp' ),
+						'type'        => 'number',
+						'description' => __( '(En horas) Chilexpress entrega un listado de ubicaciones (Regiones y Ciudades) dinámico. Para evitar saturar la API de Chilexpress, aquellos listados son guardados localmente en WordPress (Transients). Ingresa el número de horas a mantener en el caché el listado de regiones y cuidades. Mínimo un día, máximo un mes.', 'whq-wcchp' ),
+						'default'     => 24,
+					),
+					'extra_wrapper' => array(
+						'title'       => __( 'CM extra para caja/embalaje', 'whq-wcchp' ),
+						'type'        => 'number',
+						'description' => __( '(En centímetros) El plugin permite que añadas X centímetros extra al paquete que enviarás a Chilexpress, esto, para permitirte contabilizar el posible uso de una caja (y el espacio extra que necesitarás para evitar que lo que envias se dañe). Si ya usas ese estimado extra al momento de ingresar tus productos a tu tienda, y no deseas utilizar este extra, simplemente deja el valor en cero.', 'whq-wcchp' ),
+						'default'     => 0,
+					),
+					'soap_login' => array(
+						'title'       => __( 'Chilexpress API Username', 'whq-wcchp' ),
 						'type'        => 'text',
-						'description' => __( 'Login a utilizar en las llamadas al SOAP de Chilexpress', 'whq-wcchp' ),
-						'default'     => __( 'UsrTestServicios', 'whq-wcchp' ),
+						'description' => __( '(Opcional) Usuario a utilizar en las llamadas a la API de Chilexpress. Dejar en blanco para utilizar datos de conexión por defecto (públicos) que Chilexpress provee.', 'whq-wcchp' ),
+						'default'     => __( '', 'whq-wcchp' ),
 					),
 					'soap_password' => array(
-						'title'       => __( 'SOAP Password', 'whq-wcchp' ),
+						'title'       => __( 'Chilexpress API Password', 'whq-wcchp' ),
 						'type'        => 'password',
-						'description' => __( 'Password a utilizar en las llamadas al SOAP de Chilexpress', 'whq-wcchp' ),
+						'description' => __( '(Opcional) Contraseña a utilizar en las llamadas a la API de Chilexpress. Dejar en blanco para utilizar datos de conexión por defecto (públicos) que Chilexpress provee.', 'whq-wcchp' ),
 						'default'     => __( '', 'whq-wcchp' ),
-					),*/
+					),
 				);
 			}
 
-			public function get_chilexpress_option( $option_name = '' ) {
-				$options = get_option("woocommerce_chilexpress_settings");
+			public static function get_chilexpress_option( $option_name = '' ) {
+				$options = get_option( 'woocommerce_chilexpress_settings' );
+
+				if( array_key_exists( $option_name, $options) === false ) {
+					return false;
+				}
 
 				return $options["$option_name"];
+			}
+
+			private function get_cities() {
+				global $whq_wcchp_default;
+
+				$url    = $whq_wcchp_default['plugin_url'] . 'wsdl/WSDL_GeoReferencia_QA.wsdl';
+				$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
+				$route  = 'ConsultarCoberturas';
+				$method = 'reqObtenerCobertura';
+
+				$codregion        = 99; //Bring it on!
+				$codtipocobertura = 2;
+				$parameters       = [ 'CodRegion'        => $codregion,
+									  'CodTipoCobertura' => $codtipocobertura ];
+
+				$cities = whq_wcchp_call_soap($ns, $url, $route, $method, $parameters)->respObtenerCobertura->Coberturas;
+
+				whq_wcchp_array_move( $cities, 2, 86 );
+
+				if( is_array( $cities ) ) {
+					$cities_array = array();
+					foreach ($cities as $city) {
+						$cities_array["$city->CodComuna"] = $city->GlsComuna;
+					}
+				} else {
+					$cities_array = array( $cities );
+				}
+
+				return $cities_array;
 			}
 
 			public function is_available( $package ) {
@@ -359,44 +169,180 @@ function whq_wcchp_init_class() {
 			 * @return void
 			 */
 			public function calculate_shipping( $package = array() ) {
-				$weight     = 0;
-				$dimensions = 0;
-				$length     = 0;
-				$width      = 0;
-				$height     = 0;
+				$weight                   = 0;
+				$length                   = 0;
+				$width                    = 0;
+				$height                   = 0;
+				$product_package          = array();
+				$product_package[0]       = array( 0, 0, 0, 0 );
+				$product_package_number   = 1;
+				$product_package_quantity = count( $package['contents'] );
 
+				//Generates a package for each product in the cart.
 				foreach ( $package['contents'] as $item_id => $values ) {
-					$_product   = $values['data'];
-					$weight     = (int) absint( $weight + $_product->get_weight() * $values['quantity'] );
-					$length     = (int) absint( $length + $_product->length * $values['quantity'] );
-					$width      = (int) absint( $width + $_product->width * $values['quantity'] );
-					$height     = (int) absint( $height + $_product->height * $values['quantity'] );
-					$dimensions = (int) absint( $dimensions + (($_product->length * $values['quantity']) * $_product->width * $_product->height) );
+					$_product = $values['data'];
+
+					//Calculates the final package weight.
+					$weight   = round( $weight + $_product->get_weight() * $values['quantity'],3 );
+
+					//Generates the package for the current product.
+					$length = round( $_product->get_length(), 1 );
+					$width  = round( $_product->get_width(), 1 );
+					$height = round( $_product->get_height(), 1 );
+
+					$product_package[$product_package_number] = array(0, $length, $width, $height);
+
+					//Orders the product package dimensions in ascending order.
+					sort( $product_package[$product_package_number] );
+
+					//Multiply the smallest product package dimension by the quantity to obtain the final product package.
+					$product_package[$product_package_number][1] = round( $product_package[$product_package_number][1] * $values['quantity'], 1 );
+
+					//Reorders the product package dimensions in ascendind order.
+					sort( $product_package[$product_package_number] );
+
+					//Calculates the volume of each product package.
+					$product_package[$product_package_number][0] = $product_package[$product_package_number][1] * $product_package[$product_package_number][2] * $product_package[$product_package_number][3];
+
+					write_log( "WHQChxp-PrdPkgInit({$product_package_number}): Vl={$product_package[$product_package_number][0]} Al={$product_package[$product_package_number][1]} An={$product_package[$product_package_number][2]} La={$product_package[$product_package_number][3]}" );
+
+					$product_package_number++;
 				}
 
-				if ( $_POST['s_city'] != null ) {
+				//Orders the product packages by volume descending.
+				$auxiliary_array = array( 0, 0, 0, 0 );
+
+				for ( $i=1; $i < $product_package_quantity; $i++ ) {
+					for ( $product_package_number=1; $product_package_number < $product_package_quantity; $product_package_number++ ) {
+						if ( $product_package[$product_package_number][0] < $product_package[$product_package_number+1][0] ) {
+							$auxiliary_array = $product_package[$product_package_number];
+
+							$product_package[$product_package_number] = $product_package[$product_package_number+1];
+
+							$product_package[$product_package_number+1] = $auxiliary_array;
+						}
+					}
+				}
+
+				//To save an extra loop, we check WP_DEBUG first
+				if ( true === WP_DEBUG ) {
+					for ( $i=1; $i <= $product_package_quantity; $i++ ) {
+						write_log( "WHQChxp-PrdPkgVol({$i}): Vl={$product_package[$i][0]} Al={$product_package[$i][1]} An={$product_package[$i][2]} La={$product_package[$i][3]}" );
+					}
+				}
+
+				//If the product packages are more than 3 then makes a new package for every two product packages to improve the final package.
+				if ( $product_package_quantity > 3 ) {
+					//if the product packages are not even then generates a new empty package.
+					if ( ($product_package_quantity % 2) == 1 ) {
+						$product_package_quantity++;
+						$product_package[$product_package_quantity] = array(0, 0, 0, 0);
+					}
+
+					//Joins every two product packages in a new single product package.
+					$product_package_number = 1;
+
+					for ( $i=1; $i < $product_package_quantity; $i+=2 ) {
+						$product_package[$product_package_number][1] = $product_package[$i][1] + $product_package[$i+1][1];
+
+						if ( $product_package[$i][2] > $product_package[$i+1][2] ) {
+							$product_package[$product_package_number][2] = $product_package[$i][2];
+						} else {
+							$product_package[$product_package_number][2] = $product_package[$i+1][2];
+						}
+
+						if ( $product_package[$i][3] > $product_package[$i+1][3] ) {
+							$product_package[$product_package_number][3] = $product_package[$i][3];
+						} else {
+							$product_package[$product_package_number][3] = $product_package[$i+1][3];
+						}
+
+						$product_package[$product_package_number][0] = 0;
+
+						//Reorders the new product package dimensions in ascendind order.
+						sort( $product_package[$product_package_number] );
+
+						//Calculates the volume for the new product package.
+						$product_package[$product_package_number][0] = $product_package[$product_package_number][1] * $product_package[$product_package_number][2] * $product_package[$product_package_number][3];
+
+						$product_package_number++;
+
+					}
+
+					$product_package_quantity = $product_package_quantity / 2;
+
+					//To save an extra loop, we check WP_DEBUG first
+					if ( true === WP_DEBUG ) {
+						for ($i=1; $i <= $product_package_quantity; $i++) {
+							write_log( "WHQChxp-PrdPkgRed({$i}): Vl={$product_package[$i][0]} Al={$product_package[$i][1]} An={$product_package[$i][2]} La={$product_package[$i][3]}" );
+						}
+					}
+				}
+
+				//Generates the final package.
+				for ( $product_package_number=1; $product_package_number <= $product_package_quantity; $product_package_number++ ) {
+					$product_package[0][1] = $product_package[0][1] + $product_package[$product_package_number][1];
+
+					if ( $product_package[$product_package_number][2] > $product_package[0][2] ) {
+						$product_package[0][2] = $product_package[$product_package_number][2];
+					}
+
+					if ( $product_package[$product_package_number][3] > $product_package[0][3] ) {
+						$product_package[0][3] = $product_package[$product_package_number][3];
+					}
+
+					//For each product package included reorders the resulting package by the smallest dimension.
+					sort( $product_package[0] );
+
+					write_log( "WHQChxp-FinPkgPrdPkg({$product_package_number}): Al={$product_package[0][1]} An={$product_package[0][2]} La={$product_package[0][3]}" );
+				}
+
+				/*
+				Reorders the final package by the largest dimension, adds X cm on each dimension (for the wrapping/box),
+				Rounds up each value and trasfers the values to the final variables.
+				*/
+				sort( $product_package[0] );
+
+				$extra_wrapper = (int) absint( $this->extra_wrapper );
+
+				if( empty( $extra_wrapper ) || false === $extra_wrapper || $extra_wrapper < 0) {
+					$extra_wrapper = 0; //No valid value returned?
+				}
+
+				$length = ceil( $product_package[0][3] + $extra_wrapper );
+				$width  = ceil( $product_package[0][2] + $extra_wrapper );
+				$height = ceil( $product_package[0][1] + $extra_wrapper );
+				$product_package[0][0] = $length * $width * $height;
+
+				write_log( "WHQChxp-FinalPackage: Kg={$weight} Vl={$product_package[0][0]} La={$length} An={$width} Al={$height}" );
+
+				if ( isset( $_POST['s_city'] ) && !is_null( $_POST['s_city'] ) ) {
 					$city = $_POST['s_city'];
 				} else {
-					$city = $package["destination"]["city"];
+					//And what about WC()->customer->get_shipping_city() ?
+					$city = $package['destination']['city'];
 				}
 
-				if( $city != null ) {
-					$chp_cost  = whq_wcchp_get_tarificacion($city, $this->shipping_origin, $weight, $length, $width, $height);
-					$final_cost = '0';
+				if( !is_null( $city ) ) {
+					$chp_cost   = whq_wcchp_get_tarificacion($city, $this->shipping_origin, $weight, $length, $width, $height);
+					$final_cost = 0;
 
-					if(count($chp_cost->respValorizarCourier->Servicios) == 1){
-						$final_cost = $chp_cost->respValorizarCourier->Servicios->ValorServicio;
-					}else{
-						foreach ($chp_cost->respValorizarCourier->Servicios as $key => $value) {
-							if( $value->CodServicio == 3){
+					$chp_estimated = $chp_cost->respValorizarCourier->Servicios;
+
+					if( is_array( $chp_estimated ) ) {
+						foreach ( $chp_estimated as $key => $value ) {
+							//Next working day
+							if( $value->CodServicio == 3 ) {
 								$final_cost = $value->ValorServicio;
 							}
 						}
+					} else {
+						$final_cost = $chp_cost->respValorizarCourier->Servicios->ValorServicio;
 					}
 
 					$this->add_rate( array(
 						'id'    => $this->id,
-						'label' => $this->title . "",
+						'label' => $this->title . '',
 						'cost'  => $final_cost
 					));
 				}
@@ -416,6 +362,42 @@ function whq_wcchp_init_class() {
 
 			static function add_cart_fee( WC_Cart $cart ) {
 				WC()->cart->calculate_shipping();
+			}
+
+			/**
+			 * Validate the cache duration
+			 */
+			public function validate_locations_cache_field( $key, $value ) {
+				if ( isset( $value ) && $value < 24 ) {
+					WC_Admin_Settings::add_error( esc_html__( 'El caché mínimo para las localidades y regiones es de un día.', 'whq-wcchp' ) );
+
+					$value = 24;
+				}
+
+				if ( isset( $value ) && $value > 744 ) {
+					WC_Admin_Settings::add_error( esc_html__( 'El caché máximo para las localidades y regiones es de un mes (744 horas).', 'whq-wcchp' ) );
+
+					$value = 744;
+				}
+
+				return $value;
+			}
+
+			/**
+			 * Validate the extra package wrapper
+			 */
+			public function validate_extra_wrapper_field( $key, $value ) {
+				if ( isset( $value ) && $value < 0 ) {
+					WC_Admin_Settings::add_error( esc_html__( 'El valor mínimo es 0 centímetros.', 'whq-wcchp' ) );
+
+					$value = 0;
+				}
+
+				if ( isset( $value ) && $value > 30 ) {
+					WC_Admin_Settings::add_error( esc_html__( '¿Estás seguro que necesitas 30 o más centímetros extra para la caja/embalaje?.', 'whq-wcchp' ) ); //Will leave the value in there, just warn the user
+				}
+
+				return $value;
 			}
 		}
 	}
