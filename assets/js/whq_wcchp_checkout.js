@@ -74,7 +74,7 @@ jQuery(document).ready(function( $ ) {
 			if( ! jQuery('body').hasClass('wc-chilexpress-enabled') && jQuery('#shipping_method_0_chilexpress').length ) {
 				jQuery('#shipping_method_0_chilexpress').prop('disabled', true).prop('selected', false);
 
-				jQuery('form.woocommerce-checkout').prepend('<div class="whq_wcchp_chilexpress_error woocommerce-NoticeGroup woocommerce-NoticeGroup-checkout"><ul class="woocommerce-error"><li><strong>Chilexpress no se encuentra disponible por el momento. Por favor, iténtelo más tarde.</li></ul></div>');
+				jQuery('form.woocommerce-checkout').prepend('<div class="whq_wcchp_chilexpress_error woocommerce-NoticeGroup woocommerce-NoticeGroup-checkout"><ul class="woocommerce-error"><li><strong>Chilexpress no se encuentra disponible por el momento. Por favor, inténtelo más tarde.</li></ul></div>');
 				jQuery('html, body').animate({ scrollTop: 0 }, 'normal');
 
 				setTimeout(function() {
