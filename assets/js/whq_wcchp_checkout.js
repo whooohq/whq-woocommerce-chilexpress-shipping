@@ -215,7 +215,7 @@ function whq_wcchp_checkout_load_cities_billing( region_code ) {
 				$code_and_city = jQuery('#billing_whq_city').val() + '|' + jQuery('#billing_city').val();
 				if ( $code_and_city != jQuery('#billing_whq_citopt').val() ) {
 					jQuery('#billing_whq_city').val('');
-					jQuery('#billing_city').val('');
+					jQuery('#billing_city').val(' ');
 				}
 				if( !jQuery('#billing_whq_citopt').hasClass('select2-hidden-accessible') ) {
 					jQuery('#billing_whq_citopt').select2();
@@ -266,7 +266,7 @@ function whq_wcchp_checkout_load_cities_shipping( region_code ) {
 				$code_and_city = jQuery('#shipping_whq_city').val() + '|' + jQuery('#shipping_city').val();
 				if ( $code_and_city != jQuery('#shipping_whq_citopt').val() ) {
 					jQuery('#shipping_whq_city').val('');
-					jQuery('#shipping_city').val('');
+					jQuery('#shipping_city').val(' ');
 				}
 				if( !jQuery('#shipping_whq_citopt').hasClass('select2-hidden-accessible') ) {
 					jQuery('#shipping_whq_citopt').select2();
