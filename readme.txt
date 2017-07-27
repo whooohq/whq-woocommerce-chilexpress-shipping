@@ -50,12 +50,12 @@ Ayuda y aportes (pull requests) son bienvenidos.
 
 == Changelog ==
 = 1.1.9 =
-= Mejora: calculadora recuerda valores registrados si eres cliente de la tienda (Gracias @albetix).
-= Mejora: calculadora conserva valores de región y ciudad (Gracias @albetix).
-= Mejora: calculadora pasa valores de región y ciudad al checkout (Gracias @albetix).
-= Mejora: checkout pasa valores completos de región y ciudad a la órden de compra, y no los códigos de Chilexpress (Gracias @albetix).
-= Bug: checkout ahora calcula independiente de dirección de facturación y/o envío  (Gracias @albetix).
-= Bug: mejorada la detección de caida de API Chilexpress.
+* Mejora: calculadora recuerda valores registrados si eres cliente de la tienda (Gracias @albetix).
+* Mejora: calculadora conserva valores de región y ciudad (Gracias @albetix).
+* Mejora: calculadora pasa valores de región y ciudad al checkout (Gracias @albetix).
+* Mejora: checkout pasa valores completos de región y ciudad a la órden de compra, y no los códigos de Chilexpress (Gracias @albetix).
+* Bug: checkout ahora calcula independiente de dirección de facturación y/o envío  (Gracias @albetix).
+* Bug: mejorada la detección de caida de API Chilexpress.
 
 = 1.1.8 =
 * Mejora: https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/15 ¡Gracias @llermaly y @albetix!
