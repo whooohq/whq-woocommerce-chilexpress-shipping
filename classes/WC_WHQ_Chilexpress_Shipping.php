@@ -324,6 +324,15 @@ function whq_wcchp_init_class() {
 				}
 
 				if( !is_null( $city ) ) {
+					//Transform city name to city code
+					$cities = $this->get_cities();
+					foreach ( $cities as $CodComuna => $GlsComuna ) {
+						if ( $city == $GlsComuna ) {
+							$city = $CodComuna;
+							break;
+						}
+					}
+
 					$chp_cost   = whq_wcchp_get_tarificacion($city, $this->shipping_origin, $weight, $length, $width, $height);
 					$final_cost = 0;
 
