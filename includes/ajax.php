@@ -46,7 +46,7 @@ function whq_wcchp_cities_ajax() {
 	$route  = 'ConsultarCoberturas';
 	$method = 'reqObtenerCobertura';
 
-	$codregion        = wp_kses( $_POST['codregion'], array() );
+	$codregion        = sanitize_text_field( $_POST['codregion'] );
 	$codtipocobertura = (int) absint( $_POST['codtipocobertura'] );
 	$parameters       = [ 'CodRegion'        => $codregion,
 						  'CodTipoCobertura' => $codtipocobertura ];

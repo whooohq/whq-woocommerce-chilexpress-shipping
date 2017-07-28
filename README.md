@@ -1,10 +1,5 @@
 # WooCommerce Chilexpress Shipping
 
-**Versión estable:** 1.1.9
-
-**Licencia:** GPLv2 or later
-
-
 ## Descripción
 Añade a Chilexpress como método de envío para WooCommerce.
 
@@ -36,3 +31,6 @@ Reportar errores y enviar sugerencias directamente en [GitHub](https://github.co
 Ayuda y aportes (vía Pull Requests, aceptando la [guía de contribución](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/blob/master/CONTRIBUTING.md)) son bienvenidos.
 
 ¡Gracias!
+
+### Licencia
+[GPLv2 or later](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/blob/master/LICENSE)
