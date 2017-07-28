@@ -114,7 +114,7 @@ function whq_wcchp_init_class() {
 			public static function get_chilexpress_option( $option_name = '' ) {
 				$options = get_option( 'woocommerce_chilexpress_settings' );
 
-				if( array_key_exists( $option_name, $options) === false ) {
+				if( false === array_key_exists( $option_name, $options) ) {
 					return false;
 				}
 
@@ -134,17 +134,23 @@ function whq_wcchp_init_class() {
 				$parameters       = [ 'CodRegion'        => $codregion,
 									  'CodTipoCobertura' => $codtipocobertura ];
 
-				$cities = whq_wcchp_call_soap($ns, $url, $route, $method, $parameters)->respObtenerCobertura->Coberturas;
+				$cities = whq_wcchp_call_soap($ns, $url, $route, $method, $parameters);
 
-				whq_wcchp_array_move( $cities, 2, 86 );
-
-				if( is_array( $cities ) ) {
-					$cities_array = array();
-					foreach ($cities as $city) {
-						$cities_array["$city->CodComuna"] = $city->GlsComuna;
-					}
+				if( false === $cities ) {
+					$cities_array = false;
 				} else {
-					$cities_array = array( $cities );
+					$cities = $cities->respObtenerCobertura->Coberturas;
+
+					whq_wcchp_array_move( $cities, 2, 86 );
+
+					if( is_array( $cities ) ) {
+						$cities_array = array();
+						foreach ($cities as $city) {
+							$cities_array["$city->CodComuna"] = $city->GlsComuna;
+						}
+					} else {
+						$cities_array = array( $cities );
+					}
 				}
 
 				return $cities_array;
@@ -326,17 +332,24 @@ function whq_wcchp_init_class() {
 				if( !is_null( $city ) ) {
 					//Transform city name to city code
 					$cities = $this->get_cities();
-					foreach ( $cities as $CodComuna => $GlsComuna ) {
-						if ( $city == $GlsComuna ) {
-							$city = $CodComuna;
-							break;
+					if( is_array( $cities) ) {
+						foreach ( $cities as $CodComuna => $GlsComuna ) {
+							if ( $city == $GlsComuna ) {
+								$city = $CodComuna;
+								break;
+							}
 						}
 					}
 
-					$chp_cost   = whq_wcchp_get_tarificacion($city, $this->shipping_origin, $weight, $length, $width, $height);
-					$final_cost = 0;
+					$chp_cost   = whq_wcchp_get_tarification($city, $this->shipping_origin, $weight, $length, $width, $height);
 
-					$chp_estimated = $chp_cost->respValorizarCourier->Servicios;
+					if( false === $chp_cost ) {
+						$chp_estimated = 0;
+					} else {
+						$chp_estimated = $chp_cost->respValorizarCourier->Servicios;
+					}
+
+					$final_cost = 0;
 
 					if( is_array( $chp_estimated ) ) {
 						foreach ( $chp_estimated as $key => $value ) {
@@ -346,7 +359,11 @@ function whq_wcchp_init_class() {
 							}
 						}
 					} else {
-						$final_cost = $chp_cost->respValorizarCourier->Servicios->ValorServicio;
+						if( false === $chp_cost ) {
+							$final_cost = 0;
+						} else {
+							$final_cost = $chp_cost->respValorizarCourier->Servicios->ValorServicio;
+						}
 					}
 
 					$this->add_rate( array(
