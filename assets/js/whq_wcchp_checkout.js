@@ -116,7 +116,10 @@ jQuery(document).ready(function( $ ) {
 		whq_wcchp_chilexpress_down_noselect = setInterval(function() {
 			if( jQuery('body').hasClass('wc-chilexpress-down') && jQuery('input[value="chilexpress"]').length ) {
 				jQuery('input[value="chilexpress"]').prop('disabled', true).prop('selected', false).hide().next('label').children('.amount').text('No disponible');
-				jQuery('.shipping_method').not('input[value="chilexpress"]:first').click();
+
+				if( jQuery('input[value="chilexpress"]').is(':checked') ) {
+					jQuery('.shipping_method').not('input[value="chilexpress"]:first').click();
+				}
 			}
 		}, 250);
 
