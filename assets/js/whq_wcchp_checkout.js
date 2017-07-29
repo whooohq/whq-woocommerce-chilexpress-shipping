@@ -1,4 +1,5 @@
 var whq_wcchp_chilexpress_down;
+var whq_wcchp_chilexpress_down_noselect;
 var whq_wcchp_chilexpress_cost;
 var whq_wcchp_region_billing_select;
 var whq_wcchp_region_billing_array;
@@ -87,13 +88,14 @@ jQuery(document).ready(function( $ ) {
 		//No Chilexpress API available?
 		jQuery('body').on('click', '.shipping_method', function() {
 			if( ! jQuery('body').hasClass('wc-chilexpress-enabled') ) {
-				jQuery('#shipping_method_0_chilexpress').prop('disabled', true);
+				jQuery('input[value="chilexpress"]').prop('disabled', true);
 			}
 		});
 
 		whq_wcchp_chilexpress_down = setInterval(function() {
-			if( ! jQuery('body').hasClass('wc-chilexpress-enabled') && ! jQuery('body').hasClass('wc-chilexpress-down') && jQuery('#shipping_method_0_chilexpress').length ) {
-				jQuery('#shipping_method_0_chilexpress').prop('disabled', true).prop('selected', false);
+			if( ! jQuery('body').hasClass('wc-chilexpress-enabled') && ! jQuery('body').hasClass('wc-chilexpress-down') && jQuery('input[value="chilexpress"]').length ) {
+				jQuery('input[value="chilexpress"]').prop('disabled', true).prop('selected', false).hide().next('label').children('.amount').text('No disponible');
+				jQuery('.shipping_method').not('input[value="chilexpress"]:first').click();
 
 				jQuery('form.woocommerce-checkout').prepend('<div class="whq_wcchp_chilexpress_error woocommerce-NoticeGroup woocommerce-NoticeGroup-checkout"><ul class="woocommerce-error"><li><strong>Chilexpress no se encuentra disponible por el momento. Por favor, inténtelo más tarde.</li></ul></div>');
 
@@ -111,13 +113,23 @@ jQuery(document).ready(function( $ ) {
 			}
 		}, 250);
 
+		whq_wcchp_chilexpress_down_noselect = setInterval(function() {
+			if( jQuery('body').hasClass('wc-chilexpress-down') && jQuery('input[value="chilexpress"]').length ) {
+				jQuery('input[value="chilexpress"]').prop('disabled', true).prop('selected', false).hide().next('label').children('.amount').text('No disponible');
+
+				if( jQuery('input[value="chilexpress"]').is(':checked') ) {
+					jQuery('.shipping_method').not('input[value="chilexpress"]:first').click();
+				}
+			}
+		}, 250);
+
 		//Shipping cost zero? https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/13
 		jQuery('body').on('click', '#place_order', function() {
-			if( jQuery('body').hasClass('wc-chilexpress-enabled') && jQuery('#shipping_method_0_chilexpress').length ) {
-				whq_wcchp_chilexpress_cost = jQuery('#shipping_method_0_chilexpress').next('label').children('.amount').text();
+			if( jQuery('body').hasClass('wc-chilexpress-enabled') && jQuery('input[value="chilexpress"]').length ) {
+				whq_wcchp_chilexpress_cost = jQuery('input[value="chilexpress"]').next('label').children('.amount').text();
 
-				if( whq_wcchp_chilexpress_cost == '' && jQuery('#shipping_method_0_chilexpress').is(':checked') ) {
-					jQuery('#shipping_method_0_chilexpress').prop('disabled', true).prop('selected', false);
+				if( ( whq_wcchp_chilexpress_cost === '' || whq_wcchp_chilexpress_cost === 'No disponible.' ) && jQuery('input[value="chilexpress"]').is(':checked') ) {
+					jQuery('input[value="chilexpress"]').prop('disabled', true).prop('selected', false);
 
 					jQuery('form.woocommerce-checkout').prepend('<div class="whq_wcchp_chilexpress_error woocommerce-NoticeGroup woocommerce-NoticeGroup-checkout"><ul class="woocommerce-error"><li><strong>Chilexpress no se encuentra disponible en este momento. Por favor, iténtalo en unos minutos.</li></ul></div>');
 					jQuery('html, body').animate({ scrollTop: 0 }, 'normal');
@@ -388,6 +400,9 @@ function whq_wcchp_checkout_inputs_restore() {
 		jQuery("#shipping_whq_region_select").next('.select2-container').remove();
 		jQuery("#shipping_whq_region_select").remove();
 	}
+
+	//Deselect Chilexpress
+	jQuery('.shipping_method').not('input[value="chilexpress"]:first').click();
 
 	//Show the old ones
 	jQuery('#billing_state, #billing_city, #shipping_state, #shipping_city').show();
