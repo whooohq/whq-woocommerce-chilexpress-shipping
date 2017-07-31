@@ -9,7 +9,7 @@ function whq_wcchp_add_action_links ( $links ) {
 		'<a href="' . admin_url( 'admin.php?page=wc-settings&tab=shipping&section=chilexpress' ) . '">Ajustes</a>',
 	);
 
-	return array_merge( $whq_wcchp_link, $links );
+	return array_merge( $links, $whq_wcchp_link );
 }
 
 /**
@@ -55,7 +55,7 @@ function whq_wcchp_incompatible_plugins() {
  */
 add_action( 'upgrader_process_complete', 'whq_wcchp_wp_upgrade_completed', 10, 2 );
 function whq_wcchp_wp_upgrade_completed( $upgrader_object, $options ) {
-	global $whq_wcchp_default;
+	global $whq_wcchp_default, $wpdb;
 
 	//If an update is made, and it's for plugins, then...
 	if( $options['action'] == 'update' && $options['type'] == 'plugin' && isset( $options['plugins'] ) ) {
@@ -63,7 +63,12 @@ function whq_wcchp_wp_upgrade_completed( $upgrader_object, $options ) {
 		if( is_array( $options['plugins'] ) ) {
 			foreach( $options['plugins'] as $plugin ) {
 				if( $plugin == $whq_wcchp_default['plugin_basename'] ) {
+					//It's our plugin, do some cleanup
 					delete_option( 'whq_wcchp_incompatible_plugins' );
+
+					//Clear our transients in case a change on cached data was made
+					$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name LIKE ('\_transient%\_whq_wcchp\_%');" );
+					$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name LIKE ('\_transient_timeout%\_whq_wcchp\_%');" );
 				}
 			}
 		}
@@ -75,6 +80,7 @@ function whq_wcchp_wp_upgrade_completed( $upgrader_object, $options ) {
  * Incompatible Plugins, on any plugin activation, delete our option flag
  */
 function whq_wcchp_detect_plugin_activation( $plugin, $network_activation ) {
+	//To know if an incompatible plugin is installed and activated, and warn the user
 	delete_option( 'whq_wcchp_incompatible_plugins' );
 }
 add_action( 'activated_plugin', 'whq_wcchp_detect_plugin_activation', 10, 2 );

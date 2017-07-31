@@ -10,27 +10,30 @@ function whq_wcchp_call_soap($ns, $url, $route, $method, $data = '') {
 	$soap_login    = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_login' );
 	$soap_password = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_password' );
 
-	if( empty($soap_login) || $soap_login === false ) {
+	if( empty($soap_login) || false === $soap_login ) {
 		$soap_login    = $whq_wcchp_default['chilexpress_soap_login'];
 	}
 
-	if( empty($soap_password) || $soap_password === false ) {
+	if( empty($soap_password) || false === $soap_password ) {
 		$soap_password = $whq_wcchp_default['chilexpress_soap_pass'];
 	}
 
 	//Transient duration
 	if( ( $route == 'ConsultarRegiones' && $method == 'reqObtenerRegion' && $data == '' ) || ( $route == 'ConsultarCoberturas' && $method == 'reqObtenerCobertura' ) ) {
 		$locations_cache = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'locations_cache' );
-		if( $locations_cache === false ) {
-			$locations_cache = 24;
+		if( false === $locations_cache ) {
+			$locations_cache = 7; //Days
 		} else {
-			$locations_cache = absint( $locations_cache );
+			$locations_cache = absint( $locations_cache ); //Days
 		}
 
-		//No less than a day and more than a month
-		if( $locations_cache < 24 || $locations_cache > 744) {
-			$locations_cache = 24;
+		//No less than a week and more than two months
+		if( $locations_cache < 7 || $locations_cache > 60) {
+			$locations_cache = 7;
 		}
+
+		//Days to hours
+		$locations_cache = $locations_cache * 24;
 
 		$transient_duration = 60 * 60 * $locations_cache; //Hours
 	} else {
@@ -47,29 +50,37 @@ function whq_wcchp_call_soap($ns, $url, $route, $method, $data = '') {
 				'login'    => $soap_login,
 				'password' => $soap_password
 			);
-			$client = new SoapClient($url, $client_options);
+			$client = new SoapClient( $url, $client_options );
 
-			$time_now = date( 'Y-m-d\TH:i:s.Z\Z', time() );
 			$header_body = array(
 				'transaccion' => array(
-					'fechaHora'            => $time_now,
+					'fechaHora'            => date( 'Y-m-d\TH:i:s.Z\Z', time() ),
 					'idTransaccionNegocio' => '0',
 					'sistema'              => 'TEST',
 					'usuario'              => 'TEST'
 				)
 			);
-			$header = new SOAPHeader($ns, 'headerRequest', $header_body);
+			$header = new SOAPHeader( $ns, 'headerRequest', $header_body );
 
-			$client->__setSoapHeaders($header);
-			$result = $client->__soapCall($route, [$route => [$method => $data]]);
+			$client->__setSoapHeaders( $header );
+			$result = $client->__soapCall( $route, [ $route => [ $method => $data ] ] );
 
-			if( !empty( $result ) && $result !== false ) {
+			if ( is_soap_fault( $result ) ) {
+				return false;
+			}
+
+			//List of cities down
+			if( isset( $result->respObtenerCobertura->CodEstado ) && $result->respObtenerCobertura->CodEstado === -1 ) {
+				return false;
+			}
+
+			if( ! empty( $result ) && false !== $result ) {
 				set_transient( $transient_id, $result, $transient_duration );
 			}
 
 			return $result;
-		} catch(SoapFault $e) {
-			return $e;
+		} catch( SoapFault $e ) {
+			return false;
 		}
 
 	}
@@ -77,7 +88,7 @@ function whq_wcchp_call_soap($ns, $url, $route, $method, $data = '') {
 	return $result;
 }
 
-function whq_wcchp_get_tarificacion($destination, $origin, $weight, $length, $width, $height) {
+function whq_wcchp_get_tarification($destination, $origin, $weight, $length, $width, $height) {
 	global $whq_wcchp_default;
 
 	$ns     = $whq_wcchp_default['chilexpress_url'] . '/TarificaCourier/';

@@ -12,7 +12,7 @@ function whq_wcchp_enqueue_scripts() {
 
 	$whq_wcchp_active = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'enabled' );
 
-	if( $whq_wcchp_active === false ) {
+	if( false === $whq_wcchp_active ) {
 		$whq_wcchp_active == 'no';
 	}
 
@@ -42,7 +42,7 @@ function whq_wcchp_admin_enqueue_scripts() {
 
 	$whq_wcchp_active = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'enabled' );
 
-	if( $whq_wcchp_active === false ) {
+	if( false === $whq_wcchp_active ) {
 		$whq_wcchp_active == 'no';
 	}
 

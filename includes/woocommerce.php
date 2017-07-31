@@ -18,9 +18,9 @@ function whq_wcchp_add_shipping_method( $methods ) {
  */
 add_action( 'woocommerce_init', 'whq_wcchp_cart_enable_city', 10, 1 );
 function whq_wcchp_cart_enable_city( $array ) {
-	$whq_wcchp_active          = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'enabled' );
+	$whq_wcchp_active = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'enabled' );
 
-	if( $whq_wcchp_active === false ) {
+	if( false === $whq_wcchp_active ) {
 		$whq_wcchp_active == 'no';
 	}
 

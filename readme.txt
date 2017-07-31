@@ -1,7 +1,7 @@
 === WooCommerce Chilexpress Shipping ===
 Contributors: whooo, jhoynerk, tcattd
 Tags: woocommerce, shipping, chile, chilexpress
-Stable tag: 1.1.8
+Stable tag: 1.1.14
 Requires at least: 4.4
 Tested up to: 4.8
 License: GPLv2 or later
@@ -30,13 +30,16 @@ Dejar el usuario y password (de la API de Chilexpress) en blanco para utilizar l
 Ahora tus clientes podrán seleccionar Chilexpress para el envío de sus productos (dentro de Chile) y recibir el cálculo de costo de envío automáticamente.
 
 == Frequently Asked Questions ==
-= Extensión SOAP requerida.
+= Extensión SOAP requerida =
 La conexión a la API de Chilexpress se realiza a través de SOAP. Por lo tanto, tu servidor debe tener [activada](http://php.net/manual/en/book.soap.php) aquella extensión para poder utilizar este plugin.
 
-= ¿Chilexpress caido? ==
+= Cálculo de precio de envío =
+El cálculo del precio de envío se hace utilizando directamente la API de Chilexpress. Para que la API de Chilexpress entregue los valores correctos, los productos en tu tienda deben tener medidas asignadas (alto, ancho, largo, en cm.) y peso (kg.). De lo contrario, la API de Chilexpress no podrá calcular el precio de envío correctamente.
+
+= ¿Chilexpress caido? =
 No estamos afiliados ni formamos parte de Chilexpress, por lo que no podemos garantizar el funcionamiento de este plugin al 100%. Si la API de Chilexpress o sus servicios caen (puede ocurrir), no hay nada que podamos hacer al respecto. Si el plugin detecta de la API de Chilexpress no responde, el plugin deja WooCommerce "tal como venía" (ingreso manual de Región y Ciudad), y no permite la selección de Chilexpress como método de envío. No hay nada más que podamos hacer al respecto.
 
-= ¿Errores? ¿Sugerencias?
+= ¿Errores? ¿Sugerencias? =
 Reportar errores y enviar sugerencias directamente en [GitHub](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues), por favor.
 
 Ayuda y aportes (pull requests) son bienvenidos.
@@ -49,6 +52,23 @@ Ayuda y aportes (pull requests) son bienvenidos.
 3. Configuración del plugin.
 
 == Changelog ==
+= 1.1.14 =
+* Fix (parcial): https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/22
+* Mejora: aumentado el tiempo de caché de las localidades a una semana mínimo, para evitar saturar la API de Chilexpress.
+
+= 1.1.13 =
+* Mejora: https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/22
+* Mejora: https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/pull/23
+* Mejorada limpieza de remanentes del plugin en caso de desinstalación.
+
+= 1.1.9 =
+* Mejora: calculadora recuerda valores registrados si eres cliente de la tienda (Gracias @albetix).
+* Mejora: calculadora conserva valores de región y ciudad (Gracias @albetix).
+* Mejora: calculadora pasa valores de región y ciudad al checkout (Gracias @albetix).
+* Mejora: checkout pasa valores completos de región y ciudad a la órden de compra, y no los códigos de Chilexpress (Gracias @albetix).
+* Fix: checkout ahora calcula independiente de dirección de facturación y/o envío  (Gracias @albetix).
+* Fix: mejorada la detección de caida de API Chilexpress.
+
 = 1.1.8 =
 * Mejora: https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/15 ¡Gracias @llermaly y @albetix!
 

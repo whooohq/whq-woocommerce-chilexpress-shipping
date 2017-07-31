@@ -21,8 +21,8 @@ function whq_wcchp_init_class() {
 			 * @return void
 			 */
 			public function __construct(){
-				$this->id = 'chilexpress';
-				$this->method_title = __( 'Chilexpress', 'whq-wcchp' );
+				$this->id                 = 'chilexpress';
+				$this->method_title       = __( 'Chilexpress', 'whq-wcchp' );
 				$this->method_description = __( 'Utiliza la API de Chilexpress para el cálculo automático de costos de envío. Sugerencias y reporte de errores en <a href="https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues" target="_blank">GitHub</a>.', 'whq-wcchp' );
 
 				// Load the settings.
@@ -87,8 +87,8 @@ function whq_wcchp_init_class() {
 					'locations_cache' => array(
 						'title'       => __( 'Caché de ubicaciones', 'whq-wcchp' ),
 						'type'        => 'number',
-						'description' => __( '(En horas) Chilexpress entrega un listado de ubicaciones (Regiones y Ciudades) dinámico. Para evitar saturar la API de Chilexpress, aquellos listados son guardados localmente en WordPress (Transients). Ingresa el número de horas a mantener en el caché el listado de regiones y cuidades. Mínimo un día, máximo un mes.', 'whq-wcchp' ),
-						'default'     => 24,
+						'description' => __( '(En días) Chilexpress entrega un listado de ubicaciones (Regiones y Ciudades) dinámico. Para evitar saturar la API de Chilexpress, aquellos listados son guardados localmente en WordPress (Transients). Ingresa el número de días a mantener en el caché el listado de regiones y cuidades. Mínimo una semana, máximo dos meses.', 'whq-wcchp' ),
+						'default'     => 30,
 					),
 					'extra_wrapper' => array(
 						'title'       => __( 'CM extra para caja/embalaje', 'whq-wcchp' ),
@@ -114,7 +114,7 @@ function whq_wcchp_init_class() {
 			public static function get_chilexpress_option( $option_name = '' ) {
 				$options = get_option( 'woocommerce_chilexpress_settings' );
 
-				if( array_key_exists( $option_name, $options) === false ) {
+				if( false === array_key_exists( $option_name, $options) ) {
 					return false;
 				}
 
@@ -130,21 +130,29 @@ function whq_wcchp_init_class() {
 				$method = 'reqObtenerCobertura';
 
 				$codregion        = 99; //Bring it on!
-				$codtipocobertura = 2;
+				$codtipocobertura = 1; //Admission
 				$parameters       = [ 'CodRegion'        => $codregion,
 									  'CodTipoCobertura' => $codtipocobertura ];
 
-				$cities = whq_wcchp_call_soap($ns, $url, $route, $method, $parameters)->respObtenerCobertura->Coberturas;
+				$cities = whq_wcchp_call_soap($ns, $url, $route, $method, $parameters);
 
-				whq_wcchp_array_move( $cities, 2, 86 );
-
-				if( is_array( $cities ) ) {
-					$cities_array = array();
-					foreach ($cities as $city) {
-						$cities_array["$city->CodComuna"] = $city->GlsComuna;
-					}
+				if( false === $cities ) {
+					//Retrieve the hard-coded ones
+					$cities = new WC_WHQ_Cities_CL();
+					$cities_array = $cities->array;
 				} else {
-					$cities_array = array( $cities );
+					$cities = $cities->respObtenerCobertura->Coberturas;
+
+					whq_wcchp_array_move( $cities, 2, 86 );
+
+					if( is_array( $cities ) ) {
+						$cities_array = array();
+						foreach ($cities as $city) {
+							$cities_array["$city->CodComuna"] = $city->GlsComuna;
+						}
+					} else {
+						$cities_array = array( $cities );
+					}
 				}
 
 				return $cities_array;
@@ -324,10 +332,26 @@ function whq_wcchp_init_class() {
 				}
 
 				if( !is_null( $city ) ) {
-					$chp_cost   = whq_wcchp_get_tarificacion($city, $this->shipping_origin, $weight, $length, $width, $height);
-					$final_cost = 0;
+					//Transform city name to city code
+					$cities = $this->get_cities();
+					if( is_array( $cities) ) {
+						foreach ( $cities as $CodComuna => $GlsComuna ) {
+							if ( $city == $GlsComuna ) {
+								$city = $CodComuna;
+								break;
+							}
+						}
+					}
 
-					$chp_estimated = $chp_cost->respValorizarCourier->Servicios;
+					$chp_cost   = whq_wcchp_get_tarification($city, $this->shipping_origin, $weight, $length, $width, $height);
+
+					if( false === $chp_cost ) {
+						$chp_estimated = 0;
+					} else {
+						$chp_estimated = $chp_cost->respValorizarCourier->Servicios;
+					}
+
+					$final_cost = 0;
 
 					if( is_array( $chp_estimated ) ) {
 						foreach ( $chp_estimated as $key => $value ) {
@@ -337,7 +361,11 @@ function whq_wcchp_init_class() {
 							}
 						}
 					} else {
-						$final_cost = $chp_cost->respValorizarCourier->Servicios->ValorServicio;
+						if( false === $chp_cost ) {
+							$final_cost = 0;
+						} else {
+							$final_cost = $chp_cost->respValorizarCourier->Servicios->ValorServicio;
+						}
 					}
 
 					$this->add_rate( array(
@@ -368,16 +396,16 @@ function whq_wcchp_init_class() {
 			 * Validate the cache duration
 			 */
 			public function validate_locations_cache_field( $key, $value ) {
-				if ( isset( $value ) && $value < 24 ) {
-					WC_Admin_Settings::add_error( esc_html__( 'El caché mínimo para las localidades y regiones es de un día.', 'whq-wcchp' ) );
+				if ( isset( $value ) && $value < 7 ) {
+					WC_Admin_Settings::add_error( esc_html__( 'El caché mínimo para las localidades y regiones es de una semana (7 días).', 'whq-wcchp' ) );
 
-					$value = 24;
+					$value = 7;
 				}
 
-				if ( isset( $value ) && $value > 744 ) {
-					WC_Admin_Settings::add_error( esc_html__( 'El caché máximo para las localidades y regiones es de un mes (744 horas).', 'whq-wcchp' ) );
+				if ( isset( $value ) && $value > 60 ) {
+					WC_Admin_Settings::add_error( esc_html__( 'El caché máximo para las localidades y regiones es de dos meses (60 días).', 'whq-wcchp' ) );
 
-					$value = 744;
+					$value = 60;
 				}
 
 				return $value;
