@@ -6,6 +6,8 @@ var whq_wcchp_region_name;
 var whq_wcchp_region_code;
 var whq_wcchp_city_name;
 var whq_wcchp_city_code;
+var whq_wcchp_cities_object = false;
+var whq_wcchp_object_to_array;
 
 jQuery(document).ready(function( $ ) {
 	//Only on WooCommerce's Cart
@@ -181,9 +183,24 @@ function whq_wcchp_cart_load_cities( region_code ) {
 				whq_wcchp_city_name = jQuery('#calc_shipping_city').val();
 				whq_wcchp_city_code = '';
 
+				//Hard-coded list (Chilexpress API down?)
+				if ( typeof response.data === 'object' ) {
+					whq_wcchp_cities_object   = true;
+					whq_wcchp_object_to_array = Object.keys( response.data ).map( function( key ) {
+						return [ key, response.data[ key ] ];
+					});
+					response.data = whq_wcchp_object_to_array;
+				}
+
 				if( jQuery.isArray( response.data ) ) {
 
-					jQuery(response.data).each(function( i ) {
+					jQuery(response.data).each(function( i, value ) {
+						//Map the hard-coded values back
+						if( whq_wcchp_cities_object === true ) {
+							response.data[i].CodComuna = response.data[i][0];
+							response.data[i].GlsComuna = response.data[i][1];
+						}
+
 						if( response.data[i].GlsComuna == whq_wcchp_city_name ) {
 							whq_wcchp_city_code = response.data[i].CodComuna;
 

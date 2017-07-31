@@ -18,7 +18,7 @@ function whq_wcchp_regions_ajax() {
 
 	$regions = whq_wcchp_call_soap($ns, $url, $route, $method);
 
-	if( false !== $regions) {
+	if( false !== $regions ) {
 		$regions = $regions->respObtenerRegion->Regiones;
 
 		whq_wcchp_array_move( $regions, 14, 0 );
@@ -60,7 +60,13 @@ function whq_wcchp_cities_ajax() {
 	}
 
 	if( false === $cities || NULL === $cities ) {
-		wp_send_json_error( $cities );
+		$cities = new WC_WHQ_Cities_CL();
+
+		if( false !== $cities && ! empty( $cities ) ) {
+			wp_send_json_success( $cities->array );
+		} else {
+			wp_send_json_error( $cities );
+		}
 	} else {
 		wp_send_json_success( $cities );
 	}
