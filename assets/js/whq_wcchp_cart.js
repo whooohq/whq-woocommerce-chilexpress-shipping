@@ -62,10 +62,12 @@ jQuery(document).ready(function( $ ) {
 				if( jQuery('#shipping_method_0_chilexpress').is(':checked') ) {
 					jQuery('.shipping_method').not('input[value="chilexpress"]:first').click();
 				}
+
 				if( ! jQuery('#wc-chilexpress-verify').length ) {
 					//Disables chilexpress shipping option
 					jQuery('input[value="chilexpress"]').next('label').children('.amount').remove();
 					jQuery('input[value="chilexpress"]').prop('disabled', true).prop('selected', false);
+
 					//Adds the option to check Chilexpress availability
 					jQuery('input[value="chilexpress"]').next('label').after('<span id="wc-chilexpress-verify"> - No disponible (<a class="wc-chilexpress-verify" href="#">Reintentar</a>)</span>');
 					jQuery('#wc-chilexpress-verify').on('click', '.wc-chilexpress-verify', function() {
@@ -104,6 +106,7 @@ function whq_wcchp_cart_chile_detected() {
 	if( jQuery('body').hasClass('wc-chilexpress-enabled') ) {
 		return;
 	}
+
 	jQuery('body').addClass('wc-chilexpress-enabled');
 
 	whq_wcchp_cart_inputs_replace();
@@ -175,8 +178,8 @@ function whq_wcchp_cart_load_cities( region_code ) {
 			} else {
 				jQuery('#calc_shipping_whq_city_select').prop('disabled', false).empty().append('<option value=""></option>');
 
-				var whq_wcchp_city_name = jQuery('#calc_shipping_city').val();
-				var whq_wcchp_city_code = '';
+				whq_wcchp_city_name = jQuery('#calc_shipping_city').val();
+				whq_wcchp_city_code = '';
 
 				if( jQuery.isArray( response.data ) ) {
 
