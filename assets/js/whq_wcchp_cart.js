@@ -17,6 +17,7 @@ jQuery(document).ready(function( $ ) {
 			whq_wcchp_cart_chile_detected();
 		}
 
+		//User expand calculate shipping
 		jQuery('body').on('click', '.shipping-calculator-button', function() {
 			whq_wcchp_cart_watcher();
 		});
@@ -61,7 +62,7 @@ jQuery(document).ready(function( $ ) {
 		whq_wcchp_chilexpress_down_noselect = setInterval(function() {
 			if( jQuery('body').hasClass('wc-chilexpress-down') && jQuery('input[value="chilexpress"]').length ) {
 				//Changes shipping option only if chilexpress is selected
-				if( jQuery('#shipping_method_0_chilexpress').is(':checked') ) {
+				if( jQuery('input[value="chilexpress"]').is(':checked') ) {
 					jQuery('.shipping_method').not('input[value="chilexpress"]:first').click();
 				}
 
@@ -72,12 +73,14 @@ jQuery(document).ready(function( $ ) {
 
 					//Adds the option to check Chilexpress availability
 					jQuery('input[value="chilexpress"]').next('label').after('<span id="wc-chilexpress-verify"> - No disponible (<a class="wc-chilexpress-verify" href="#">Reintentar</a>)</span>');
-					jQuery('#wc-chilexpress-verify').on('click', '.wc-chilexpress-verify', function() {
-						whq_wcchp_cart_chilexpress_verify();
-					});
 				}
 			}
 		}, 250);
+
+		//Retry button for Chilexpress
+		jQuery('#wc-chilexpress-verify').on('click', '.wc-chilexpress-verify', function() {
+			whq_wcchp_cart_chilexpress_verify();
+		});
 
 		//Fix DOM refresh when changing shipping method
 		jQuery('body').on('click', '.shipping_method', function() {
@@ -184,7 +187,7 @@ function whq_wcchp_cart_load_cities( region_code ) {
 				whq_wcchp_city_code = '';
 
 				//Hard-coded list (Chilexpress API down?)
-				if ( typeof response.data === 'object' ) {
+				if ( typeof response.data === 'object' && Object.keys(response.data).length == 239 ) {
 					whq_wcchp_cities_object   = true;
 					whq_wcchp_object_to_array = Object.keys( response.data ).map( function( key ) {
 						return [ key, response.data[ key ] ];
@@ -201,6 +204,9 @@ function whq_wcchp_cart_load_cities( region_code ) {
 							response.data[i].GlsComuna = response.data[i][1];
 						}
 
+						//Cleanup the 2 at the end of the city's name
+						response.data[i].GlsComuna = whq_wcchp_city_name_cleanup( response.data[i].GlsComuna );
+
 						if( response.data[i].GlsComuna == whq_wcchp_city_name ) {
 							whq_wcchp_city_code = response.data[i].CodComuna;
 
@@ -212,6 +218,9 @@ function whq_wcchp_cart_load_cities( region_code ) {
 					});
 
 				} else {
+
+					//Cleanup the 2 at the end of the city's name
+					response.data.GlsComuna = whq_wcchp_city_name_cleanup( response.data.GlsComuna );
 
 					if( response.data.GlsComuna == whq_wcchp_city_name ) {
 						whq_wcchp_city_code = response.data.CodComuna;
@@ -295,4 +304,13 @@ function whq_wcchp_cart_chilexpress_verify() {
 	jQuery('#wc-chilexpress-verify').remove();
 	jQuery('input[value="chilexpress"]').prop('disabled', false);
 	jQuery('input[value="chilexpress"]').click();
+}
+
+//https://stackoverflow.com/a/6253616/920648
+function whq_wcchp_city_name_cleanup( city_name ) {
+	if (city_name.substring( city_name.length - 1 ) === '2' ) {
+		city_name = city_name.substring( 0,  city_name.length - 1 );
+	}
+
+	return city_name;
 }

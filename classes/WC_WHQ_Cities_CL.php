@@ -15,7 +15,87 @@ class WC_WHQ_Cities_CL {
 	* @return void
 	*/
 	public function __construct() {
-		$this->array = ['PAYS' => 'AISEN',
+		//1, Admission
+		//2, Delivery
+		//3, Both
+
+		//Delivery
+		$this->delivery = [
+			'ACHA' => 'ACHAO',
+			'AHOS' => 'ALTO HOSPICIO',
+			'ALAM' => 'LOS ALAMOS',
+			'ALGA' => 'ALGARROBO',
+			'ANCU' => 'ANCUD',
+			'ANDA' => 'ANDACOLLO',
+			'ANGO' => 'ANGOL',
+			'ANTO' => 'ANTOFAGASTA',
+			'ARAU' => 'ARAUCO',
+			'ARIC' => 'ARICA',
+			'BUIN' => 'BUIN',
+			'BULN' => 'BULNES',
+			'CABI' => 'CABILDO',
+			'CABR' => 'CABRERO',
+			'CALA' => 'CALAMA',
+			'CALB' => 'CALBUCO',
+			'CALD' => 'CALDERA',
+			'CANE' => 'CANETE',
+			'CARA' => 'CARAHUE',
+			'CART' => 'CARTAGENA',
+			'CASA' => 'CASABLANCA',
+			'CAST' => 'CASTRO',
+			'CAUQ' => 'CAUQUENES',
+			'CCHA' => 'CONCHALI',
+			'CCON' => 'CONCON',
+			'CHAN' => 'CHANARAL',
+			'CHCH' => 'CHILE CHICO',
+			'CHEP' => 'CHEPICA',
+			'CHIG' => 'CHIGUAYANTE',
+			'CHIL' => 'CHILLAN',
+			'CHIM' => 'CHIMBARONGO',
+			'CHON' => 'CHONCHI',
+			'CNAV' => 'CERRO NAVIA',
+			'COCH' => 'COCHRANE',
+			'COEL' => 'COELEMU',
+			'COIC' => 'COIHUECO',
+			'COIN' => 'COINCO',
+			'COLB' => 'COLBUN',
+			'COLI' => 'COLINA',
+			'COLL' => 'COLLIPULLI',
+			'COLT' => 'COLTAUCO',
+			'COMB' => 'COMBARBALA',
+			'CONC' => 'CONCEPCION',
+			'CONS' => 'CONSTITUCION',
+			'COPI' => 'COPIAPO',
+			'COQU' => 'COQUIMBO',
+			'CORO' => 'CORONEL',
+			'COYH' => 'COYHAIQUE',
+			'CRCV' => 'CURACAVI',
+			'CTAN' => 'CALERA DE TANGO',
+			'CURA' => 'CURANILAHUE',
+			'CURC' => 'CURACAUTIN',
+			'CURI' => 'CURICO',
+			'DALC' => 'DALCAHUE',
+			'DIEG' => 'DIEGO DE ALMAGRO',
+			'DONI' => 'DONIHUE',
+			'ECAR' => 'EL CARMEN',
+			'ECEN' => 'ESTACION CENTRAL',
+			'ELBO' => 'EL BOSQUE',
+			'ELMO' => 'EL MONTE',
+			'ENEA' => 'ENEA EXPRESS',
+			'FREI' => 'FREIRINA',
+			'FRER' => 'FREIRE',
+			'FRUT' => 'FRUTILLAR',
+			'FUTR' => 'FUTRONO',
+			'GORB' => 'GORBEA',
+			'GRAN' => 'GRANEROS',
+			'HAQI' => 'HUALQUI',
+			'HIJU' => 'HIJUELAS',
+			'HORP' => 'HORNOPIREN',
+		];
+
+		//Admission, update pending...
+		$this->admission = [
+				'PAYS' => 'AISEN',
 				'ALGA' => 'ALGARROBO',
 				'AHOS' => 'ALTO HOSPICIO',
 				'ANCU' => 'ANCUD',
@@ -193,7 +273,7 @@ class WC_WHQ_Cities_CL {
 				'QULL' => 'QUILLON',
 				'QLTA' => 'QUILLOTA',
 				'QUIL' => 'QUILPUE',
-				'ACHA' => 'QUINCHAO',
+				'ACHA' => 'ACHAO',
 				'QTIL' => 'QUINTA DE TILCOCO',
 				'QNOR' => 'QUINTA NORMAL',
 				'QUIN' => 'QUINTERO',
@@ -253,7 +333,8 @@ class WC_WHQ_Cities_CL {
 				'VINA' => 'VINA DEL MAR',
 				'VITA' => 'VITACURA',
 				'YUMB' => 'YUMBEL',
-				'YUNG' => 'YUNGAY'];
+				'YUNG' => 'YUNGAY',
+			];
 	}
 }
 
