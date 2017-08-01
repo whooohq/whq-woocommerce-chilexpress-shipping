@@ -52,6 +52,7 @@ function whq_wcchp_cities_ajax() {
 						  'CodTipoCobertura' => $codtipocobertura ];
 
 	$cities = whq_wcchp_call_soap($ns, $url, $route, $method, $parameters);
+	//$cities = false; //Simulate API down
 
 	if( false !== $cities ) {
 		$cities = $cities->respObtenerCobertura->Coberturas;
@@ -63,7 +64,7 @@ function whq_wcchp_cities_ajax() {
 		$cities = new WC_WHQ_Cities_CL();
 
 		if( false !== $cities && ! empty( $cities ) ) {
-			wp_send_json_success( $cities->array );
+			wp_send_json_success( $cities->delivery );
 		} else {
 			wp_send_json_error( $cities );
 		}

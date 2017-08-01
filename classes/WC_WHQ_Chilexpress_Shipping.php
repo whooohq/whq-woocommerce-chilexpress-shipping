@@ -135,11 +135,12 @@ function whq_wcchp_init_class() {
 									  'CodTipoCobertura' => $codtipocobertura ];
 
 				$cities = whq_wcchp_call_soap($ns, $url, $route, $method, $parameters);
+				//$cities = false; //Simulate API down
 
 				if( false === $cities ) {
 					//Retrieve the hard-coded ones
 					$cities = new WC_WHQ_Cities_CL();
-					$cities_array = $cities->array;
+					$cities_array = $cities->admission;
 				} else {
 					$cities = $cities->respObtenerCobertura->Coberturas;
 
