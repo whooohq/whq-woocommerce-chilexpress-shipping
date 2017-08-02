@@ -197,7 +197,9 @@ function whq_wcchp_checkout_chile_detected() {
 				});
 
 				if( !jQuery('#billing_whq_region_select, #shipping_whq_region_select').hasClass('select2-hidden-accessible') ) {
-					jQuery('#billing_whq_region_select, #shipping_whq_region_select').select2();
+					jQuery('#billing_whq_region_select, #shipping_whq_region_select').select2({
+						placeholder: 'Selecciona tu Región primero.'
+					});
 					jQuery('#billing_state_field, #shipping_state_field').unblock();
 				}
 
@@ -299,7 +301,9 @@ function whq_wcchp_checkout_load_cities_billing( region_code ) {
 				}
 
 				if( ! jQuery('#billing_whq_city_select').hasClass('select2-hidden-accessible') ) {
-					jQuery('#billing_whq_city_select').select2();
+					jQuery('#billing_whq_city_select').select2({
+						placeholder: 'Selecciona tu Ciudad/Localidad.'
+					});
 					jQuery('#billing_city_field').unblock();
 				}
 			}

@@ -286,13 +286,13 @@ function whq_wcchp_cart_inputs_replace() {
 
 		if( !jQuery('#calc_shipping_whq_region_select').hasClass('select2-hidden-accessible') ) {
 			jQuery('#calc_shipping_whq_region_select').select2({
-				placeholder: "Seleccionar Región"
+				placeholder: 'Selecciona tu Región primero.'
 			});
 			jQuery('.select2-container').css('width', '100%'); //Select2 width fix
 		}
 		if( !jQuery('#calc_shipping_whq_city_select').hasClass('select2-hidden-accessible') ) {
 			jQuery('#calc_shipping_whq_city_select').select2({
-				placeholder: "Seleccionar Localidad"
+				placeholder: 'Selecciona tu Ciudad/Localidad.'
 			});
 			jQuery('.select2-container').css('width', '100%'); //Select2 width fix
 		}
