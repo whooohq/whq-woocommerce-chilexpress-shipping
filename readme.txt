@@ -1,7 +1,7 @@
 === WooCommerce Chilexpress Shipping ===
 Contributors: whooo, jhoynerk, tcattd
 Tags: woocommerce, shipping, chile, chilexpress
-Stable tag: 1.1.14
+Stable tag: 1.1.17
 Requires at least: 4.4
 Tested up to: 4.8
 License: GPLv2 or later
@@ -52,9 +52,10 @@ Ayuda y aportes (pull requests) son bienvenidos.
 3. Configuración del plugin.
 
 == Changelog ==
-= 1.1.14 =
-* Fix (parcial): https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/22
+= 1.1.17 =
+* Fix: https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/22
 * Mejora: aumentado el tiempo de caché de las localidades a una semana mínimo, para evitar saturar la API de Chilexpress.
+* Actualizada lista (hard-coded) de ciudades y localidades tanto como origen de envío y como para entregas.
 
 = 1.1.13 =
 * Mejora: https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/22

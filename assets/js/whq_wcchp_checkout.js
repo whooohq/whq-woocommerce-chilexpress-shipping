@@ -13,7 +13,7 @@ var whq_wcchp_region_shipping_name;
 var whq_wcchp_region_shipping_code;
 var whq_wcchp_city_name;
 var whq_wcchp_city_code;
-var whq_wcchp_cities_object = false;
+var whq_wcchp_cities_hardcoded = false;
 var whq_wcchp_object_to_array;
 
 jQuery(document).ready(function( $ ) {
@@ -241,8 +241,8 @@ function whq_wcchp_checkout_load_cities_billing( region_code ) {
 				whq_wcchp_city_code = '';
 
 				//Hard-coded list (Chilexpress API down?)
-				if ( typeof response.data === 'object' ) {
-					whq_wcchp_cities_object   = true;
+				if ( typeof response.data === 'object' && Object.keys(response.data).length >= 239 ) {
+					whq_wcchp_cities_hardcoded   = true;
 					whq_wcchp_object_to_array = Object.keys( response.data ).map( function( key ) {
 						return [ key, response.data[ key ] ];
 					});
@@ -250,11 +250,17 @@ function whq_wcchp_checkout_load_cities_billing( region_code ) {
 				}
 
 				if( jQuery.isArray( response.data ) ) {
+
 					jQuery(response.data).each(function( i, value ) {
 						//Map the hard-coded values back
-						if( whq_wcchp_cities_object === true ) {
+						if( whq_wcchp_cities_hardcoded === true ) {
 							response.data[i].CodComuna = response.data[i][0];
 							response.data[i].GlsComuna = response.data[i][1];
+						}
+
+						//Cleanup the 2 at the end of the city's name
+						if ( whq_wcchp_cities_hardcoded === false ) {
+							response.data[i].GlsComuna = whq_wcchp_city_name_cleanup( response.data[i].GlsComuna );
 						}
 
 						if( response.data[i].GlsComuna  == whq_wcchp_city_name ) {
@@ -266,7 +272,14 @@ function whq_wcchp_checkout_load_cities_billing( region_code ) {
 							jQuery('#billing_whq_city_select').append('<option value="' + response.data[i].CodComuna + '|' + response.data[i].GlsComuna + '">' + response.data[i].GlsComuna + '</option>');
 						}
 					});
+
 				} else {
+
+					//Cleanup the 2 at the end of the city's name
+					if ( whq_wcchp_cities_hardcoded === false ) {
+						response.data.GlsComuna = whq_wcchp_city_name_cleanup( response.data.GlsComuna );
+					}
+
 					if( response.data.GlsComuna  == whq_wcchp_city_name ) {
 						whq_wcchp_city_code = response.data.CodComuna;
 
@@ -275,6 +288,7 @@ function whq_wcchp_checkout_load_cities_billing( region_code ) {
 					} else {
 						jQuery('#billing_whq_city_select').append('<option value="' + response.data.CodComuna + '|' + response.data.GlsComuna + '">' + response.data.GlsComuna + '</option>');
 					}
+
 				}
 
 				$code_and_city = jQuery('#billing_whq_city').val() + '|' + jQuery('#billing_city').val();
@@ -430,4 +444,17 @@ function whq_wcchp_checkout_inputs_restore() {
 
 	//Remove our trigger class from body
 	jQuery('body').removeClass('wc-chilexpress-enabled');
+}
+
+//https://stackoverflow.com/a/6253616/920648
+function whq_wcchp_city_name_cleanup( city_name ) {
+	if( typeof city_name === 'undefined' ) {
+		return city_name;
+	}
+
+	if (city_name.substring( city_name.length - 1 ) === '2' ) {
+		city_name = city_name.substring( 0,  city_name.length - 1 );
+	}
+
+	return city_name;
 }
