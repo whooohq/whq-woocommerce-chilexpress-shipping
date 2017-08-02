@@ -114,7 +114,12 @@ function whq_wcchp_init_class() {
 			public static function get_chilexpress_option( $option_name = '' ) {
 				$options = get_option( 'woocommerce_chilexpress_settings' );
 
-				if( false === array_key_exists( $option_name, $options) ) {
+				//https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/25
+				if ( false === $options ) {
+					return false;
+				}
+
+				if ( false === array_key_exists( $option_name, $options ) ) {
 					return false;
 				}
 

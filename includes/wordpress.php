@@ -27,6 +27,10 @@ function whq_wcchp_incompatible_plugins_check() {
 		if ( is_plugin_active( 'comunas-de-chile-para-woocommerce/woocoomerce-comunas.php' ) ) {
 			$show_notice = true;
 		}
+
+		if ( is_plugin_active( 'woocommerce-chilean-peso-currency/woocommerce-chilean-peso.php' ) ) {
+			$show_notice = true;
+		}
 	}
 
 	if( true === $show_notice ) {
