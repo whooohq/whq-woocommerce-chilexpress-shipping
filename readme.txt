@@ -52,7 +52,7 @@ Ayuda y aportes (pull requests) son bienvenidos.
 3. Configuración del plugin.
 
 == Changelog ==
-= 1.1.19 =
+= 1.1.20 =
 * Mejora: https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/25
 * Mejora: utilizados placeholders de select2 (¡gracias @albetix por la idea!)
 
