@@ -399,6 +399,8 @@ function whq_wcchp_init_class() {
 							$supported_shipments_types = array( 2, 3, 4 );
 						}
 
+						write_log( $supported_shipments_types );
+
 						foreach ( $chp_estimated as $key => $value ) {
 							write_log( 'Servicio: ' . '[' . $value->CodServicio . ']' . $value->GlsServicio . ', valor ' . $value->ValorServicio );
 
