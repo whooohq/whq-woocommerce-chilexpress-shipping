@@ -393,13 +393,11 @@ function whq_wcchp_init_class() {
 						//TERCER DÍA:5
 
 						$supported_shipments_types = $this->get_chilexpress_option('shipments_types');
-						write_log( $supported_shipments_types );
 
 						if( false === $supported_shipments_types ) {
 							//We need some default values in case the admin hasn't configured this yet
 							$supported_shipments_types = array( 2, 3, 4 );
 						}
-						write_log( $supported_shipments_types );
 
 						foreach ( $chp_estimated as $key => $value ) {
 							write_log( 'Servicio: ' . '[' . $value->CodServicio . ']' . $value->GlsServicio . ', valor ' . $value->ValorServicio );
