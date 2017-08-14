@@ -8,13 +8,15 @@ var whq_wcchp_city_name;
 var whq_wcchp_city_code;
 var whq_wcchp_cities_hardcoded = false;
 var whq_wcchp_object_to_array;
+var whq_wcchp_chilexpress_noservice;
+var whq_wcchp_chilexpress_noservice_text;
 
 jQuery(document).ready(function( $ ) {
 	//Only on WooCommerce's Cart
 	if( jQuery('.woocommerce-cart').length ) {
-		if( jQuery('input[value="chilexpress"]').length ) {
+		if( jQuery('input[value^="chilexpress"]').length ) {
 			//CL detection
-			if( jQuery('input[value="chilexpress"]').is(':checked') && jQuery('#calc_shipping_country').val() == 'CL' ) {
+			if( jQuery('input[value^="chilexpress"]').is(':checked') && jQuery('#calc_shipping_country').val() == 'CL' ) {
 				whq_wcchp_cart_chile_detected();
 			}
 		}
@@ -69,14 +71,14 @@ jQuery(document).ready(function( $ ) {
 		});
 
 		whq_wcchp_chilexpress_down = setInterval(function() {
-			if( jQuery('body').hasClass('wc-chilexpress-down') && jQuery('input[value="chilexpress"]').length ) {
+			if( jQuery('body').hasClass('wc-chilexpress-down') && jQuery('input[value^="chilexpress"]').length ) {
 				if( ! jQuery('#wc-chilexpress-verify').length ) {
 					//Disables chilexpress shipping option
-					jQuery('input[value="chilexpress"]').next('label').children('.amount').remove();
-					jQuery('input[value="chilexpress"]').prop('disabled', true);
+					jQuery('input[value^="chilexpress"]').next('label').children('.amount').remove();
+					jQuery('input[value^="chilexpress"]').prop('disabled', true);
 
 					//Adds the option to check Chilexpress availability
-					jQuery('input[value="chilexpress"]').next('label').after('<span id="wc-chilexpress-verify">: No disponible (<a class="wc-chilexpress-verify" href="#">Reintentar</a>)</span>');
+					jQuery('input[value^="chilexpress"]').next('label').after('<span id="wc-chilexpress-verify">: No disponible (<a class="wc-chilexpress-verify" href="#">Reintentar</a>)</span>');
 				}
 				//Displays an error message to the user
 				if( ! jQuery('body').hasClass('wc-chilexpress-errormsg') ) {
@@ -101,13 +103,26 @@ jQuery(document).ready(function( $ ) {
 		jQuery('body').on('click', 'button[name="calc_shipping"]', function() {
 			whq_wcchp_cart_inputs_restore();
 		});
+
+
+		//No service for certain location detection
+		whq_wcchp_chilexpress_noservice = setInterval(function() {
+			whq_wcchp_chilexpress_noservice_text = jQuery('input[value^="chilexpress:"]').next('label').text();
+
+			if ( whq_wcchp_chilexpress_noservice_text.toLowerCase().indexOf('sin servicio') >= 0 ) {
+				jQuery('input[value^="chilexpress:"]').prop('disabled', true);
+				jQuery('.shipping_method').not('input[value^="chilexpress"]:first').click();
+			} else {
+				jQuery('input[value^="chilexpress:"]').prop('disabled', false);
+			}
+		}, 250);
 	}
 });
 
 function whq_wcchp_cart_watcher() {
-	if( jQuery('input[value="chilexpress"]').length ) {
+	if( jQuery('input[value^="chilexpress"]').length ) {
 		//CL detection
-		if( jQuery('input[value="chilexpress"]').is(':checked') && jQuery('#calc_shipping_country').val() == 'CL' ) {
+		if( jQuery('input[value^="chilexpress"]').is(':checked') && jQuery('#calc_shipping_country').val() == 'CL' ) {
 			whq_wcchp_cart_chile_detected();
 		} else {
 			whq_wcchp_cart_inputs_restore();
@@ -336,8 +351,8 @@ function whq_wcchp_cart_remove_chilexpress_classes() {
 function whq_wcchp_cart_chilexpress_down() {
 	whq_wcchp_cart_inputs_restore();
 	jQuery('body').addClass('wc-chilexpress-down');
-	if( jQuery('input[value="chilexpress"]').is(':checked') ) {
-		jQuery('.shipping_method').not('input[value="chilexpress"]:first').click();
+	if( jQuery('input[value^="chilexpress"]').is(':checked') ) {
+		jQuery('.shipping_method').not('input[value^="chilexpress"]:first').click();
 	}
 }
 
@@ -345,8 +360,8 @@ function whq_wcchp_cart_chilexpress_verify() {
 	jQuery('body').removeClass('wc-chilexpress-down');
 	jQuery('body').removeClass('wc-chilexpress-errormsg');
 	jQuery('#wc-chilexpress-verify').remove();
-	jQuery('input[value="chilexpress"]').prop('disabled', false);
-	jQuery('input[value="chilexpress"]').prop('checked', true);
+	jQuery('input[value^="chilexpress"]').prop('disabled', false);
+	jQuery('input[value^="chilexpress"]').prop('checked', true);
 	jQuery('.shipping-calculator-button').click();
 }
 
