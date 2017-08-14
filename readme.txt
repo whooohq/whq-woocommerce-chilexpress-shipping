@@ -55,7 +55,7 @@ Ayuda y aportes (pull requests) son bienvenidos.
 
 == Changelog ==
 = 1.2.0 =
-* Mejora: ahora puedes seleccionar los típos de envíos disponibles (Ultra Rápido, Overnight, Día hábil siguiente, Día hábil subsiguiente, Tercer día) que deseas soportar en tu tienda, configurables desde las opciones del método de envío [[Ref.](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/26)]
+* Mejora: ahora puedes seleccionar los típos de envíos disponibles (Ultra Rápido, Overnight, Día hábil siguiente, Día hábil subsiguiente, Tercer día) que deseas soportar en tu tienda, configurables desde las opciones del método de envío ([#26](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/26))
 
 = 1.1.20 =
 * Agregado nuevo plugin en lista de incompatibilidad ([#25](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/25))
