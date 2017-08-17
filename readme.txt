@@ -55,7 +55,7 @@ Ayuda y aportes (pull requests) son bienvenidos.
 
 == Changelog ==
 = 1.2.1 =
-* Mejoras en el carro de compras y el checkout ([PR#28](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/pull/28))
+* Mejoras en el carro de compras y el checkout ([PR#28](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/pull/28)). ¡Gracias @albetix!
 * Limpiadas rutinas javascript del plugin. Agregado debug para desarrollo.
 
 = 1.2.0 =

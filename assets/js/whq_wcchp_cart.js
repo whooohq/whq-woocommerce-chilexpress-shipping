@@ -14,6 +14,10 @@ var whq_wcchp_chilexpress_noservice_text;
 jQuery(document).ready(function( $ ) {
 	//Only on WooCommerce's Cart
 	if( jQuery('.woocommerce-cart').length ) {
+		if( whq_wcchp_jsdebug ) {
+			console.log('[WCCHP] in cart');
+		}
+
 		if( jQuery('input[value^="chilexpress"]').length ) {
 			//CL detection
 			if( jQuery('input[value^="chilexpress"]').is(':checked') && jQuery('#calc_shipping_country').val() == 'CL' ) {
