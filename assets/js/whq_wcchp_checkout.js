@@ -50,6 +50,13 @@ jQuery(document).ready(function( $ ) {
 			jQuery('#billing_state').val(whq_wcchp_region_billing_array[1]);
 			jQuery('#billing_whq_region').val(whq_wcchp_region_billing_array[0]);
 
+			jQuery('#billing_city_field').block({
+				message: null,
+				overlayCSS: {
+					background: '#fff',
+					opacity: 0.6
+				}
+			});
 			whq_wcchp_checkout_load_cities_billing( whq_wcchp_region_billing_array[0] );
 		});
 
@@ -61,6 +68,13 @@ jQuery(document).ready(function( $ ) {
 			jQuery('#shipping_state').val(whq_wcchp_region_shipping_array[1]);
 			jQuery('#shipping_whq_region').val(whq_wcchp_region_shipping_array[0]);
 
+			jQuery('#shipping_city_field').block({
+				message: null,
+				overlayCSS: {
+					background: '#fff',
+					opacity: 0.6
+				}
+			});
 			whq_wcchp_checkout_load_cities_shipping( whq_wcchp_region_shipping_array[0] );
 		});
 
@@ -168,8 +182,6 @@ function whq_wcchp_checkout_chile_detected() {
 		return;
 	}
 
-	jQuery('body').addClass('wc-chilexpress-enabled');
-
 	whq_wcchp_checkout_inputs_replace();
 
 	jQuery.ajax({
@@ -210,12 +222,7 @@ function whq_wcchp_checkout_chile_detected() {
 					}
 				});
 
-				if( !jQuery('#billing_whq_region_select, #shipping_whq_region_select').hasClass('select2-hidden-accessible') ) {
-					jQuery('#billing_whq_region_select, #shipping_whq_region_select').select2({
-						placeholder: 'Selecciona tu Región primero.'
-					});
-					jQuery('#billing_state_field, #shipping_state_field').unblock();
-				}
+				jQuery('#billing_state_field, #shipping_state_field').unblock();
 
 				if( whq_wcchp_region_billing_code !== '' ) {
 					whq_wcchp_checkout_load_cities_billing( whq_wcchp_region_billing_code );
@@ -314,12 +321,7 @@ function whq_wcchp_checkout_load_cities_billing( region_code ) {
 					jQuery('#billing_city').val(' ');
 				}
 
-				if( ! jQuery('#billing_whq_city_select').hasClass('select2-hidden-accessible') ) {
-					jQuery('#billing_whq_city_select').select2({
-						placeholder: 'Selecciona tu Ciudad/Localidad.'
-					});
-					jQuery('#billing_city_field').unblock();
-				}
+				jQuery('#billing_city_field').unblock();
 			}
 		}
 	});
@@ -349,8 +351,29 @@ function whq_wcchp_checkout_load_cities_shipping( region_code ) {
 				whq_wcchp_city_name = jQuery('#shipping_city').val();
 				whq_wcchp_city_code = '';
 
+				//Hard-coded list (Chilexpress API down?)
+				if ( typeof response.data === 'object' && Object.keys(response.data).length >= 239 ) {
+					whq_wcchp_cities_hardcoded   = true;
+					whq_wcchp_object_to_array = Object.keys( response.data ).map( function( key ) {
+						return [ key, response.data[ key ] ];
+					});
+					response.data = whq_wcchp_object_to_array;
+				}
+
 				if( jQuery.isArray( response.data ) ) {
-					jQuery(response.data).each(function( i ) {
+
+					jQuery(response.data).each(function( i, value ) {
+						//Map the hard-coded values back
+						if( whq_wcchp_cities_hardcoded === true ) {
+							response.data[i].CodComuna = response.data[i][0];
+							response.data[i].GlsComuna = response.data[i][1];
+						}
+
+						//Cleanup the 2 at the end of the city's name
+						if ( whq_wcchp_cities_hardcoded === false ) {
+							response.data[i].GlsComuna = whq_wcchp_city_name_cleanup( response.data[i].GlsComuna );
+						}
+
 						if( response.data[i].GlsComuna  == whq_wcchp_city_name ) {
 							whq_wcchp_city_code = response.data[i].CodComuna;
 
@@ -360,7 +383,14 @@ function whq_wcchp_checkout_load_cities_shipping( region_code ) {
 							jQuery('#shipping_whq_city_select').append('<option value="' + response.data[i].CodComuna + '|' + response.data[i].GlsComuna + '">' + response.data[i].GlsComuna + '</option>');
 						}
 					});
+
 				} else {
+
+					//Cleanup the 2 at the end of the city's name
+					if ( whq_wcchp_cities_hardcoded === false ) {
+						response.data.GlsComuna = whq_wcchp_city_name_cleanup( response.data.GlsComuna );
+					}
+
 					if( response.data.GlsComuna  == whq_wcchp_city_name ) {
 						whq_wcchp_city_code = response.data.CodComuna;
 
@@ -369,6 +399,7 @@ function whq_wcchp_checkout_load_cities_shipping( region_code ) {
 					} else {
 						jQuery('#shipping_whq_city_select').append('<option value="' + response.data.CodComuna + '|' + response.data.GlsComuna + '">' + response.data.GlsComuna + '</option>');
 					}
+
 				}
 
 				$code_and_city = jQuery('#shipping_whq_city').val() + '|' + jQuery('#shipping_city').val();
@@ -378,17 +409,14 @@ function whq_wcchp_checkout_load_cities_shipping( region_code ) {
 					jQuery('#shipping_city').val(' ');
 				}
 
-				if( ! jQuery('#shipping_whq_city_select').hasClass('select2-hidden-accessible') ) {
-					jQuery('#shipping_whq_city_select').select2();
-					jQuery('#shipping_city_field').unblock();
-				}
+				jQuery('#shipping_city_field').unblock();
 			}
 		}
 	});
 }
 
 function whq_wcchp_checkout_inputs_replace() {
-	if( jQuery('#billing_city, #shipping_city').is('input') ) {
+	if( ! jQuery('#billing_whq_city_select, #shipping_whq_city_select').is('select') ) {
 		//Inserts new fields for manipulation and select
 		jQuery("#billing_city").after('<input type="text" class="input-text" name="billing_whq_city" id="billing_whq_city" />');
 		jQuery("#billing_whq_city").after('<select id="billing_whq_city_select" name="billing_whq_city_select" disabled="disabled"><option value="">Selecciona la región primero.</option></select>');
@@ -407,8 +435,14 @@ function whq_wcchp_checkout_inputs_replace() {
 				opacity: 0.6
 			}
 		});
+
+		if( ! jQuery('#billing_whq_city_select, #shipping_whq_city_select').hasClass('select2-hidden-accessible') ) {
+			jQuery('#billing_whq_city_select, #shipping_whq_city_select').select2({
+				placeholder: 'Selecciona la Comuna o Ciudad.'
+			});
+		}
 	}
-	if( jQuery('#billing_state, #shipping_state').is('input') ) {
+	if( ! jQuery('#billing_whq_region_select, #shipping_whq_region_select').is('select') ) {
 		//Inserts new fields for manipulation and select
 		jQuery("#billing_state").after('<input type="text" class="input-text" name="billing_whq_region" id="billing_whq_region" />');
 		jQuery("#billing_whq_region").after('<select id="billing_whq_region_select" name="billing_whq_region_select" disabled="disabled"></select>');
@@ -427,41 +461,52 @@ function whq_wcchp_checkout_inputs_replace() {
 				opacity: 0.6
 			}
 		});
+
+		if( !jQuery('#billing_whq_region_select, #shipping_whq_region_select').hasClass('select2-hidden-accessible') ) {
+			jQuery('#billing_whq_region_select, #shipping_whq_region_select').select2({
+				placeholder: 'Selecciona la Región primero.'
+			});
+		}
+
+		//Inserts our trigger class in body
+		jQuery('body').addClass('wc-chilexpress-enabled');
 	}
 }
 
 function whq_wcchp_checkout_inputs_restore() {
-	//Remove inserted fields
-	if( jQuery('#billing_whq_city_select, #shipping_whq_city_select').is('select') ) {
-		jQuery("#billing_whq_city").remove();
-		jQuery("#billing_whq_city_select").next('.select2-container').remove();
-		jQuery("#billing_whq_city_select").remove();
-		jQuery("#shipping_whq_city").remove();
-		jQuery("#shipping_whq_city_select").next('.select2-container').remove();
-		jQuery("#shipping_whq_city_select").remove();
+	if( jQuery('body').hasClass('wc-chilexpress-enabled') ) {
+		//Remove inserted fields
+		if( jQuery('#billing_whq_city_select, #shipping_whq_city_select').is('select') ) {
+			jQuery("#billing_whq_city").remove();
+			jQuery("#billing_whq_city_select").next('.select2-container').remove();
+			jQuery("#billing_whq_city_select").remove();
+			jQuery("#shipping_whq_city").remove();
+			jQuery("#shipping_whq_city_select").next('.select2-container').remove();
+			jQuery("#shipping_whq_city_select").remove();
+		}
+
+		if( jQuery('#billing_whq_region_select, #shipping_whq_region_select').is('select') ) {
+			jQuery("#billing_whq_region").remove();
+			jQuery("#billing_whq_region_select").next('.select2-container').remove();
+			jQuery("#billing_whq_region_select").remove();
+			jQuery("#shipping_whq_region").remove();
+			jQuery("#shipping_whq_region_select").next('.select2-container').remove();
+			jQuery("#shipping_whq_region_select").remove();
+		}
+
+		//Deselect Chilexpress
+		jQuery('.shipping_method').not('input[value^="chilexpress"]:first').click();
+
+		//Show the old ones
+		jQuery('#billing_state, #billing_city, #shipping_state, #shipping_city').show();
+
+		//Unblock the UI
+		jQuery('#shipping_city_field, #shipping_state_field').unblock();
+		jQuery('#billing_city_field, #billing_state_field').unblock();
+
+		//Remove our trigger class from body
+		jQuery('body').removeClass('wc-chilexpress-enabled');
 	}
-
-	if( jQuery('#billing_whq_region_select, #shipping_whq_region_select').is('select') ) {
-		jQuery("#billing_whq_region").remove();
-		jQuery("#billing_whq_region_select").next('.select2-container').remove();
-		jQuery("#billing_whq_region_select").remove();
-		jQuery("#shipping_whq_region").remove();
-		jQuery("#shipping_whq_region_select").next('.select2-container').remove();
-		jQuery("#shipping_whq_region_select").remove();
-	}
-
-	//Deselect Chilexpress
-	jQuery('.shipping_method').not('input[value^="chilexpress"]:first').click();
-
-	//Show the old ones
-	jQuery('#billing_state, #billing_city, #shipping_state, #shipping_city').show();
-
-	//Unblock the UI
-	jQuery('#shipping_city_field, #shipping_state_field').unblock();
-	jQuery('#billing_city_field, #billing_state_field').unblock();
-
-	//Remove our trigger class from body
-	jQuery('body').removeClass('wc-chilexpress-enabled');
 }
 
 //https://stackoverflow.com/a/6253616/920648

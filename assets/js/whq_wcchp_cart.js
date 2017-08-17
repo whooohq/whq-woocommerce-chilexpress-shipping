@@ -104,16 +104,12 @@ jQuery(document).ready(function( $ ) {
 			whq_wcchp_cart_inputs_restore();
 		});
 
-
 		//No service for certain location detection
 		whq_wcchp_chilexpress_noservice = setInterval(function() {
 			whq_wcchp_chilexpress_noservice_text = jQuery('input[value^="chilexpress:"]').next('label').text();
-
-			if ( whq_wcchp_chilexpress_noservice_text.toLowerCase().indexOf('sin servicio') >= 0 ) {
-				jQuery('input[value^="chilexpress:"]').prop('disabled', true);
-				jQuery('.shipping_method').not('input[value^="chilexpress"]:first').click();
-			} else {
-				jQuery('input[value^="chilexpress:"]').prop('disabled', false);
+		 	if ( whq_wcchp_chilexpress_noservice_text.toLowerCase().indexOf('sin servicio') >= 0 ) {
+				whq_wcchp_chilexpress_noservice_text = jQuery('input[value^="chilexpress:"]').next('label').text().replace('(SIN SERVICIO)', '');
+				jQuery('input[value^="chilexpress"]').next('label').text(whq_wcchp_chilexpress_noservice_text);
 			}
 		}, 250);
 	}
@@ -275,7 +271,7 @@ function whq_wcchp_cart_load_cities( region_code ) {
 }
 
 function whq_wcchp_cart_inputs_replace() {
-	if( jQuery('#calc_shipping_city, #calc_shipping_state').is('input') ) {
+	if( ! jQuery('#calc_shipping_whq_city_select, #calc_shipping_whq_region_select').is('select') ) {
 		//Show city field and hide postcode field
 		jQuery('#calc_shipping_city_field').show();
 		jQuery('#calc_shipping_postcode_field').hide();
@@ -301,13 +297,13 @@ function whq_wcchp_cart_inputs_replace() {
 
 		if( !jQuery('#calc_shipping_whq_region_select').hasClass('select2-hidden-accessible') ) {
 			jQuery('#calc_shipping_whq_region_select').select2({
-				placeholder: 'Selecciona tu Región primero.'
+				placeholder: 'Selecciona la Región primero.'
 			});
 			jQuery('.select2-container').css('width', '100%'); //Select2 width fix
 		}
 		if( !jQuery('#calc_shipping_whq_city_select').hasClass('select2-hidden-accessible') ) {
 			jQuery('#calc_shipping_whq_city_select').select2({
-				placeholder: 'Selecciona tu Ciudad/Localidad.'
+				placeholder: 'Selecciona la Comuna o Ciudad.'
 			});
 			jQuery('.select2-container').css('width', '100%'); //Select2 width fix
 		}
