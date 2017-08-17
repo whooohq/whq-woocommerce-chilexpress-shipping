@@ -221,12 +221,12 @@ jQuery(document).ready(function( $ ) {
 
 function whq_wcchp_checkout_chile_detected() {
 	if( whq_wcchp_jsdebug ) {
-		console.log( '[WCCHP] whq_wcchp_checkout_chile_detected' );
+		console.log( '[WCCHP] whq_wcchp_checkout_chile_detected()' );
 	}
 
 	if( jQuery('body').hasClass('wc-chilexpress-enabled') ) {
 		if( whq_wcchp_jsdebug ) {
-			console.log('.wc-chilexpress-enabled is already set, aborting');
+			console.log('[WCCHP] .wc-chilexpress-enabled is already set, aborting');
 		}
 
 		return;
@@ -235,7 +235,7 @@ function whq_wcchp_checkout_chile_detected() {
 	whq_wcchp_checkout_inputs_replace();
 
 	if( whq_wcchp_jsdebug ) {
-		console.log('requesting regions, action: whq_wcchp_regions_ajax');
+		console.log('[WCCHP] requesting regions, action: whq_wcchp_regions_ajax');
 	}
 
 	jQuery.ajax({
@@ -333,12 +333,20 @@ function whq_wcchp_checkout_chile_detected() {
 }
 
 function whq_wcchp_checkout_load_cities( region_code, billorship ) {
+	if( whq_wcchp_jsdebug ) {
+		console.log( '[WCCHP] whq_wcchp_checkout_load_cities()' );
+	}
+
 	if( region_code === '' ) {
 		region_code = '99'; //Bring it on!
 	}
 
 	if( billorship === '' ) {
 		billorship = 'billing';
+	}
+
+	if( whq_wcchp_jsdebug ) {
+		console.log('[WCCHP] requesting cities, action: whq_wcchp_cities_ajax');
 	}
 
 	jQuery.ajax({
@@ -351,10 +359,23 @@ function whq_wcchp_checkout_load_cities( region_code, billorship ) {
 		type: 'POST',
 		datatype: 'application/json',
 		success: function( response ) {
+			if( whq_wcchp_jsdebug ) {
+				console.log( '[WCCHP] whq_wcchp_cities_ajax response' );
+				console.log( response );
+			}
+
 			if( response.success === false ) {
+				if( whq_wcchp_jsdebug ) {
+					console.log( '[WCCHP] chilexpress api down' );
+				}
+
 				//Chilexpress API down? error?
 				whq_wcchp_checkout_inputs_restore();
 			} else {
+				if( whq_wcchp_jsdebug ) {
+					console.log( '[WCCHP] populating cities' );
+				}
+
 				jQuery('#' + billorship + '_whq_city_select').prop('disabled', false).empty().append('<option value=""></option>');
 
 				whq_wcchp_city_name = jQuery('#' + billorship + '_city').val();
