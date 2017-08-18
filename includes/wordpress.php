@@ -19,17 +19,24 @@ add_action( 'admin_init', 'whq_wcchp_incompatible_plugins_check' );
 function whq_wcchp_incompatible_plugins_check() {
 	$show_notice = false;
 
-	if ( current_user_can( 'activate_plugins' ) && ( ! wp_doing_ajax() ) ) {
-		if ( is_plugin_active( 'woo-checkout-field-editor-pro/checkout-form-designer.php' ) ) {
-			$show_notice = true;
-		}
+	$incompatible_plugins = array(
+		'woocommerce-checkout-field-editor/woocommerce-checkout-field-editor.php',
+		'woo-checkout-field-editor-pro/checkout-form-designer.php',
+		'comunas-de-chile-para-woocommerce/woocoomerce-comunas.php',
+		'woocommerce-chilean-peso-currency/woocommerce-chilean-peso.php',
+	);
 
-		if ( is_plugin_active( 'comunas-de-chile-para-woocommerce/woocoomerce-comunas.php' ) ) {
-			$show_notice = true;
+	if ( current_user_can( 'activate_plugins' ) && ( ! wp_doing_ajax() ) ) {
+		if ( is_array( $incompatible_plugins ) && ! empty( $incompatible_plugins ) ) {
+			foreach ($incompatible_plugins as $plugin) {
+				if ( is_plugin_active( $plugin ) ) {
+					$show_notice = true;
+				}
+			}
 		}
 	}
 
-	if( true === $show_notice ) {
+	if ( true === $show_notice ) {
 		add_action( 'admin_notices', 'whq_wcchp_incompatible_plugins' );
 	}
 }
@@ -41,7 +48,7 @@ function whq_wcchp_incompatible_plugins() {
 	if( empty( get_option( 'whq_wcchp_incompatible_plugins' ) ) ) {
 	?>
 		<div class="notice error is-dismissible whq_wcchp_incompatible_plugins">
-			<p>Hemos detectado al menos un plugin con incompatibilidad (parcial o total) conocida, que puede afectar el funcionamiento del sistema de envíos de Chilexpress para WooCommerce. Por favor, <a href="https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/18">revisa el listado</a> antes de reportar un bug en el sistema de envíos Chilexpress.</p>
+			<p>Hemos detectado al menos un plugin con incompatibilidad (parcial o total) conocida, que puede afectar el funcionamiento del sistema de envíos de Chilexpress para WooCommerce.<br/>Por favor, <a href="https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/18">revisa el listado</a> antes de reportar un bug en el sistema de envíos a través de Chilexpress.</p>
 		</div>
 	<?php
 	}

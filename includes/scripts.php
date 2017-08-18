@@ -50,3 +50,17 @@ function whq_wcchp_admin_enqueue_scripts() {
 		wp_enqueue_script( 'whq_wcchp_admin', $whq_wcchp_default['plugin_url'] . 'assets/js/whq_wcchp_admin.js', array( 'jquery' ), $whq_wcchp_default['plugin_version'], true );
 	}
 }
+
+add_action( 'wp_footer', 'whq_wcchp_debug' );
+function whq_wcchp_debug() {
+	if ( true === WP_DEBUG ) {
+		$jsdebug = true;
+	} else {
+		$jsdebug = false;
+	}
+	?>
+		<script type="text/javascript">
+			var whq_wcchp_jsdebug = '<?php echo $jsdebug; ?>';
+		</script>
+	<?php
+}

@@ -1,7 +1,7 @@
 === WooCommerce Chilexpress Shipping ===
 Contributors: whooo, jhoynerk, tcattd
 Tags: woocommerce, shipping, chile, chilexpress
-Stable tag: 1.1.17
+Stable tag: 1.2.1
 Requires at least: 4.4
 Tested up to: 4.8
 License: GPLv2 or later
@@ -18,6 +18,8 @@ Demostración en video:
 [youtube https://www.youtube.com/watch?v=JaLp1wmtKlk]
 
 El soporte al plugin se realiza directamente en [GitHub](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/).
+
+Un humilde aporte de [Whooo](http://whooohq.com) a la comunidad de WordPress.
 
 == Installation ==
 1. Ingresa a tu Administrador (WP-Admin), luego Plugins -> Añadir Nuevo. Busca "WooCommerce Chilexpress Shipping". Presiona "Instalar ahora" y luego Actívalo.
@@ -52,6 +54,17 @@ Ayuda y aportes (pull requests) son bienvenidos.
 3. Configuración del plugin.
 
 == Changelog ==
+= 1.2.1 =
+* Mejoras en el carro de compras y el checkout ([PR#28](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/pull/28)). ¡Gracias @albetix!
+* Limpiadas rutinas javascript del plugin. Agregado debug para desarrollo.
+
+= 1.2.0 =
+* Mejora: ahora puedes seleccionar los típos de envíos disponibles (Ultra Rápido, Overnight, Día hábil siguiente, Día hábil subsiguiente, Tercer día) que deseas soportar en tu tienda, configurables desde las opciones del método de envío ([#26](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/26))
+
+= 1.1.20 =
+* Agregado nuevo plugin en lista de incompatibilidad ([#25](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/25))
+* Mejora: utilizados placeholders de select2 (¡gracias @albetix por la idea!)
+
 = 1.1.17 =
 * Fix: https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/22
 * Mejora: aumentado el tiempo de caché de las localidades a una semana mínimo, para evitar saturar la API de Chilexpress.

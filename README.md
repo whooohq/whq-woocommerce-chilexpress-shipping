@@ -11,6 +11,8 @@ Demostración en video:
 
 El soporte al plugin se realiza directamente en [GitHub](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues).
 
+Un humilde aporte de [Whooo](http://whooohq.com) a la comunidad de WordPress.
+
 
 ## Instalación
 Ver página oficial del plugin en [WordPress.org](https://wordpress.org/plugins/woo-chilexpress-shipping/).
