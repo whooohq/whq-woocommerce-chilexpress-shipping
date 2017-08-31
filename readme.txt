@@ -1,7 +1,7 @@
 === WooCommerce Chilexpress Shipping ===
 Contributors: whooo, jhoynerk, tcattd
 Tags: woocommerce, shipping, chile, chilexpress
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 Requires at least: 4.4
 Tested up to: 4.8
 Requires PHP: 5.6
@@ -55,10 +55,11 @@ Ayuda y aportes (pull requests) son bienvenidos.
 3. Configuración del plugin.
 
 == Changelog ==
-= 1.2.2 =
+= 1.2.3 =
 * Mejoras en el carro de compras y el checkout ([PR#28](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/pull/28)). ¡Gracias @albetix!
 * Limpiadas rutinas javascript del plugin. Agregado debug para desarrollo.
 * Implementados headers para aviso de versión mínima de PHP oficial de WP ([ref.](https://make.wordpress.org/plugins/2017/08/29/minimum-php-version-requirement/)) y de WooCommerce ([ref.](https://woocommerce.wordpress.com/2017/08/28/new-version-check-in-woocommerce-3-2/)).
+* Actualizada lista de plugins incompatibles ([#18](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/18))
 
 = 1.2.0 =
 * Mejora: ahora puedes seleccionar los típos de envíos disponibles (Ultra Rápido, Overnight, Día hábil siguiente, Día hábil subsiguiente, Tercer día) que deseas soportar en tu tienda, configurables desde las opciones del método de envío ([#26](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/26))

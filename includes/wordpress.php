@@ -24,6 +24,7 @@ function whq_wcchp_incompatible_plugins_check() {
 		'woo-checkout-field-editor-pro/checkout-form-designer.php',
 		'comunas-de-chile-para-woocommerce/woocoomerce-comunas.php',
 		'woocommerce-chilean-peso-currency/woocommerce-chilean-peso.php',
+		'calculo-de-despacho-via-starken-para-woocommerce/calculo-starken-woocommerce.php',
 	);
 
 	if ( current_user_can( 'activate_plugins' ) && ( ! wp_doing_ajax() ) ) {
