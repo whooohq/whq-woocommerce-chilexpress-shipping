@@ -67,8 +67,8 @@ jQuery(document).ready(function( $ ) {
 			whq_wcchp_region_billing_select = jQuery('#billing_whq_region_select').val();
 			whq_wcchp_region_billing_array  = whq_wcchp_region_billing_select.split('|');
 
-			jQuery('#billing_state').val(whq_wcchp_region_billing_array[1]);
-			jQuery('#billing_whq_region').val(whq_wcchp_region_billing_array[0]);
+			jQuery('#billing_state').val( whq_wcchp_region_billing_array[1] );
+			jQuery('#billing_whq_region').val( whq_wcchp_region_billing_array[0] );
 
 			jQuery('#billing_city_field').block({
 				message: null,
@@ -90,8 +90,8 @@ jQuery(document).ready(function( $ ) {
 			whq_wcchp_region_shipping_select = jQuery('#shipping_whq_region_select').val();
 			whq_wcchp_region_shipping_array  = whq_wcchp_region_shipping_select.split('|');
 
-			jQuery('#shipping_state').val(whq_wcchp_region_shipping_array[1]);
-			jQuery('#shipping_whq_region').val(whq_wcchp_region_shipping_array[0]);
+			jQuery('#shipping_state').val( whq_wcchp_region_shipping_array[1] );
+			jQuery('#shipping_whq_region').val( whq_wcchp_region_shipping_array[0] );
 
 			jQuery('#shipping_city_field').block({
 				message: null,
@@ -113,8 +113,8 @@ jQuery(document).ready(function( $ ) {
 			whq_wcchp_city_select = jQuery('#billing_whq_city_select').val();
 			whq_wcchp_city_array  = whq_wcchp_city_select.split('|');
 
-			jQuery('#billing_city').val(whq_wcchp_city_array[1]);
-			jQuery('#billing_whq_city').val(whq_wcchp_city_array[0]);
+			jQuery('#billing_city').val( whq_wcchp_city_array[1] );
+			jQuery('#billing_whq_city').val( whq_wcchp_city_array[0] );
 		});
 
 		//Manage shipping cities
@@ -126,8 +126,8 @@ jQuery(document).ready(function( $ ) {
 			whq_wcchp_city_select = jQuery('#shipping_whq_city_select').val();
 			whq_wcchp_city_array  = whq_wcchp_city_select.split('|');
 
-			jQuery('#shipping_city').val(whq_wcchp_city_array[1]);
-			jQuery('#shipping_whq_city').val(whq_wcchp_city_array[0]);
+			jQuery('#shipping_city').val( whq_wcchp_city_array[1] );
+			jQuery('#shipping_whq_city').val( whq_wcchp_city_array[0] );
 		});
 
 		//Fix Select2 width
@@ -179,7 +179,8 @@ jQuery(document).ready(function( $ ) {
 			}
 		}, 250);
 
-		//Shipping cost zero? https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/13
+		//Shipping cost zero?
+		//https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/13
 		jQuery('body').on('click', '#place_order', function() {
 			if( jQuery('body').hasClass('wc-chilexpress-enabled') && jQuery('input[value^="chilexpress"]').length ) {
 				whq_wcchp_chilexpress_cost = jQuery('input[value^="chilexpress"]').next('label').children('.amount').text();
@@ -327,6 +328,40 @@ function whq_wcchp_checkout_chile_detected() {
 
 				//Unblock the UI
 				jQuery('#billing_state_field, #shipping_state_field').unblock();
+
+				//Copy values to the hidden Inputs, for Chrome auto-complete
+				//https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/34
+				whq_wcchp_city_select = jQuery('#billing_whq_city_select').val();
+				whq_wcchp_city_array  = whq_wcchp_city_select.split('|');
+
+				if( whq_wcchp_city_select !== false ) {
+					jQuery('#billing_city').val( whq_wcchp_city_array[1] );
+					jQuery('#billing_whq_city').val( whq_wcchp_city_array[0] );
+				}
+
+				whq_wcchp_region_billing_select = jQuery('#billing_whq_region_select').val();
+				whq_wcchp_region_billing_array  = whq_wcchp_region_billing_select.split('|');
+
+				if( whq_wcchp_region_billing_select !== false ) {
+					jQuery('#billing_state').val( whq_wcchp_region_billing_array[1] );
+					jQuery('#billing_whq_region').val( whq_wcchp_region_billing_array[0] );
+				}
+
+				whq_wcchp_city_select = jQuery('#shipping_whq_city_select').val();
+				whq_wcchp_city_array  = whq_wcchp_city_select.split('|');
+
+				if( whq_wcchp_city_select !== false ) {
+					jQuery('#shipping_city').val( whq_wcchp_city_array[1] );
+					jQuery('#shipping_whq_city').val( whq_wcchp_city_array[0] );
+				}
+
+				whq_wcchp_region_shipping_select = jQuery('#shipping_whq_region_select').val();
+				whq_wcchp_region_shipping_array  = whq_wcchp_region_shipping_select.split('|');
+
+				if( whq_wcchp_region_shipping_select !== false ) {
+					jQuery('#shipping_state').val( whq_wcchp_region_shipping_array[1] );
+					jQuery('#shipping_whq_region').val( whq_wcchp_region_shipping_array[0] );
+				}
 			}
 		}
 	});
