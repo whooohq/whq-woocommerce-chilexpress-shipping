@@ -1,7 +1,7 @@
 === WooCommerce Chilexpress Shipping ===
 Contributors: whooo, jhoynerk, tcattd
 Tags: woocommerce, shipping, chile, chilexpress
-Stable tag: 1.2.4
+Stable tag: 1.2.5
 Requires at least: 4.4
 Tested up to: 4.8
 Requires PHP: 5.6
@@ -55,6 +55,10 @@ Ayuda y aportes (pull requests) son bienvenidos.
 3. Configuración del plugin.
 
 == Changelog ==
+= 1.2.5 =
+* Bugfix: arreglo de cierta condicion que permitía terminar una compra cuando Chilexpress está sin servicio.
+* SE BUSCAN opiniones en [issue #39](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/39) respecto a un cambio sugerido en el plugin (Zonas de Envío). Desde ya, gracias por vuestra participación.
+
 = 1.2.4 =
 * Bugfix: arreglo de auto-completado en los navegadores ([#34](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/34)). Gracias @llermaly por el reporte.
 

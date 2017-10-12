@@ -20,12 +20,14 @@ function whq_wcchp_init_class() {
 			 * @access public
 			 * @return void
 			 */
-			public function __construct(){
+			public function __construct( $instance_id = 0 ) {
 				$this->id                 = 'chilexpress';
+				$this->instance_id        = absint( $instance_id );
 				$this->method_title       = __( 'Chilexpress', 'whq-wcchp' );
 				$this->method_description = __( 'Utiliza la API de Chilexpress para el cálculo automático de costos de envío. Sugerencias y reporte de errores en <a href="https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues" target="_blank">GitHub</a>.', 'whq-wcchp' );
 
 				// Load the settings.
+				//$this->init();
 				$this->init_form_fields();
 				$this->init_settings();
 
@@ -39,6 +41,11 @@ function whq_wcchp_init_class() {
 				$this->soap_login      = $this->get_option( 'soap_login' );
 				$this->soap_password   = $this->get_option( 'soap_password' );
 				$this->availability    = true;
+				/*$this->supports        = array(
+					'shipping-zones',
+					'instance-settings',
+					'instance-settings-modal',
+				);*/
 
 				// Save settings in admin if you have any defined
 				add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
