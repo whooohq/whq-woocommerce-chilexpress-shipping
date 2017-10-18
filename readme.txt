@@ -60,10 +60,10 @@ Ayuda y aportes (pull requests) son bienvenidos.
 = 1.2.6 =
 * Igualada detección de PHP a algoritmo usado por WooCommerce. A ver si [#42](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/42) no continua ocurriendo.
 * Actualizado el FAQ. Referencia directa a [#27](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/27#issuecomment-321929605) para futuros issues duplicados.
+* SE BUSCAN opiniones en [issue #39](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/39) respecto a un cambio sugerido en el plugin (Zonas de Envío). Desde ya, gracias por vuestra participación.
 
 = 1.2.5 =
 * Bugfix: arreglo de cierta condicion que permitía terminar una compra cuando Chilexpress está sin servicio.
-* SE BUSCAN opiniones en [issue #39](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/39) respecto a un cambio sugerido en el plugin (Zonas de Envío). Desde ya, gracias por vuestra participación.
 
 = 1.2.4 =
 * Bugfix: arreglo de auto-completado en los navegadores ([#34](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/34)). Gracias @llermaly por el reporte.
