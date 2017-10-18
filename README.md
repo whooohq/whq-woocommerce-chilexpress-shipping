@@ -28,10 +28,10 @@ La conexión a la API de Chilexpress se realiza a través de SOAP. Por lo tanto,
 El cálculo del precio de envío se hace utilizando directamente la API de Chilexpress. Para que la API de Chilexpress entregue los valores correctos, los productos en tu tienda deben tener medidas asignadas (alto, ancho, largo, en cm.) y peso (kg.). De lo contrario, la API de Chilexpress no podrá calcular el precio de envío correctamente.
 
 
-### ¿Chilexpress caido? (Chilexpress no disponible)
+### ¿Chilexpress caído? (Chilexpress no disponible)
 No estamos afiliados ni formamos parte de Chilexpress, por lo que no podemos garantizar el funcionamiento de este plugin al 100%. Si la API de Chilexpress o sus servicios caen (puede ocurrir), no hay nada que podamos hacer al respecto. Si el plugin detecta de la API de Chilexpress no responde, el plugin deja WooCommerce "tal como venía" (ingreso manual de Región y Ciudad), y no permite la selección de Chilexpress como método de envío. No hay nada más que podamos hacer al respecto.
 
-Si vuestro servidor no puede realizar la conexión con los servidores de Chilexpress, el mismo error (Chilexpress no disponible) aparecerá en pantalla durante el checkout, y no podrás utilizar el plugin. Ante eso (problemas de conectividad del servidor), no podemos hacer nada tampoco. Es vuestra responsabilidad debugear aquel punto.
+Por otro lado, si vuestro servidor no puede realizar la conexión con los servidores de Chilexpress, el mismo error (Chilexpress no disponible) aparecerá en pantalla durante el checkout, y no podrás utilizar el plugin. Ante eso (problemas de conectividad del servidor), no podemos hacer nada tampoco. Es vuestra responsabilidad debugear aquel punto.
 
 Para más detalle, ver [issue #27](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/27#issuecomment-321929605).
 
