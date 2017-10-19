@@ -24,7 +24,7 @@ function whq_wcchp_init_class() {
 				$this->id                 = 'chilexpress';
 				$this->instance_id        = absint( $instance_id );
 				$this->method_title       = __( 'Chilexpress', 'whq-wcchp' );
-				$this->method_description = __( 'Utiliza la API de Chilexpress para el cálculo automático de costos de envío. Sugerencias y reporte de errores en <a href="https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues" target="_blank">GitHub</a>.', 'whq-wcchp' );
+				$this->method_description = __( '<p>Utiliza la API de Chilexpress para el cálculo automático de costos de envío. Sugerencias y reporte de errores en <a href="https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>', 'whq-wcchp' );
 
 				// Load the settings.
 				//$this->init();
@@ -32,20 +32,30 @@ function whq_wcchp_init_class() {
 				$this->init_settings();
 
 				// Define user set variables
-				$this->enabled         = $this->get_option( 'enabled' );
-				$this->title           = $this->get_option( 'title' );
-				$this->shipping_origin = $this->get_option( 'shipping_origin' );
-				$this->shipments_types = $this->get_option( 'shipments_types' );
-				$this->locations_cache = $this->get_option( 'locations_cache' );
-				$this->extra_wrapper   = $this->get_option( 'extra_wrapper' );
-				$this->soap_login      = $this->get_option( 'soap_login' );
-				$this->soap_password   = $this->get_option( 'soap_password' );
-				$this->availability    = true;
-				/*$this->supports        = array(
-					'shipping-zones',
-					'instance-settings',
-					'instance-settings-modal',
-				);*/
+				$this->enabled                = $this->get_option( 'enabled' );
+				$this->title                  = $this->get_option( 'title' );
+				$this->shipping_origin        = $this->get_option( 'shipping_origin' );
+				$this->shipments_types        = $this->get_option( 'shipments_types' );
+				$this->locations_cache        = $this->get_option( 'locations_cache' );
+				$this->extra_wrapper          = $this->get_option( 'extra_wrapper' );
+				$this->soap_login             = $this->get_option( 'soap_login' );
+				$this->soap_password          = $this->get_option( 'soap_password' );
+				$this->shipping_zones_support = $this->get_option( 'shipping_zones_support' );
+				$this->disable_shipping_zones = $this->get_option( 'disable_shipping_zones' );
+				$this->availability           = true;
+
+				if( $this->get_chilexpress_option( 'shipping_zones_support' ) == 'yes' ) {
+					$this->supports = array(
+						'shipping-zones',
+						'instance-settings',
+						//'instance-settings-modal',
+					);
+
+					// Only on the config page (and not in a modal)
+					if( isset( $_REQUEST['instance_id'] ) && ! empty( $_REQUEST['instance_id'] ) && $_REQUEST['instance_id'] == $this->instance_id ) {
+						$this->method_description .= '<p><a href="#' . $this->instance_id . '" class="wcchp_disable_shipping_zones_support"><span class="dashicons dashicons-no-alt" style="text-decoration: none;"></span>Desactivar soporte para Zonas de Envío</a>. Serás redireccionado a la página de configuración en unos momentos.</p>';
+					}
+				}
 
 				// Save settings in admin if you have any defined
 				add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
@@ -80,6 +90,13 @@ function whq_wcchp_init_class() {
 						'label'   => __( 'Habilitar envíos vía Chilexpress', 'whq-wcchp' ),
 						'default' => 'yes',
 					),
+					'shipping_zones_support' => array(
+						'title'       => __( 'Soporte de Zonas de Envío', 'whq-wcchp' ),
+						'type'        => 'checkbox',
+						'label'       => __( 'Habilitar Zonas de Envío de WooCommerce', 'whq-wcchp' ),
+						'description' => __( 'Al activar esta opción, Chilexpress se transforma en un método de envío compatible con las Zonas de Envío. Al hacerlo, esta página de configuración se moverá las <a href="admin.php?page=wc-settings&tab=shipping&section=">Zonas de Envío</a>.<br/>Debes tener en cuenta que para poder continuar utilizando Chilexpress com método de envío, <strong>tendrás que crear al menos una Zona de Envío, incluir a Chile en ella, y luego a Chilexpress como método de envío dentro de Chile</strong>. Hacerlo es mandatorio para poder continuar configurando el método de envío.<br/>Al activar esta opción, serás redireccionado a las Zonas de Envío de WooCommerce.', 'whq-wcchp' ),
+						'default'     => 'disabled',
+					),
 					'title' => array(
 						'title'       => __( 'Título del método de envío', 'whq-wcchp' ),
 						'type'        => 'text',
@@ -95,7 +112,7 @@ function whq_wcchp_init_class() {
 					'shipments_types' => array(
 						'title'       => __( 'Tipos de envíos soportados', 'whq-wcchp' ),
 						'type'        => 'multiselect',
-						'description' => __( 'Selecciona los tipos de envíos a soportar.<br/>Considera que dependiendo de la ubicación de origen de tus envíos, algunas localidades extremas podrían no contar con un tipo de envío normal (día hábil siguiente), y solo tener disponible envío al tercer día, por lo que lo recomendado es que selecciones al menos "día hábil siguiente", "día hábil subsiguiente" y "tercer día".<br/>Ten presente que los envíos Ultra Rápidos y Overnight están disponibles solo en ciertas ciudades de origen y para algunos destinos.<br/>También debes tener en cuenta que el envío Ultra Rápido debería ser despachado inmediatamente por tu tienda para cumplir con las espectativas del comprador.<br/>Conoce más sobre estos <a href="http://www.chilexpress.cl/tiempos-de-entrega-envios-paquetes-documentos" target="_blank">tipos de envíos, acá</a>.', 'whq-wcchp' ),
+						'description' => __( 'Selecciona los tipos de envíos a soportar.<br/>Considera que dependiendo de la ubicación de origen de tus envíos, algunas localidades extremas podrían no contar con un tipo de envío normal (día hábil siguiente), y solo tener disponible envío al tercer día, por lo que lo recomendado es que selecciones al menos "día hábil siguiente", "día hábil subsiguiente" y "tercer día".<br/>Ten presente que los envíos Ultra Rápidos y Overnight están disponibles solo en ciertas ciudades de origen y para algunos destinos.<br/>También <strong>debes tener en cuenta que el envío Ultra Rápido debería ser despachado inmediatamente por tu tienda para cumplir con las espectativas del comprador</strong>.<br/>Conoce más sobre estos <a href="http://www.chilexpress.cl/tiempos-de-entrega-envios-paquetes-documentos" target="_blank" rel="noopener noreferrer">tipos de envíos, acá</a>.', 'whq-wcchp' ),
 						'options'     => $this->get_shipments_types(),
 						'default'     => array( 3, 4, 5 ),
 					),
@@ -115,15 +132,26 @@ function whq_wcchp_init_class() {
 						'title'       => __( 'Chilexpress API Username', 'whq-wcchp' ),
 						'type'        => 'text',
 						'description' => __( '(Opcional) Usuario a utilizar en las llamadas a la API de Chilexpress. Dejar en blanco para utilizar datos de conexión por defecto (públicos) que Chilexpress provee.', 'whq-wcchp' ),
-						'default'     => __( '', 'whq-wcchp' ),
+						'default'     => '',
 					),
 					'soap_password' => array(
 						'title'       => __( 'Chilexpress API Password', 'whq-wcchp' ),
-						'type'        => 'password',
+						'type'        => 'text', // https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/45
 						'description' => __( '(Opcional) Contraseña a utilizar en las llamadas a la API de Chilexpress. Dejar en blanco para utilizar datos de conexión por defecto (públicos) que Chilexpress provee.', 'whq-wcchp' ),
-						'default'     => __( '', 'whq-wcchp' ),
+						'default'     => '',
+						'desc_tip'    => false,
 					),
 				);
+
+				// https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/45
+				// Only if password is entered, change the type, to mask the password in the db
+				if ( ! empty( $this->get_option( 'soap_password' ) ) ) {
+					$this->form_fields['soap_password']['type'] = 'password';
+				}
+
+				// Shipping Zones support
+				$this->instance_form_fields = $this->form_fields;
+				unset( $this->instance_form_fields['shipping_zones_support'] );
 			}
 
 			public static function get_chilexpress_option( $option_name = '' ) {
@@ -131,6 +159,10 @@ function whq_wcchp_init_class() {
 
 				//https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/25
 				if ( false === $options ) {
+					return false;
+				}
+
+				if ( ! is_array( $options ) ) {
 					return false;
 				}
 
@@ -476,36 +508,54 @@ function whq_wcchp_init_class() {
 			}
 
 			/**
-			 * Validate the cache duration
+			 * Validate any checkbox field
 			 */
-			public function validate_locations_cache_field( $key, $value ) {
-				if ( isset( $value ) && $value < 7 ) {
-					WC_Admin_Settings::add_error( esc_html__( 'El caché mínimo para las localidades y regiones es de una semana (7 días).', 'whq-wcchp' ) );
+			public function validate_checkbox_field( $key, $value ) {
+				if( $key == 'shipping_zones_support' ) {
+					if ( $value == 1 ) {
+						// Update value by hand, so we can redirect our users to the next step (Setting a Shipping Zone)
+						$wcchp_options                           = get_option( 'woocommerce_chilexpress_settings' );
+						$wcchp_options['shipping_zones_support'] = 'yes';
+						update_option( 'woocommerce_chilexpress_settings', $wcchp_options );
 
-					$value = 7;
+						wp_redirect( 'admin.php?page=wc-settings&tab=shipping&section=' );
+						die();
+					}
 				}
 
-				if ( isset( $value ) && $value > 60 ) {
-					WC_Admin_Settings::add_error( esc_html__( 'El caché máximo para las localidades y regiones es de dos meses (60 días).', 'whq-wcchp' ) );
-
-					$value = 60;
-				}
-
-				return $value;
+				return ! is_null( $value ) ? 'yes' : 'no';
 			}
 
 			/**
-			 * Validate the extra package wrapper
+			 * Validate any number field
 			 */
-			public function validate_extra_wrapper_field( $key, $value ) {
-				if ( isset( $value ) && $value < 0 ) {
-					WC_Admin_Settings::add_error( esc_html__( 'El valor mínimo es 0 centímetros.', 'whq-wcchp' ) );
+			public function validate_number_field( $key, $value ) {
+				// Validate the minimum and maximum cache time limit
+				if ( $key == 'locations_cache' ) {
+					if ( isset( $value ) && $value < 7 ) {
+						WC_Admin_Settings::add_error( esc_html__( 'El caché mínimo para las localidades y regiones es de una semana (7 días).', 'whq-wcchp' ) );
 
-					$value = 0;
+						$value = 7;
+					}
+
+					if ( isset( $value ) && $value > 60 ) {
+						WC_Admin_Settings::add_error( esc_html__( 'El caché máximo para las localidades y regiones es de dos meses (60 días).', 'whq-wcchp' ) );
+
+						$value = 60;
+					}
 				}
 
-				if ( isset( $value ) && $value > 30 ) {
-					WC_Admin_Settings::add_error( esc_html__( '¿Estás seguro que necesitas 30 o más centímetros extra para la caja/embalaje?.', 'whq-wcchp' ) ); //Will leave the value in there, just warn the user
+				// Validate the extra package wrapper
+				if ( $key == 'extra_wrapper' ) {
+					if ( isset( $value ) && $value < 0 ) {
+						WC_Admin_Settings::add_error( esc_html__( 'El valor mínimo es 0 centímetros.', 'whq-wcchp' ) );
+
+						$value = 0;
+					}
+
+					if ( isset( $value ) && $value > 30 ) {
+						WC_Admin_Settings::add_error( esc_html__( '¿Estás seguro que necesitas 30 o más centímetros extra para la caja/embalaje?.', 'whq-wcchp' ) ); //Will leave the value in there, just warn the user
+					}
 				}
 
 				return $value;

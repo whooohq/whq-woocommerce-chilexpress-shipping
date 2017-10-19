@@ -83,3 +83,27 @@ function whq_wcchp_dismiss_admin_notice() {
 	echo '1';
 	die();
 }
+
+/**
+ * Disable Shipping Zones support
+ */
+add_action( 'wp_ajax_whq_wcchp_disable_shipping_zones_support_ajax', 'whq_wcchp_disable_shipping_zones_support' );
+function whq_wcchp_disable_shipping_zones_support() {
+	global $wpdb;
+
+	$instance_id = absint( $_POST['instance_id'] );
+
+	$wcchp_options                           = get_option( 'woocommerce_chilexpress_settings' );
+	$wcchp_options['shipping_zones_support'] = 'no';
+	update_option( 'woocommerce_chilexpress_settings', $wcchp_options );
+
+	$zone = new WC_Shipping_Zone();
+	$zone->delete_shipping_method( $instance_id );
+
+	$wpdb->delete( $wpdb->prefix . 'woocommerce_shipping_zone_methods', array( 'instance_id' => $instance_id ) );
+
+	delete_option( 'woocommerce_chilexpress_' . $instance_id . '_settings' );
+
+	echo '1';
+	die();
+}
