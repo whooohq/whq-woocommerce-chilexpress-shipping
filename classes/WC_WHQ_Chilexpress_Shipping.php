@@ -57,7 +57,7 @@ function whq_wcchp_init_class() {
 					}
 
 					// Populate Chile's States
-					add_filter( 'woocommerce_states', array( &$this, 'create_states' ) );
+					//add_filter( 'woocommerce_states', array( &$this, 'create_states' ) );
 				}
 
 				// Save settings in admin if you have any defined
