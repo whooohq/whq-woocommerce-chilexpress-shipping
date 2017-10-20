@@ -61,7 +61,7 @@ function whq_wcchp_cities_ajax() {
 	}
 
 	if( false === $cities || NULL === $cities ) {
-		$cities = new WC_WHQ_Cities_CL();
+		$cities = new WC_WHQ_States_Cities_CL();
 
 		if( false !== $cities && ! empty( $cities ) ) {
 			wp_send_json_success( $cities->delivery );

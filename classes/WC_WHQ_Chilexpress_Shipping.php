@@ -1,5 +1,5 @@
 <?php
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	die();
 }
 
@@ -55,6 +55,9 @@ function whq_wcchp_init_class() {
 					if( isset( $_REQUEST['instance_id'] ) && ! empty( $_REQUEST['instance_id'] ) && $_REQUEST['instance_id'] == $this->instance_id ) {
 						$this->method_description .= '<p><a href="#' . $this->instance_id . '" class="wcchp_disable_shipping_zones_support"><span class="dashicons dashicons-no-alt" style="text-decoration: none;"></span>Desactivar soporte para Zonas de Envío</a>. Serás redireccionado a la página de configuración en unos momentos.</p>';
 					}
+
+					// Populate Chile's States
+					add_filter( 'woocommerce_states', array( &$this, 'create_states' ) );
 				}
 
 				// Save settings in admin if you have any defined
@@ -157,6 +160,11 @@ function whq_wcchp_init_class() {
 			public static function get_chilexpress_option( $option_name = '' ) {
 				$options = get_option( 'woocommerce_chilexpress_settings' );
 
+				// TODO: detect if shipping zones is enabled, and get only this option from the global array. Others needs to be called from the respective $instance_id
+				if ($option_name == 'shipping_zones_support') {
+					$options = get_option( 'woocommerce_chilexpress_settings' );
+				}
+
 				//https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/25
 				if ( false === $options ) {
 					return false;
@@ -191,7 +199,12 @@ function whq_wcchp_init_class() {
 				return $shipments_types;
 			}
 
-			private function get_cities() {
+			/**
+			 * Get Chilexpress's supported cities
+			 * @param  integer $type 1 = Admission, 2 = Delivery, 3 = Both
+			 * @return array        Array containing the cities, with their code as the key
+			 */
+			private function get_cities( $type = 1 ) {
 				global $whq_wcchp_default;
 
 				$url    = $whq_wcchp_default['plugin_url'] . 'wsdl/WSDL_GeoReferencia_QA.wsdl';
@@ -200,7 +213,7 @@ function whq_wcchp_init_class() {
 				$method = 'reqObtenerCobertura';
 
 				$codregion        = 99; //Bring it on!
-				$codtipocobertura = 1; //Admission
+				$codtipocobertura = $type; //Admission
 				$parameters       = [ 'CodRegion'        => $codregion,
 									  'CodTipoCobertura' => $codtipocobertura ];
 
@@ -209,7 +222,7 @@ function whq_wcchp_init_class() {
 
 				if( false === $cities ) {
 					//Retrieve the hard-coded ones
-					$cities = new WC_WHQ_Cities_CL();
+					$cities       = new WC_WHQ_States_Cities_CL();
 					$cities_array = $cities->admission;
 				} else {
 					$cities = $cities->respObtenerCobertura->Coberturas;
@@ -227,6 +240,47 @@ function whq_wcchp_init_class() {
 				}
 
 				return $cities_array;
+			}
+
+			/**
+			 * Get Chilexpress's supported regions (Chile's states)
+			 * @param  integer $type 1 = Admission, 2 = Delivery, 3 = Both
+			 * @return array        Array containing the cities, with their code as the key
+			 */
+			private function get_states() {
+				global $whq_wcchp_default;
+
+				$url    = $whq_wcchp_default['plugin_url'] . 'wsdl/WSDL_GeoReferencia_QA.wsdl';
+				$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
+				$route  = 'ConsultarRegiones';
+				$method = 'reqObtenerRegion';
+
+				$regions = whq_wcchp_call_soap($ns, $url, $route, $method);
+				//$regions = false; //Simulate API down
+
+				if( false === $regions ) {
+					//Retrieve the hard-coded ones
+					$regions       = new WC_WHQ_States_Cities_CL();
+					$regions_array = $regions->states;
+				} else {
+					$regions = $regions->respObtenerRegion->Regiones;
+
+					whq_wcchp_array_move( $regions, 14, 0 );
+					whq_wcchp_array_move( $regions, 10, 6 );
+					whq_wcchp_array_move( $regions, 14, 11 );
+
+					$regions_array = [];
+
+					foreach ($regions as $key => $value) {
+						$regions_array[ $value->idRegion ] = $value->GlsRegion;
+					}
+				}
+
+				if ( ! is_array( $regions_array ) ) {
+					return false;
+				}
+
+				return $regions_array;
 			}
 
 			public function is_available( $package ) {
@@ -492,12 +546,11 @@ function whq_wcchp_init_class() {
 			}
 
 			static function create_states( $states ) {
-				$cities       = [];
+				$regions      = $this->get_states();
 				$states['CL'] = array();
 
-				foreach ($cities as $key => $city) {
-					$code                = $city['code'];
-					$states['CL'][$code] = $city['name'];
+				foreach ($regions as $key => $city) {
+					$states['CL'][$key] = $city;
 				}
 
 				return $states;
