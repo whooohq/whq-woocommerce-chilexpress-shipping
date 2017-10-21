@@ -45,7 +45,7 @@ function whq_wcchp_init_class() {
 				$this->availability           = true;
 
 				if( $this->get_chilexpress_option( 'shipping_zones_support' ) == 'yes' ) {
-					$this->supports = array(
+					/*$this->supports = array(
 						'shipping-zones',
 						'instance-settings',
 						//'instance-settings-modal',
@@ -55,6 +55,7 @@ function whq_wcchp_init_class() {
 					if( isset( $_REQUEST['instance_id'] ) && ! empty( $_REQUEST['instance_id'] ) && $_REQUEST['instance_id'] == $this->instance_id ) {
 						$this->method_description .= '<p><a href="#' . $this->instance_id . '" class="wcchp_disable_shipping_zones_support"><span class="dashicons dashicons-no-alt" style="text-decoration: none;"></span>Desactivar soporte para Zonas de Envío</a>. Serás redireccionado a la página de configuración en unos momentos.</p>';
 					}
+					*/
 
 					// Populate Chile's States
 					//add_filter( 'woocommerce_states', array( &$this, 'create_states' ) );
@@ -93,13 +94,13 @@ function whq_wcchp_init_class() {
 						'label'   => __( 'Habilitar envíos vía Chilexpress', 'whq-wcchp' ),
 						'default' => 'yes',
 					),
-					'shipping_zones_support' => array(
+					/*'shipping_zones_support' => array(
 						'title'       => __( 'Soporte de Zonas de Envío', 'whq-wcchp' ),
 						'type'        => 'checkbox',
 						'label'       => __( 'Habilitar Zonas de Envío de WooCommerce', 'whq-wcchp' ),
 						'description' => __( 'Al activar esta opción, Chilexpress se transforma en un método de envío compatible con las Zonas de Envío. Al hacerlo, esta página de configuración se moverá las <a href="admin.php?page=wc-settings&tab=shipping&section=">Zonas de Envío</a>.<br/>Debes tener en cuenta que para poder continuar utilizando Chilexpress como método de envío en tu tienda, <strong>tendrás que crear al menos una Zona de Envío, incluir a Chile en ella, y luego agregar Chilexpress como método de envío dentro de Chile</strong>. Hacerlo es mandatorio para poder continuar configurando el método de envío.<br/>Al activar esta opción, serás redireccionado a las Zonas de Envío de WooCommerce.', 'whq-wcchp' ),
 						'default'     => 'disabled',
-					),
+					),*/
 					'title' => array(
 						'title'       => __( 'Título del método de envío', 'whq-wcchp' ),
 						'type'        => 'text',
@@ -153,8 +154,8 @@ function whq_wcchp_init_class() {
 				}
 
 				// Shipping Zones support
-				$this->instance_form_fields = $this->form_fields;
-				unset( $this->instance_form_fields['shipping_zones_support'] );
+				/*$this->instance_form_fields = $this->form_fields;
+				unset( $this->instance_form_fields['shipping_zones_support'] );*/
 			}
 
 			public static function get_chilexpress_option( $option_name = '' ) {
