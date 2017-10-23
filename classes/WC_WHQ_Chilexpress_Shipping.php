@@ -117,9 +117,9 @@ function whq_wcchp_init_class() {
 					'packaging_heuristic' => array(
 						'title'       => __( 'Heuristica para calculo de costo de envío', 'whq-wcchp' ),
 						'type'        => 'select',
-						'description' => __( 'Heuristica para calcular el ensamblaje de varios productos en un mismo pedido<br><ul><li>Unir los lados mas angostos (aplicable cuando son productos pequeños)</li><li>Sumar volumenes</li><li>Un paquete por producto (recomendable cuando se envian productos mayores y/o en mayor cantidad)</li></ul>', 'whq-wcchp' ),
-						'options'     => array('Unir lados angostos','Un paquete por item'),
-						'default'     => array(0),
+						'description' => __( 'Heuristica para calcular el ensamblaje de varios productos en un mismo pedido<br><ul><li>Unir los lados mas angostos (aplicable cuando son productos pequeños)</li><li>Un paquete por producto (recomendable cuando se envian productos mayores y/o en mayor cantidad)</li></ul>', 'whq-wcchp' ),
+						'options'     => array('join_narrow_sides'=>'Unir lados angostos','single_package_per_item'=>'Un paquete por item'),
+						'default'     => 'join_narrow_sides',
 					),
 					'shipments_types' => array(
 						'title'       => __( 'Tipos de envíos soportados', 'whq-wcchp' ),
@@ -311,15 +311,18 @@ function whq_wcchp_init_class() {
 			 * @return void
 			 */
 			public function calculate_shipping( $package = array() ) {
-				if ($this->form_fields['packaging_heuristic']=='Un paquete por item'){
-                    $this->calculate_shipping_byItem($package);
+				
+				write_log('calculate shipping heuristic: '.$this->packaging_heuristic);
+
+				if ($this->packaging_heuristic=='single_package_per_item'){
+                    $this->calculate_shipping_by_item($package);
                 } else {
-                    $this->calculate_shipping_byShortestSide($package);
+                    $this->calculate_shipping_by_shortest_side($package);
                 }
 
             }
 
-            public function calculate_shipping_byShortestSide( $package = array() ) {
+            public function calculate_shipping_by_shortest_side( $package = array() ) {
 
 				write_log( "Calculate Shipping By Adding shortestSides");
 
@@ -472,13 +475,11 @@ function whq_wcchp_init_class() {
 
 
 
-                $result=$this->get_tarification($package, $weight, $length, $width, $height);
-                foreach($result as $key=>$values){
-                    $this->addRate($values[0], $values[1], $values[2]);
-                }
+                $rates=$this->get_tarification($package, $weight, $length, $width, $height);
+                $this->add_rates($rates);
             }
 
-            public function calculate_shipping_byItem( $package = array() ) {
+            public function calculate_shipping_by_item( $package = array() ) {
 
             	write_log( "Calculate Shipping By Item");
 
@@ -519,9 +520,7 @@ function whq_wcchp_init_class() {
                 }
 
                 // for every service add the Rate for the frontend and payment
-                foreach ($final_tarification as $key => $value){
-                    $this->addRate($value[0], $value[1], $value[2]);
-                }
+                $this->add_rates($final_tarification);
 
 
             }
@@ -581,7 +580,7 @@ function whq_wcchp_init_class() {
 
                         write_log($supported_shipments_types);
 
-                        $result=array();
+                        $rates=array();
 
                         foreach ($chp_estimated as $key => $value) {
                             write_log('Servicio: ' . '[' . $value->CodServicio . ']' . $value->GlsServicio . ', valor ' . $value->ValorServicio);
@@ -608,11 +607,11 @@ function whq_wcchp_init_class() {
                                 $service_value = 0;
                             }
 
-                            $result[$service_id] = array($service_id, $service_label, $service_value);
+                            $rates[$service_id] = array($service_id, $service_label, $service_value);
 
                         }
 
-                        return $result;
+                        return $rates;
                     } else {
                         if (false === $chp_cost) {
                             $service_id = $this->id . ':0';
@@ -624,27 +623,27 @@ function whq_wcchp_init_class() {
                             $service_value = $chp_cost->respValorizarCourier->Servicios->ValorServicio;
                         }
 
-                        $result=array();
+                        $rates=array();
 
-                        $result[$service_id]=array($service_id, $service_label, $service_value);
+                        $rates[$service_id]=array($service_id, $service_label, $service_value);
 
-                        return $result;
+                        return $rates;
                     }
                 }
             }
 
             /**
-             * @param $service_id
-             * @param $service_label
-             * @param $service_value
+             * @param $rates
              */
-            private function addRate($service_id, $service_label, $service_value)
+            private function add_rates($rates)
             {
+            	foreach($rates as $key=>$values){
                     $this->add_rate(array(
-                        'id' => $service_id,
-                        'label' => $service_label,
-                        'cost' => $service_value
+                        'id' => $values[0],            // service_id
+                        'label' => $value[s1],         // service_label
+                        'cost' => $values[2]           // service_cost
                     ));
+                }
             }
 
 			static function create_states( $states ) {
