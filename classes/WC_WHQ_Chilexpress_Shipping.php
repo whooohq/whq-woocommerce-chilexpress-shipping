@@ -117,7 +117,7 @@ function whq_wcchp_init_class() {
 					'packaging_heuristic' => array(
 						'title'       => __( 'Heuristica para calculo de costo de envío', 'whq-wcchp' ),
 						'type'        => 'select',
-						'description' => __( 'Heuristica para calcular el ensamblaje de varios productos en un mismo pedido<br><ul><li>Unir los lados mas angostos (aplicable cuando son productos pequeños)</li><li>Un paquete por producto (recomendable cuando se envian productos mayores y/o en mayor cantidad)</li></ul>', 'whq-wcchp' ),
+						'description' => __( 'Heuristica para calcular el precio a base del ensamblaje de varios productos en un mismo pedido<br><ul><li>- Un solo paquete uniendo los lados mas angostos (recomendable cuando son productos pequeños. método por defecto)</li><li>- Un paquete por producto (recomendable cuando se envian productos mayores y/o en mayor cantidad)</li></ul>', 'whq-wcchp' ),
 						'options'     => array('join_narrow_sides'=>'Unir lados angostos','single_package_per_item'=>'Un paquete por item'),
 						'default'     => 'join_narrow_sides',
 					),
@@ -640,7 +640,7 @@ function whq_wcchp_init_class() {
             	foreach($rates as $key=>$values){
                     $this->add_rate(array(
                         'id' => $values[0],            // service_id
-                        'label' => $value[s1],         // service_label
+                        'label' => $values[1],         // service_label
                         'cost' => $values[2]           // service_cost
                     ));
                 }
