@@ -35,7 +35,7 @@ function whq_wcchp_init_class() {
 				$this->enabled                = $this->get_option( 'enabled' );
 				$this->title                  = $this->get_option( 'title' );
 				$this->shipping_origin        = $this->get_option( 'shipping_origin' );
-				$this->packaging_heuristic 	  = $this->get_option( 'packaging_heuristic' );
+				$this->packaging_heuristic    = $this->get_option( 'packaging_heuristic' );
 				$this->shipments_types        = $this->get_option( 'shipments_types' );
 				$this->locations_cache        = $this->get_option( 'locations_cache' );
 				$this->extra_wrapper          = $this->get_option( 'extra_wrapper' );
@@ -115,10 +115,17 @@ function whq_wcchp_init_class() {
 						'options'     => $this->get_cities(),
 					),
 					'packaging_heuristic' => array(
-						'title'       => __( 'Heuristica para calculo de costo de envío', 'whq-wcchp' ),
+						'title'       => __( 'Método para cálculo de costo de envío (embalaje)', 'whq-wcchp' ),
 						'type'        => 'select',
-						'description' => __( 'Heuristica para calcular el precio a base del ensamblaje de varios productos en un mismo pedido<br><ul><li>- Un solo paquete uniendo los lados mas angostos (recomendable cuando son productos pequeños. método por defecto)</li><li>- Un paquete por producto (recomendable cuando se envian productos mayores y/o en mayor cantidad)</li></ul>', 'whq-wcchp' ),
-						'options'     => array('join_narrow_sides'=>'Unir lados angostos','single_package_per_item'=>'Un paquete por item'),
+						'description' => __( 'Heurística utilizada para calcular el precio a base del ensamblaje de varios productos en un mismo pedido (paquete).<br/>
+							<ul>
+								<li>- Unir lados angostos: un solo paquete uniendo los lados más angostos, recomendable cuando son productos pequeños (método por defecto).</li>
+								<li>- Un paquete por item: un paquete por producto, recomendable cuando se envían productos mayores y/o en mayor cantidad.</li>
+							</ul>', 'whq-wcchp' ),
+						'options'     => array(
+							'join_narrow_sides'       => 'Unir lados angostos',
+							'single_package_per_item' => 'Un paquete por item',
+						),
 						'default'     => 'join_narrow_sides',
 					),
 					'shipments_types' => array(
@@ -304,26 +311,33 @@ function whq_wcchp_init_class() {
 			}
 
 			/**
-			 * calculate_shipping function.
+			 * calculate_shipping method
 			 *
 			 * @access public
 			 * @param mixed $package
 			 * @return void
 			 */
 			public function calculate_shipping( $package = array() ) {
-				
-				write_log('calculate shipping heuristic: '.$this->packaging_heuristic);
+				write_log( 'Shipping Heuristic algorithm selected: ' . $this->packaging_heuristic );
 
-				if ($this->packaging_heuristic=='single_package_per_item'){
-                    $this->calculate_shipping_by_item($package);
-                } else {
-                    $this->calculate_shipping_by_shortest_side($package);
-                }
+				//Prevent upgraded plugin instances from failing (empty or null value)
+				if ( ! isset( $this->packaging_heuristic ) || empty( $this->packaging_heuristic ) ) {
+					$this->packaging_heuristic = 'join_narrow_sides';
+				}
 
-            }
+				if ( $this->packaging_heuristic == 'single_package_per_item' ) {
+					$this->calculate_shipping_by_item( $package );
+				} else {
+					//Default packaging
+					$this->calculate_shipping_by_shortest_side( $package );
+				}
+			}
 
-            public function calculate_shipping_by_shortest_side( $package = array() ) {
-
+			/**
+			 * calculate_shipping_by_shortest_side method
+			 * @param  array  $package Package data
+			 */
+			public function calculate_shipping_by_shortest_side( $package = array() ) {
 				write_log( "Calculate Shipping By Adding shortestSides");
 
 				$weight                   = 0;
@@ -473,178 +487,199 @@ function whq_wcchp_init_class() {
 
 				write_log( "FinalPackage: Kg={$weight} Vl={$product_package[0][0]} La={$length} An={$width} Al={$height}" );
 
+				//Add rate to WC
+				$rates = $this->get_tarification($package, $weight, $length, $width, $height);
 
+				$this->add_rates($rates);
+			}
 
-                $rates=$this->get_tarification($package, $weight, $length, $width, $height);
-                $this->add_rates($rates);
-            }
+			/**
+			 * calculate_shipping_by_item method
+			 *
+			 * @param  array  $package Package data
+			 */
+			public function calculate_shipping_by_item( $package = array() ) {
+				write_log( "Calculate Shipping By Item");
 
-            public function calculate_shipping_by_item( $package = array() ) {
+				$weight = 0;
+				$length = 0;
+				$width  = 0;
+				$height = 0;
 
-            	write_log( "Calculate Shipping By Item");
+				$final_tarification = array();
 
-                $weight                   = 0;
-                $length                   = 0;
-                $width                    = 0;
-                $height                   = 0;
+				foreach ( $package['contents'] as $item_id => $values ) {
+					$_product = $values['data'];
 
-                $final_tarification=array();
+					//Calculates the final package weight.
+					$weight = round( $weight + $_product->get_weight(), 3 );
 
-                foreach ( $package['contents'] as $item_id => $values ) {
-                    $_product = $values['data'];
+					//Generates the package for the current product.
+					$length = round( $_product->get_length(), 1 );
+					$width  = round( $_product->get_width(), 1 );
+					$height = round( $_product->get_height(), 1 );
 
-                    //Calculates the final package weight.
-                    $weight = round($weight + $_product->get_weight(), 3);
+					//Adds the extra_wrapper to the package
+					$extra_wrapper = (int) absint( $this->extra_wrapper );
 
-                    //Generates the package for the current product.
-                    $length = round($_product->get_length(), 1);
-                    $width = round($_product->get_width(), 1);
-                    $height = round($_product->get_height(), 1);
+					if( empty( $extra_wrapper ) || false === $extra_wrapper || $extra_wrapper < 0) {
+						$extra_wrapper = 0; //No valid value returned?
+					}
 
-                    $result=$this->get_tarification($package, $weight, $length, $width, $height);
+					$length = ceil( $length + $extra_wrapper );
+					$width  = ceil( $width + $extra_wrapper );
+					$height = ceil( $height + $extra_wrapper );
 
-                    foreach ($result as $key => $value){
-                        // for every available service multiply the cost with quantity
-                        $result[$key][2]=$value[2]*$values['quantity'];
-                    }
+					//Get Chilexpress's tarification data
+					$result = $this->get_tarification($package, $weight, $length, $width, $height);
 
-                    // add the rate to the final_tarification
-                    if (count($final_tarification)==0){
-                        $final_tarification=$result;
-                    } else {
-                        foreach ($result as $key => $value){
-                            // for every available service add the rate of this item (already multiplied with the quantity) to the final rate
-                            $final_tarification[$key][2]+=$value[2];
-                        }
-                    }
-                }
+					foreach ($result as $key => $value){
+						// for every available service multiply the cost with quantity
+						$result[$key][2] = $value[2] * $values['quantity'];
+					}
 
-                // for every service add the Rate for the frontend and payment
-                $this->add_rates($final_tarification);
+					// add the rate to the final_tarification
+					if (count($final_tarification)==0){
+						$final_tarification=$result;
+					} else {
+						foreach ($result as $key => $value){
+							// for every available service add the rate of this item (already multiplied with the quantity) to the final rate
+							$final_tarification[$key][2]+=$value[2];
+						}
+					}
+				}
 
+				// for every service add the Rate for the frontend and payment
+				$this->add_rates($final_tarification);
+			}
 
-            }
+			/**
+			 * @param $package
+			 * @param $weight
+			 * @param $length
+			 * @param $width
+			 * @param $height
+			 */
+			/**
+			 *[get_tarification method, retrieves Chilexpress's data directly from the API
+			 * @param  array $package Package data
+			 * @param  integer $weight  Package weight, in kg
+			 * @param  integer $length  Package length, in cm
+			 * @param  integer $width   Package width, in cm
+			 * @param  integer $height  Package height, in cm
+			 * @return integer          Chilexpress's tarification value
+			 */
+			private function get_tarification( $package, $weight, $length, $width, $height ) {
+				if ( isset( $_POST['s_city'] ) && ! is_null( $_POST['s_city'] ) ) {
+					$city = $_POST['s_city'];
+				} else {
+					//And what about WC()->customer->get_shipping_city() ?
+					$city = $package['destination']['city'];
+				}
 
-            /**
-             * @param $package
-             * @param $weight
-             * @param $length
-             * @param $width
-             * @param $height
-             */
-            private function get_tarification($package, $weight, $length, $width, $height)
-            {
+				if ( ! is_null( $city ) ) {
+					//Transform city name to city code
+					$cities = $this->get_cities();
 
-                if ( isset( $_POST['s_city'] ) && !is_null( $_POST['s_city'] ) ) {
-                    $city = $_POST['s_city'];
-                } else {
-                    //And what about WC()->customer->get_shipping_city() ?
-                    $city = $package['destination']['city'];
-                }
+					if ( is_array( $cities ) ) {
+						foreach ( $cities as $CodComuna => $GlsComuna ) {
+							if ( $city == $GlsComuna ) {
+								$city = $CodComuna;
+								break;
+							}
+						}
+					}
 
-                if (!is_null($city)) {
-                    //Transform city name to city code
-                    $cities = $this->get_cities();
-                    if (is_array($cities)) {
-                        foreach ($cities as $CodComuna => $GlsComuna) {
-                            if ($city == $GlsComuna) {
-                                $city = $CodComuna;
-                                break;
-                            }
-                        }
-                    }
+					$chp_cost = whq_wcchp_get_tarification( $city, $this->shipping_origin, $weight, $length, $width, $height );
 
-                    $chp_cost = whq_wcchp_get_tarification($city, $this->shipping_origin, $weight, $length, $width, $height);
+					if ( false === $chp_cost ) {
+						$chp_estimated = 0;
+					} else {
+						$chp_estimated = $chp_cost->respValorizarCourier->Servicios;
+					}
 
-                    if (false === $chp_cost) {
-                        $chp_estimated = 0;
-                    } else {
-                        $chp_estimated = $chp_cost->respValorizarCourier->Servicios;
-                    }
+					$service_value = 0;
 
-                    $service_value = 0;
+					if ( is_array( $chp_estimated ) ) {
+						//ULTRA RÁPIDO:1
+						//OVERNIGHT:2
+						//DÍA HÁBIL SIGUIENTE:3
+						//DÍA HÁBIL SUBSIGUIENTE:4
+						//TERCER DÍA:5
 
-                    if (is_array($chp_estimated)) {
-                        //ULTRA RÁPIDO:1
-                        //OVERNIGHT:2
-                        //DÍA HÁBIL SIGUIENTE:3
-                        //DÍA HÁBIL SUBSIGUIENTE:4
-                        //TERCER DÍA:5
+						$supported_shipments_types = $this->get_chilexpress_option('shipments_types');
 
-                        $supported_shipments_types = $this->get_chilexpress_option('shipments_types');
+						if ( false === $supported_shipments_types ) {
+							//We need some default values in case the admin hasn't configured this yet
+							$supported_shipments_types = array( 2, 3, 4 );
+						}
 
-                        if (false === $supported_shipments_types) {
-                            //We need some default values in case the admin hasn't configured this yet
-                            $supported_shipments_types = array(2, 3, 4);
-                        }
+						write_log( $supported_shipments_types );
 
-                        write_log($supported_shipments_types);
+						$rates = array();
 
-                        $rates=array();
+						foreach ( $chp_estimated as $key => $value ) {
+							write_log( 'Servicio: ' . '[' . $value->CodServicio . ']' . $value->GlsServicio . ', valor ' . $value->ValorServicio );
 
-                        foreach ($chp_estimated as $key => $value) {
-                            write_log('Servicio: ' . '[' . $value->CodServicio . ']' . $value->GlsServicio . ', valor ' . $value->ValorServicio);
+							//We don't wan't to support other kind of shippments for now
+							if ( $value->CodServicio >= 6 ) {
+								continue;
+							}
 
-                            //We don't wan't to support other kind of shippments for now
-                            if ($value->CodServicio >= 6) {
-                                continue;
-                            }
+							//Not supported by this store?
+							if ( ! in_array( $value->CodServicio, $supported_shipments_types ) ) {
+								write_log( '[' . $value->CodServicio . ']' . $value->GlsServicio . ' Not supported by the Store!' );
+								continue;
+							} else {
+								write_log( '[' . $value->CodServicio . ']' . $value->GlsServicio . ' is supported' );
+							}
 
-                            //Not supported by this store?
-                            if (!in_array($value->CodServicio, $supported_shipments_types)) {
-                                write_log('[' . $value->CodServicio . ']' . $value->GlsServicio . ' Not supported by the Store!');
-                                continue;
-                            } else {
-                                write_log('[' . $value->CodServicio . ']' . $value->GlsServicio . ' is supported');
-                            }
+							$service_id    = $this->id . ':' . $value->CodServicio;
+							$service_label = $this->title . ' (' . $value->GlsServicio . ')';
+							$service_value = $value->ValorServicio;
 
-                            $service_id = $this->id . ':' . $value->CodServicio;
-                            $service_label = $this->title . ' (' . $value->GlsServicio . ')';
-                            $service_value = $value->ValorServicio;
+							if ( false === $service_value || empty( $service_value ) ) {
+								$service_id    = $this->id . '_0';
+								$service_value = 0;
+							}
 
-                            if (false === $service_value || empty($service_value)) {
-                                $service_id = $this->id . '_0';
-                                $service_value = 0;
-                            }
+							$rates[ $service_id ] = array( $service_id, $service_label, $service_value );
+						}
 
-                            $rates[$service_id] = array($service_id, $service_label, $service_value);
+						return $rates;
+					} else {
+						if ( false === $chp_cost ) {
+							$service_id    = $this->id . ':0';
+							$service_label = $this->title . ' (No Disponible)';
+							$service_value = 0;
+						} else {
+							$service_id    = $this->id . ':' . $chp_cost->respValorizarCourier->Servicios->CodServicio;
+							$service_label = $this->title . ' (' . $chp_cost->respValorizarCourier->Servicios->GlsServicio . ')';
+							$service_value = $chp_cost->respValorizarCourier->Servicios->ValorServicio;
+						}
 
-                        }
+						$rates = array();
 
-                        return $rates;
-                    } else {
-                        if (false === $chp_cost) {
-                            $service_id = $this->id . ':0';
-                            $service_label = $this->title . ' (No Disponible)';
-                            $service_value = 0;
-                        } else {
-                            $service_id = $this->id . ':' . $chp_cost->respValorizarCourier->Servicios->CodServicio;
-                            $service_label = $this->title . ' (' . $chp_cost->respValorizarCourier->Servicios->GlsServicio . ')';
-                            $service_value = $chp_cost->respValorizarCourier->Servicios->ValorServicio;
-                        }
+						$rates[ $service_id ] = array( $service_id, $service_label, $service_value );
 
-                        $rates=array();
+						return $rates;
+					}
+				}
+			}
 
-                        $rates[$service_id]=array($service_id, $service_label, $service_value);
-
-                        return $rates;
-                    }
-                }
-            }
-
-            /**
-             * @param $rates
-             */
-            private function add_rates($rates)
-            {
-            	foreach($rates as $key=>$values){
-                    $this->add_rate(array(
-                        'id' => $values[0],            // service_id
-                        'label' => $values[1],         // service_label
-                        'cost' => $values[2]           // service_cost
-                    ));
-                }
-            }
+			/**
+			 * add_rates method, add the calculated rate to WC's cart and checkout
+			 * @param integer $rates Rate to add
+			 */
+			private function add_rates( $rates ) {
+				foreach( $rates as $key => $values ) {
+					$this->add_rate(array(
+						'id'    => $values[0], // service_id
+						'label' => $values[1], // service_label
+						'cost'  => $values[2], // service_cost
+					));
+				}
+			}
 
 			static function create_states( $states ) {
 				$regions      = $this->get_states();
@@ -670,6 +705,7 @@ function whq_wcchp_init_class() {
 						// Update value by hand, so we can redirect our users to the next step (Setting a Shipping Zone)
 						$wcchp_options                           = get_option( 'woocommerce_chilexpress_settings' );
 						$wcchp_options['shipping_zones_support'] = 'yes';
+
 						update_option( 'woocommerce_chilexpress_settings', $wcchp_options );
 
 						wp_redirect( 'admin.php?page=wc-settings&tab=shipping&section=' );
