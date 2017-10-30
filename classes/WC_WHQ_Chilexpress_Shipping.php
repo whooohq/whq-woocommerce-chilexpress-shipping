@@ -535,7 +535,7 @@ function whq_wcchp_init_class() {
 
 					foreach ($result as $key => $value){
 						// for every available service multiply the cost with quantity
-						$value[2] = $value[2] * $values['quantity'];
+						$result[$key][2] = $value[2] * $values['quantity'];
 					}
 
 					// add the rate to the final_tarification
