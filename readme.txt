@@ -1,7 +1,7 @@
 === WooCommerce Chilexpress Shipping ===
 Contributors: whooo, jhoynerk, tcattd
 Tags: woocommerce, shipping, chile, chilexpress
-Stable tag: 1.3.5
+Stable tag: 1.3.6
 Requires at least: 4.4
 Tested up to: 4.8
 Requires PHP: 5.6
@@ -57,7 +57,7 @@ Ayuda y aportes (pull requests) son bienvenidos.
 3. Configuración del plugin.
 
 == Changelog ==
-= 1.3.5 =
+= 1.3.6 =
 * Bugfix: corregido error en nuevo método de cálculo de paquetes introducido en v1.3.3. Gracias @PatrickCaneloDigital nuevamente.
 * Fixed WooCommerce new version check header tags ([ref](https://woocommerce.wordpress.com/2017/08/28/new-version-check-in-woocommerce-3-2/)).
 
