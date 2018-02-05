@@ -1,7 +1,7 @@
 === WooCommerce Chilexpress Shipping ===
 Contributors: whooo, jhoynerk, tcattd
 Tags: woocommerce, shipping, chile, chilexpress
-Stable tag: 1.3.7
+Stable tag: 1.3.8
 Requires at least: 4.4
 Tested up to: 4.9
 Requires PHP: 5.6
@@ -14,6 +14,8 @@ Añade a Chilexpress como método de envío para WooCommerce.
 Añade a Chilexpress como método de envío para WooCommerce.
 
 Utiliza la API de Chilexpress para obtener los costos de envío de forma automática según la región/ciudad/localidad que el usuario seleccione para envío en WooCommerce.
+
+Demo público del plugin disponible en [WPChilexpress](http://wpchilexpress.whooohq.com).
 
 Demostración en video:
 [youtube https://www.youtube.com/watch?v=JaLp1wmtKlk]
@@ -34,7 +36,7 @@ Ahora tus clientes podrán seleccionar Chilexpress para el envío de sus product
 
 == Frequently Asked Questions ==
 = ¿Puedo ver el plugin funcionando en vivo? =
-Claro. Visita [WPChilexpress](http://wpchilexpress.whooohq.com).
+Claro. Por favor, visita [WPChilexpress](http://wpchilexpress.whooohq.com).
 
 = Extensión SOAP requerida =
 La conexión a la API de Chilexpress se realiza a través de SOAP. Por lo tanto, tu servidor debe tener [activada](http://php.net/manual/en/book.soap.php) aquella extensión para poder utilizar este plugin.
@@ -61,7 +63,7 @@ Ayuda y aportes (vía Pull Requests, aceptando la [guía de contribución](https
 3. Configuración del plugin.
 
 == Changelog ==
-= 1.3.7 =
+= 1.3.8 =
 * Demo público del plugin disponible en [WPChilexpress @ WhoooHQ](http://wpchilexpress.whooohq.com).
 
 = 1.3.6 =

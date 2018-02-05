@@ -5,7 +5,7 @@ Añade a Chilexpress como método de envío para WooCommerce.
 
 Utiliza la API de Chilexpress para obtener los costos de envío de forma automática según la región/ciudad/localidad que el usuario seleccione para envío en WooCommerce.
 
-Demo público del plugin disponible en [WPChilexpress @ WhoooHQ](http://wpchilexpress.whooohq.com).
+Demo público del plugin disponible en [WPChilexpress](http://wpchilexpress.whooohq.com).
 
 Demostración en video:
 
@@ -21,6 +21,10 @@ Ver página oficial del plugin en [WordPress.org](https://wordpress.org/plugins/
 
 
 ## Preguntas Frecuentes
+
+### ¿Puedo ver el plugin funcionando en vivo?
+Claro. Visita [WPChilexpress](http://wpchilexpress.whooohq.com).
+
 
 ### Extensión SOAP requerida.
 La conexión a la API de Chilexpress se realiza a través de SOAP. Por lo tanto, tu servidor debe tener [activada](http://php.net/manual/en/book.soap.php) aquella extensión para poder utilizar este plugin.
