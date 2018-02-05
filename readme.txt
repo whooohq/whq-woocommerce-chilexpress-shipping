@@ -1,9 +1,9 @@
 === WooCommerce Chilexpress Shipping ===
 Contributors: whooo, jhoynerk, tcattd
 Tags: woocommerce, shipping, chile, chilexpress
-Stable tag: 1.3.6
+Stable tag: 1.3.7
 Requires at least: 4.4
-Tested up to: 4.8
+Tested up to: 4.9
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
@@ -33,6 +33,9 @@ Dejar el usuario y password (de la API de Chilexpress) en blanco para utilizar l
 Ahora tus clientes podrán seleccionar Chilexpress para el envío de sus productos (dentro de Chile) y recibir el cálculo de costo de envío automáticamente.
 
 == Frequently Asked Questions ==
+= ¿Puedo ver el plugin funcionando en vivo? =
+Claro. Visita [WPChilexpress](http://wpchilexpress.whooohq.com).
+
 = Extensión SOAP requerida =
 La conexión a la API de Chilexpress se realiza a través de SOAP. Por lo tanto, tu servidor debe tener [activada](http://php.net/manual/en/book.soap.php) aquella extensión para poder utilizar este plugin.
 
@@ -44,10 +47,11 @@ No estamos afiliados ni formamos parte de Chilexpress, por lo que no podemos gar
 Por otro lado, si vuestro servidor no puede realizar la conexión con los servidores de Chilexpress, el mismo error (Chilexpress no disponible) aparecerá en pantalla durante el checkout, y no podrás utilizar el plugin. Ante eso (problemas de conectividad del servidor), no podemos hacer nada tampoco. Es vuestra responsabilidad debugear aquel punto.
 Para más detalle, ver [issue #27](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/27#issuecomment-321929605).
 
-= ¿Errores? ¿Sugerencias? =
+= ¿Errores? ¿Sugerencias? ¿Soporte? =
 Reportar errores y enviar sugerencias directamente en [GitHub](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues), por favor.
+Todo el soporte del plugin se realiza directo en GitHub. No en los foros de WordPress. No por email. Por favor. Agradecemos la comprensión.
 
-Ayuda y aportes (pull requests) son bienvenidos.
+Ayuda y aportes (vía Pull Requests, aceptando la [guía de contribución](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/blob/master/CONTRIBUTING.md)) son bienvenidos.
 
 ¡Gracias!
 
@@ -57,6 +61,9 @@ Ayuda y aportes (pull requests) son bienvenidos.
 3. Configuración del plugin.
 
 == Changelog ==
+= 1.3.7 =
+* Demo público del plugin disponible en [WPChilexpress @ WhoooHQ](http://wpchilexpress.whooohq.com).
+
 = 1.3.6 =
 * Bugfix: corregido error en nuevo método de cálculo de paquetes introducido en v1.3.3. Gracias @PatrickCaneloDigital nuevamente.
 * Fixed WooCommerce new version check header tags ([ref](https://woocommerce.wordpress.com/2017/08/28/new-version-check-in-woocommerce-3-2/)).
