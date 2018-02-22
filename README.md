@@ -35,6 +35,13 @@ El cálculo del precio de envío se hace utilizando directamente la API de Chile
 
 
 ### ¿Chilexpress caído? (Chilexpress no disponible)
+Primero que todo, para que un método de envío (en WC) pueda calcular el costo, WC necesita que se llenen los campos obligatorios del formulario del Checkout. Esto es: nombre, apellido, país, dirección, teléfono y correo electrónico, junto a los campos de región y localidad/ciudad (que son poblados automáticamente con los valores que Chilexpress requiere).
+Si no rellenan esos datos primero, el checkout seguirá mostrando "no disponible" al lado de Chilexpress.
+Una vez rellenados los campos obligatorios y seleccionada la región y localidad/ciudad, Chilexpress debería mostrar el costo del envío en el Checkout.
+¿Revisaste si eso es lo que te ocurre?. Si es así, eso es normal.
+
+Habiendo dicho eso, si tu problema persiste, pueden existir un sin fin de otros inconvenientes.
+
 No estamos afiliados ni formamos parte de Chilexpress, por lo que no podemos garantizar el funcionamiento de este plugin al 100%. Si la API de Chilexpress o sus servicios caen (puede ocurrir), no hay nada que podamos hacer al respecto. Si el plugin detecta de la API de Chilexpress no responde, el plugin deja WooCommerce "tal como venía" (ingreso manual de Región y Ciudad), y no permite la selección de Chilexpress como método de envío. No hay nada más que podamos hacer al respecto.
 
 Por otro lado, si vuestro servidor no puede realizar la conexión con los servidores de Chilexpress, el mismo error (Chilexpress no disponible) aparecerá en pantalla durante el checkout, y no podrás utilizar el plugin. Ante eso (problemas de conectividad del servidor), no podemos hacer nada tampoco. Es vuestra responsabilidad debugear aquel punto.
