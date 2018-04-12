@@ -1,7 +1,7 @@
 === WooCommerce Chilexpress Shipping ===
 Contributors: whooo, jhoynerk, tcattd
 Tags: woocommerce, shipping, chile, chilexpress
-Stable tag: 1.3.9
+Stable tag: 1.3.10
 Requires at least: 4.4
 Tested up to: 4.9
 Requires PHP: 5.6
@@ -72,6 +72,9 @@ Ayuda y aportes (vía Pull Requests, aceptando la [guía de contribución](https
 3. Configuración del plugin.
 
 == Changelog ==
+= 1.3.10 =
+* Doble checkeo de versión de PHP antes de función conflictiva.
+
 = 1.3.9 =
 * Demo público del plugin disponible en [WPChilexpress @ WhoooHQ](http://wpchilexpress.whooohq.com).
 * Aclaración en el FAQ (Chilexpress caído, no disponible).
