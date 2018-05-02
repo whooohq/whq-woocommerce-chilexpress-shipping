@@ -1,7 +1,7 @@
 === WooCommerce Chilexpress Shipping ===
 Contributors: whooo, jhoynerk, tcattd
 Tags: woocommerce, shipping, chile, chilexpress
-Stable tag: 1.3.11
+Stable tag: 1.3.12
 Requires at least: 4.4
 Tested up to: 4.9
 Requires PHP: 5.6
@@ -72,7 +72,7 @@ Ayuda y aportes (vía Pull Requests, aceptando la [guía de contribución](https
 3. Configuración del plugin.
 
 == Changelog ==
-= 1.3.11 =
+= 1.3.12 =
 * Bugfix: previene compras con Chilexpress con costo de envío cero, cuando API de Chilexpress no responde correctamente. Ver [issue #81](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/81). Gracias @PatrickCaneloDigital por reportar el error!
 
 = 1.3.10 =
