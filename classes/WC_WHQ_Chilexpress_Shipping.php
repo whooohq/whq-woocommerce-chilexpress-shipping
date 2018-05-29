@@ -205,11 +205,11 @@ function whq_wcchp_init_class() {
 				//TERCER DÍA:5
 
 				$shipments_types = [
-					'1' => 'Ultra rápido',
-					'2' => 'Overnight',
-					'3' => 'Día hábil siguiente',
-					'4' => 'Día hábil subsiguiente',
-					'5' => 'Tercer día',
+					1 => 'Ultra rápido',
+					2 => 'Overnight',
+					3 => 'Día hábil siguiente',
+					4 => 'Día hábil subsiguiente',
+					5 => 'Tercer día',
 				];
 
 				return $shipments_types;
@@ -745,6 +745,21 @@ function whq_wcchp_init_class() {
 
 					if ( isset( $value ) && $value > 30 ) {
 						WC_Admin_Settings::add_error( esc_html__( '¿Estás seguro que necesitas 30 o más centímetros extra para la caja/embalaje?.', 'whq-wcchp' ) ); //Will leave the value in there, just warn the user
+					}
+				}
+
+				return $value;
+			}
+
+
+			/**
+			 * Validate any multiselect field
+			 */
+			public function validate_multiselect_field( $key, $value ) {
+				//We need integer here as values for shipments_types, not strings
+				if( $key == 'shipments_types' ) {
+					foreach ($value as $key => $v) {
+						$value[ $key ] = (int) $v;
 					}
 				}
 

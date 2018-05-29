@@ -1,7 +1,7 @@
 === WooCommerce Chilexpress Shipping ===
 Contributors: whooo, jhoynerk, tcattd
 Tags: woocommerce, shipping, chile, chilexpress
-Stable tag: 1.3.12
+Stable tag: 1.3.13
 Requires at least: 4.4
 Tested up to: 4.9
 Requires PHP: 5.6
@@ -58,6 +58,27 @@ Por otro lado, si vuestro servidor no puede realizar la conexión con los servid
 
 Para más detalle, ver [issue #27](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/27#issuecomment-321929605).
 
+= ¿Problemas generales, visuales (glitches) y/o funcionales en el carro o finalizar compra (checkout)?
+Si vuestro theme presenta glitches visuales, como repetir los campos de región, localidad/ciudad, no muestra el select con las ciudades y localidades que vienen desde la API de Chilexpress, o presenta problemas funcionales que no permiten el paso del carro al checkout, o del checkout al pago, es vuestro deber descartar primero que el problema no sea probocado por una incompatibilidad con otro plugin instalado en WordPress o el theme que se está utilizando en tu instalación de WordPress.
+
+Esto, porque cualquier plugin o theme que altere las funcionalidades por defecto de WooCommerce, también puede quebrar lo que nosotros (así como otros plugins) necesitamos para poder funcionar correctamente.
+
+Para esto, debes:
+
+* Actualizar WordPress, WooCommerce, y nuestro plugin de Chilexpress.
+
+* Desactivar todo plugin en WordPress, a excepción de WooCommerce y nuestro plugin de Chilexpress.
+
+* Instalar el theme recomendado por WooCommerce, [Storefront](https://woocommerce.com/storefront/) (gratuito), y activarlo. Si no puedes activar el theme por ser un sitio en producción, debes instalar el plugin [WP Theme Test](https://wordpress.org/plugins/wp-theme-test/), y con el activar temporalmente el theme para tu cuenta como administrador del sitio.
+
+* Recién ahora debes probar y ver si puedes reproducir el problema que tenías anteriormente.
+
+Si luego de todos esos pasos, el inconveniente aún continúa, por favor repórtalo en un [nuevo issue en GitHub](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues).
+
+Por el contrario, si luego de todos esos pasos el inconveniente ya no se presenta, es vuestro menester encontrar y resolver cualquier incompatibilidad que exista con otro plugin y/o el theme que estás utilizando. No podemos ayudarte en eso, lamentablemente.
+
+Se agradece enormemente si, una vez que encuentres el conflicto que resuelve tu inconveniente, lo compartes con nosotros en un [nuevo issue en GitHub](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues). Así estarás ayudando a muchos otros que podrían encontrarse con tu problema a futuro.
+
 = ¿Errores? ¿Sugerencias? ¿Soporte? =
 Reportar errores y enviar sugerencias directamente en [GitHub](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues), por favor.
 Todo el soporte del plugin se realiza directo en GitHub. No en los foros de WordPress. No por email. Por favor. Agradecemos la comprensión.
@@ -72,6 +93,9 @@ Ayuda y aportes (vía Pull Requests, aceptando la [guía de contribución](https
 3. Configuración del plugin.
 
 == Changelog ==
+= 1.3.13 =
+* Bugfix: soluciona el problema de selección de tipos de envío soportados en la configuración del plugin. Ver [issue #86](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/86). Muchas gracias a @juanchomix por reportar el error.
+
 = 1.3.12 =
 * Bugfix: previene compras con Chilexpress con costo de envío cero, cuando API de Chilexpress no responde correctamente. Ver [issue #81](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/81). Gracias @PatrickCaneloDigital por reportar el error!
 
