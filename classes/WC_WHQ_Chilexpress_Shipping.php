@@ -357,7 +357,7 @@ function whq_wcchp_init_class() {
 				
 				// go into standard calculations
 				// if override_shipping_calculation=false
-				if( false === $this->override_shipping_calculation) ) {
+				if( false === $this->override_shipping_calculation ) {
 					if ( $this->packaging_heuristic == 'single_package_per_item' ) {
 						$this->calculate_shipping_by_item( $package );
 					} else {
