@@ -33,6 +33,6 @@ jQuery(document).ready(function( $ ) {
 
 	//Shippment type select height
 	if( $('#woocommerce_chilexpress_shipments_types').length ) {
-		$('#woocommerce_chilexpress_shipments_types').selectWoo();
+		//$('#woocommerce_chilexpress_shipments_types').selectWoo(); //See admin_options() method
 	}
 });

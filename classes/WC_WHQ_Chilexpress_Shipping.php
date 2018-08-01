@@ -82,6 +82,25 @@ function whq_wcchp_init_class() {
 			}
 
 			/**
+			 * Output the admin options table.
+			 */
+			public function admin_options() {
+			?>
+				<h2>Chilexpress Shipping</h2>
+				<table class="form-table">
+					<?php $this->generate_settings_html(); ?>
+				</table>
+				<script type="text/javascript">
+					jQuery(document).ready(function( $ ) {
+						if( $('#woocommerce_chilexpress_shipments_types').length ) {
+							$('#woocommerce_chilexpress_shipments_types').selectWoo();
+						}
+					});
+				</script>
+			<?php
+			}
+
+			/**
 			 * Form fields
 			 *
 			 * @access public
@@ -745,21 +764,6 @@ function whq_wcchp_init_class() {
 
 					if ( isset( $value ) && $value > 30 ) {
 						WC_Admin_Settings::add_error( esc_html__( '¿Estás seguro que necesitas 30 o más centímetros extra para la caja/embalaje?.', 'whq-wcchp' ) ); //Will leave the value in there, just warn the user
-					}
-				}
-
-				return $value;
-			}
-
-
-			/**
-			 * Validate any multiselect field
-			 */
-			public function validate_multiselect_field( $key, $value ) {
-				//We need integer here as values for shipments_types, not strings
-				if( $key == 'shipments_types' ) {
-					foreach ($value as $key => $v) {
-						$value[ $key ] = (int) $v;
 					}
 				}
 
