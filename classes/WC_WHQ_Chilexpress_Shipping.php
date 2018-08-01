@@ -365,8 +365,7 @@ function whq_wcchp_init_class() {
 						$this->calculate_shipping_by_shortest_side( $package );
 					}
 				} else {
-					$external_rates= $this->calculate_shipping_externally( $package );
-			    		$this->add_rates( $external_rates );
+					$this->calculate_shipping_externally( $package );
 				}
 				
 			}
