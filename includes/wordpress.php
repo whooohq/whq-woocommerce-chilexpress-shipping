@@ -47,6 +47,21 @@ function whq_wcchp_incompatible_plugins_check() {
  * Incompatible Plugins, admin notice
  */
 function whq_wcchp_incompatible_plugins() {
+	global $whq_wcchp_default;
+
+	//PHP minimum version
+	if ( ! version_compare( PHP_VERSION, '5.6', '>=' ) OR version_compare( phpversion(), '5.6', '<' ) ) {
+		?>
+		<div class="notice error is-dismissible whq_wcchp_incompatible_plugins">
+			<p>Actualmente estás corriendo PHP versión <?php echo phpversion(); ?>. Nuestro plugin requiere PHP 5.6 o superior, como recomienda <a href="https://wordpress.org/about/requirements/">WordPress</a>. Versiones de PHP inferiores a la 5.6 <a href="http://php.net/supported-versions.php">no son soportadas actualmente</a>, y constituyen un potencial problema de seguridad.<br />Te comendamos actualizar tu versión de PHP.</p>
+		</div>
+		<?php
+
+		deactivate_plugins( plugin_basename( $whq_wcchp_default['plugin_file'] ) );
+
+		return;
+	}
+
 	if( empty( get_option( 'whq_wcchp_incompatible_plugins' ) ) ) {
 	?>
 		<div class="notice error is-dismissible whq_wcchp_incompatible_plugins">

@@ -82,6 +82,25 @@ function whq_wcchp_init_class() {
 			}
 
 			/**
+			 * Output the admin options table.
+			 */
+			public function admin_options() {
+			?>
+				<h2>Chilexpress Shipping</h2>
+				<table class="form-table">
+					<?php $this->generate_settings_html(); ?>
+				</table>
+				<script type="text/javascript">
+					jQuery(document).ready(function( $ ) {
+						if( $('#woocommerce_chilexpress_shipments_types').length ) {
+							$('#woocommerce_chilexpress_shipments_types').selectWoo();
+						}
+					});
+				</script>
+			<?php
+			}
+
+			/**
 			 * Form fields
 			 *
 			 * @access public
@@ -205,11 +224,11 @@ function whq_wcchp_init_class() {
 				//TERCER DÍA:5
 
 				$shipments_types = [
-					'1' => 'Ultra rápido',
-					'2' => 'Overnight',
-					'3' => 'Día hábil siguiente',
-					'4' => 'Día hábil subsiguiente',
-					'5' => 'Tercer día',
+					1 => 'Ultra rápido',
+					2 => 'Overnight',
+					3 => 'Día hábil siguiente',
+					4 => 'Día hábil subsiguiente',
+					5 => 'Tercer día',
 				];
 
 				return $shipments_types;
