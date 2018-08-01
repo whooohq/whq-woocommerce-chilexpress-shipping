@@ -350,7 +350,7 @@ function whq_wcchp_init_class() {
 				$this->override_shipping_calculation = apply_filters( 'whq_wcchp_override_shipping_calculation', false );
 				$this->filtered_packaging_heuristic = apply_filters('whq_wcchp_packaging_heuristic' , $this->packaging_heuristic );
 				write_log('Shipping Heuristic algorithm override: "' . $this->filtered_packaging_heuristic . '"');
-				if ( empty($this->filtered_packaging_heuristic ) {
+				if ( empty($this->filtered_packaging_heuristic) ) {
 					//fallback to standard heuristic if filtered_heuristic is empty
 					$this->override_shipping_calculation=false;
 				}
