@@ -339,24 +339,25 @@ function whq_wcchp_init_class() {
 			public function calculate_shipping( $package = array() ) {
 				write_log( 'Shipping Heuristic algorithm selected: ' . $this->packaging_heuristic );
 
-				// BEGIN: filter packaging heuristic if filter is used externally
-				$filtered_packaging_heuristic = apply_filters('whq_wcchp_packaging_heuristic',$this->packaging_heuristic);
-				write_log('Shipping Heuristic algorithm override: ' . $filtered_packaging_heuristic);
-				
-				$this->override_shipping_calculation = apply_filters( 'whq_wcchp_override_shipping_calculation', false );
-				
-				if (!empty( $filter_result )){
-				    //overwrite only if there was a non empty result
-				    $this->packaging_heuristic=$filter_result;
-				};
-				// END: filter packaging heuristic
-				
+								
 				//Prevent upgraded plugin instances from failing (empty or null value)
 				if ( ! isset( $this->packaging_heuristic ) || empty( $this->packaging_heuristic ) ) {
 					$this->packaging_heuristic = 'join_narrow_sides';
 				}
 				
-				if( false === $this->override_shipping_calculation ) {
+				// heuristic override filters
+				// there is a 3rd filter in: calculate_shipping_externally()
+				$this->override_shipping_calculation = apply_filters( 'whq_wcchp_override_shipping_calculation', false );
+				$this->filtered_packaging_heuristic = apply_filters('whq_wcchp_packaging_heuristic' , $this->packaging_heuristic );
+				write_log('Shipping Heuristic algorithm override: "' . $this->filtered_packaging_heuristic . '"');
+				if ( empty($this->filtered_packaging_heuristic ) {
+					//fallback to standard heuristic if filtered_heuristic is empty
+					$this->override_shipping_calculation=false;
+				}
+				
+				// go into standard calculations
+				// if override_shipping_calculation=false
+				if( false === $this->override_shipping_calculation) ) {
 					if ( $this->packaging_heuristic == 'single_package_per_item' ) {
 						$this->calculate_shipping_by_item( $package );
 					} else {
@@ -364,8 +365,8 @@ function whq_wcchp_init_class() {
 						$this->calculate_shipping_by_shortest_side( $package );
 					}
 				} else {
-					$external_rates= $this->calculate_shipping_externally( $filtered_packaging_heuristic , $package );
-				    	$this->add_rates( $external_rates );
+					$external_rates= $this->calculate_shipping_externally( $package );
+			    		$this->add_rates( $external_rates );
 				}
 				
 			}
@@ -594,14 +595,14 @@ function whq_wcchp_init_class() {
 			* calculate_shipping_externally method
 			* @param  string  $package used
 			*/
-			public function calculate_shipping_externally( $filtered_packaging_heuristic , $package = array() )
+			public function calculate_shipping_externally( $package = array() )
 			{
-				write_log( "Calculate Shipping Externally using: " . $filtered_packaging_heuristic );
+				write_log( "Calculate Shipping Externally using: " . $this->filtered_packaging_heuristic );
 
 				$final_tarification = array();
 				$packages_for_tarification=array();
 
-				$packages_for_tarification=apply_filters('whq_wcchp_packages_for_tarification', $packages_for_tarification , array( $filtered_packaging_heuristic  ,$package ) );
+				$packages_for_tarification=apply_filters('whq_wcchp_packages_for_tarification', $packages_for_tarification , array( $this->filtered_packaging_heuristic  , $package ) );
 				foreach ($packages_for_tarification as $tarif_package){
 				    if (count($tarif_package)>=4 &&
 					!empty($tarif_package['weight']) &&
