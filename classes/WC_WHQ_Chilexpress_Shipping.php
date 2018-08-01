@@ -339,17 +339,33 @@ function whq_wcchp_init_class() {
 			public function calculate_shipping( $package = array() ) {
 				write_log( 'Shipping Heuristic algorithm selected: ' . $this->packaging_heuristic );
 
+				$filter_result = apply_filters('whq_wcchp_packaging_heuristic',$this->packaging_heuristic);
+				write_log('Shipping Heuristic algorithm override: ' . $filter_result);
+				
+				$this->override_shipping_calculation = apply_filters( 'whq_wcchp_override_shipping_calculation', false );
+				
+				if (!empty( $filter_result )){
+				    //overwrite only if there was a non empty result
+				    $this->packaging_heuristic=$filter_result;
+				};
+				
 				//Prevent upgraded plugin instances from failing (empty or null value)
 				if ( ! isset( $this->packaging_heuristic ) || empty( $this->packaging_heuristic ) ) {
 					$this->packaging_heuristic = 'join_narrow_sides';
 				}
-
-				if ( $this->packaging_heuristic == 'single_package_per_item' ) {
-					$this->calculate_shipping_by_item( $package );
+				
+				if( false === $this->override_shipping_calculation ) {
+					if ( $this->packaging_heuristic == 'single_package_per_item' ) {
+						$this->calculate_shipping_by_item( $package );
+					} else {
+						//Default packaging
+						$this->calculate_shipping_by_shortest_side( $package );
+					}
 				} else {
-					//Default packaging
-					$this->calculate_shipping_by_shortest_side( $package );
+					$external_rates= $this->calculate_shipping_externally($packaging_heuristic,$package);
+				    	$this->add_rates($external_rates);
 				}
+				
 			}
 
 			/**
@@ -571,6 +587,55 @@ function whq_wcchp_init_class() {
 				// for every service add the Rate for the frontend and payment
 				$this->add_rates($final_tarification);
 			}
+			
+			/**
+             * calculate_shipping_by_shortest_side method
+             * @param  array  $package Package data
+             */
+            public function calculate_shipping_externally( $packaging_heuristic,$package = array() )
+            {
+                write_log("Calculate Shipping Externally ".$packaging_heuristic);
+
+                $final_tarification = array();
+                $packages_for_tarification=array();
+
+                $packages_for_tarification=apply_filters('whq_wcchp_packages_for_tarification', $packages_for_tarification , array($packaging_heuristic,$package) );
+                foreach ($packages_for_tarification as $tarif_package){
+                    if (count($tarif_package)>=4 &&
+                        !empty($tarif_package['weight']) &&
+                        !empty($tarif_package['length']) &&
+                        !empty($tarif_package['width']) &&
+                        !empty($tarif_package['height']) &&
+                        filter_var($tarif_package['weight'], FILTER_VALIDATE_FLOAT) !== false &&
+                        filter_var($tarif_package['length'], FILTER_VALIDATE_INT) !== false &&
+                        filter_var($tarif_package['width'], FILTER_VALIDATE_INT) !== false &&
+                        filter_var($tarif_package['height'], FILTER_VALIDATE_INT) !== false){
+
+                        $weight=$tarif_package['weight'];
+                        $length=$tarif_package['length'];
+                        $width=$tarif_package['width'];
+                        $height=$tarif_package['height'];
+
+                        $result = $this->get_tarification($package, $weight, $length, $width, $height);
+
+                        // add the rate to the final_tarification
+                        if (count($final_tarification)==0){
+                            $final_tarification=$result;
+                        } else {
+                            foreach ($result as $key => $value){
+                                // for every available service add the rate of this item (already multiplied with the quantity) to the final rate
+                                $final_tarification[$key][2]+=$value[2];
+                            }
+                        }
+                    }
+
+                }
+
+                write_log($final_tarification);
+
+                $this->add_rates($final_tarification);
+
+            }
 
 			/**
 			 * @param $package
