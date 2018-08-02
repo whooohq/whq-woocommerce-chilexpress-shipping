@@ -32,18 +32,20 @@ function whq_wcchp_init_class() {
 				$this->init_settings();
 
 				// Define user set variables
-				$this->enabled                = $this->get_option( 'enabled' );
-				$this->title                  = $this->get_option( 'title' );
-				$this->shipping_origin        = $this->get_option( 'shipping_origin' );
-				$this->packaging_heuristic    = $this->get_option( 'packaging_heuristic' );
-				$this->shipments_types        = $this->get_option( 'shipments_types' );
-				$this->locations_cache        = $this->get_option( 'locations_cache' );
-				$this->extra_wrapper          = $this->get_option( 'extra_wrapper' );
-				$this->soap_login             = $this->get_option( 'soap_login' );
-				$this->soap_password          = $this->get_option( 'soap_password' );
-				$this->shipping_zones_support = $this->get_option( 'shipping_zones_support' );
-				$this->disable_shipping_zones = $this->get_option( 'disable_shipping_zones' );
-				$this->availability           = true;
+				$this->enabled                       = $this->get_option( 'enabled' );
+				$this->title                         = $this->get_option( 'title' );
+				$this->shipping_origin               = apply_filters( 'whq_wcchp_shipping_origin', $this->get_option( 'shipping_origin' ) );
+				$this->packaging_heuristic           = $this->get_option( 'packaging_heuristic' );
+				$this->shipments_types               = $this->get_option( 'shipments_types' );
+				$this->locations_cache               = $this->get_option( 'locations_cache' );
+				$this->extra_wrapper                 = $this->get_option( 'extra_wrapper' );
+				$this->soap_login                    = $this->get_option( 'soap_login' );
+				$this->soap_password                 = $this->get_option( 'soap_password' );
+				$this->shipping_zones_support        = $this->get_option( 'shipping_zones_support' );
+				$this->disable_shipping_zones        = $this->get_option( 'disable_shipping_zones' );
+				$this->availability                  = true;
+				$this->override_shipping_calculation = apply_filters( 'whq_wcchp_override_shipping_calculation', false );
+				$this->override_packaging_heuristic  = apply_filters( 'whq_wcchp_override_packaging_heuristic', $this->packaging_heuristic );
 
 				if( $this->get_chilexpress_option( 'shipping_zones_support' ) == 'yes' ) {
 					/*$this->supports = array(
@@ -337,26 +339,18 @@ function whq_wcchp_init_class() {
 			 * @return void
 			 */
 			public function calculate_shipping( $package = array() ) {
-				write_log( 'Shipping Heuristic algorithm selected: ' . $this->packaging_heuristic );
+				write_log( 'Shipping Heuristic algorithm selected: ' . $this->override_packaging_heuristic );
 
-								
 				//Prevent upgraded plugin instances from failing (empty or null value)
 				if ( ! isset( $this->packaging_heuristic ) || empty( $this->packaging_heuristic ) ) {
 					$this->packaging_heuristic = 'join_narrow_sides';
 				}
-				
-				// heuristic override filters
-				// there is a 3rd filter in: calculate_shipping_externally()
-				$this->override_shipping_calculation = apply_filters( 'whq_wcchp_override_shipping_calculation', false );
-				$this->filtered_packaging_heuristic = apply_filters('whq_wcchp_packaging_heuristic' , $this->packaging_heuristic );
-				write_log('Shipping Heuristic algorithm override: "' . $this->filtered_packaging_heuristic . '"');
-				if ( empty($this->filtered_packaging_heuristic) ) {
-					//fallback to standard heuristic if filtered_heuristic is empty
-					$this->override_shipping_calculation=false;
+
+				//Fallback to standard heuristic if empty
+				if ( empty( $this->override_packaging_heuristic ) ) {
+					$this->override_shipping_calculation = false;
 				}
-				
-				// go into standard calculations
-				// if override_shipping_calculation=false
+
 				if( false === $this->override_shipping_calculation ) {
 					if ( $this->packaging_heuristic == 'single_package_per_item' ) {
 						$this->calculate_shipping_by_item( $package );
@@ -365,9 +359,9 @@ function whq_wcchp_init_class() {
 						$this->calculate_shipping_by_shortest_side( $package );
 					}
 				} else {
-					$this->calculate_shipping_externally( $package );
+					//Override packaging calculation
+					$this->calculate_shipping_override( $package );
 				}
-				
 			}
 
 			/**
@@ -375,7 +369,7 @@ function whq_wcchp_init_class() {
 			 * @param  array  $package Package data
 			 */
 			public function calculate_shipping_by_shortest_side( $package = array() ) {
-				write_log( "Calculate Shipping By Adding shortestSides");
+				write_log( 'Calculate shipping by adding shortest sides' );
 
 				$weight                   = 0;
 				$length                   = 0;
@@ -525,9 +519,9 @@ function whq_wcchp_init_class() {
 				write_log( "FinalPackage: Kg={$weight} Vl={$product_package[0][0]} La={$length} An={$width} Al={$height}" );
 
 				//Add rate to WC
-				$rates = $this->get_tarification($package, $weight, $length, $width, $height);
+				$rates = $this->get_tarification( $package, $weight, $length, $width, $height );
 
-				$this->add_rates($rates);
+				$this->add_rates( $rates );
 			}
 
 			/**
@@ -536,7 +530,7 @@ function whq_wcchp_init_class() {
 			 * @param  array  $package Package data
 			 */
 			public function calculate_shipping_by_item( $package = array() ) {
-				write_log( "Calculate Shipping By Item");
+				write_log( 'Calculate Shipping By Item' );
 
 				$weight = 0;
 				$length = 0;
@@ -576,78 +570,75 @@ function whq_wcchp_init_class() {
 					}
 
 					// add the rate to the final_tarification
-					if (count($final_tarification)==0){
-						$final_tarification=$result;
+					if ( count( $final_tarification ) == 0 ) {
+						$final_tarification = $result;
 					} else {
-						foreach ($result as $key => $value){
+						foreach ( $result as $key => $value ) {
 							// for every available service add the rate of this item (already multiplied with the quantity) to the final rate
-							$final_tarification[$key][2]+=$value[2];
+							$final_tarification[$key][2] += $value[2];
 						}
 					}
 				}
 
-				// for every service add the Rate for the frontend and payment
-				$this->add_rates($final_tarification);
-			}
-			
-			/**
-			* calculate_shipping_externally method
-			* @param  string  $package used
-			*/
-			public function calculate_shipping_externally( $package = array() )
-			{
-				write_log( "Calculate Shipping Externally using: " . $this->filtered_packaging_heuristic );
-
-				$final_tarification = array();
-				$packages_for_tarification=array();
-
-				$packages_for_tarification=apply_filters('whq_wcchp_packages_for_tarification', $packages_for_tarification , array( $this->filtered_packaging_heuristic  , $package ) );
-				foreach ($packages_for_tarification as $tarif_package){
-				    if (count($tarif_package)>=4 &&
-					!empty($tarif_package['weight']) &&
-					!empty($tarif_package['length']) &&
-					!empty($tarif_package['width']) &&
-					!empty($tarif_package['height']) &&
-					filter_var($tarif_package['weight'], FILTER_VALIDATE_FLOAT) !== false &&
-					filter_var($tarif_package['length'], FILTER_VALIDATE_INT) !== false &&
-					filter_var($tarif_package['width'], FILTER_VALIDATE_INT) !== false &&
-					filter_var($tarif_package['height'], FILTER_VALIDATE_INT) !== false){
-
-					$weight=$tarif_package['weight'];
-					$length=$tarif_package['length'];
-					$width=$tarif_package['width'];
-					$height=$tarif_package['height'];
-
-					$result = $this->get_tarification($package, $weight, $length, $width, $height);
-
-					// add the rate to the final_tarification
-					if (count($final_tarification)==0){
-					    $final_tarification=$result;
-					} else {
-					    foreach ($result as $key => $value){
-						// for every available service add the rate of this item (already multiplied with the quantity) to the final rate
-						$final_tarification[$key][2]+=$value[2];
-					    }
-					}
-				    }
-
+				if ( true === WP_DEBUG ) {
+					write_log( $final_tarification );
 				}
 
-				write_log($final_tarification);
-
-				$this->add_rates($final_tarification);
-
+				// for every service add the Rate for the frontend and payment
+				$this->add_rates( $final_tarification );
 			}
 
 			/**
-			 * @param $package
-			 * @param $weight
-			 * @param $length
-			 * @param $width
-			 * @param $height
-			 */
+			* calculate_shipping_override method
+			*
+			* @param  array  $package Package data
+			*/
+			public function calculate_shipping_override( $package = array() ) {
+				write_log( 'Packaging heuristic to being used: ' . $this->override_packaging_heuristic );
+
+				$final_tarification        = array();
+				$packages_for_tarification = array();
+				$packages_for_tarification = apply_filters( 'whq_wcchp_override_packages_for_tarification', $packages_for_tarification, array( $this->override_packaging_heuristic, $package ) );
+
+				foreach ( $packages_for_tarification as $tarif_package ) {
+					if ( count( $tarif_package ) >= 4 &&
+					!empty( $tarif_package['weight'] ) &&
+					!empty( $tarif_package['length'] ) &&
+					!empty( $tarif_package['width'] ) &&
+					!empty( $tarif_package['height'] ) &&
+					filter_var( $tarif_package['weight'], FILTER_VALIDATE_FLOAT ) !== false &&
+					filter_var( $tarif_package['length'], FILTER_VALIDATE_INT ) !== false &&
+					filter_var( $tarif_package['width'], FILTER_VALIDATE_INT ) !== false &&
+					filter_var( $tarif_package['height'], FILTER_VALIDATE_INT ) !== false ) {
+
+						$weight = $tarif_package['weight'];
+						$length = $tarif_package['length'];
+						$width  = $tarif_package['width'];
+						$height = $tarif_package['height'];
+
+						$result = $this->get_tarification($package, $weight, $length, $width, $height);
+
+						// add the rate to the final_tarification
+						if ( count( $final_tarification ) == 0 ) {
+							$final_tarification = $result;
+						} else {
+							foreach ( $result as $key => $value ) {
+							// for every available service add the rate of this item (already multiplied with the quantity) to the final rate
+								$final_tarification[$key][2] += $value[2];
+							}
+						}
+					}
+				}
+
+				if ( true === WP_DEBUG ) {
+					write_log( $final_tarification );
+				}
+
+				$this->add_rates( $final_tarification );
+			}
+
 			/**
-			 *[get_tarification method, retrieves Chilexpress's data directly from the API
+			 * get_tarification method, retrieves Chilexpress's data directly from the API
 			 * @param  array $package Package data
 			 * @param  integer $weight  Package weight, in kg
 			 * @param  integer $length  Package length, in cm
