@@ -600,34 +600,38 @@ function whq_wcchp_init_class() {
 				$final_tarification        = array();
 				$packages_for_tarification = apply_filters( 'whq_wcchp_override_packages_for_tarification', array(), array( $package, $override_packaging_heuristic ) );
 
-				foreach ( $packages_for_tarification as $tarif_package ) {
-					if ( count( $tarif_package ) >= 4 &&
-					!empty( $tarif_package['weight'] ) &&
-					!empty( $tarif_package['length'] ) &&
-					!empty( $tarif_package['width'] ) &&
-					!empty( $tarif_package['height'] ) &&
-					filter_var( $tarif_package['weight'], FILTER_VALIDATE_FLOAT ) !== false &&
-					filter_var( $tarif_package['length'], FILTER_VALIDATE_INT ) !== false &&
-					filter_var( $tarif_package['width'], FILTER_VALIDATE_INT ) !== false &&
-					filter_var( $tarif_package['height'], FILTER_VALIDATE_INT ) !== false ) {
+				if( ! empty( $packages_for_tarification ) || is_array( $packages_for_tarification ) ) {
+					foreach ( $packages_for_tarification as $tarif_package ) {
+						if ( count( $tarif_package ) >= 4 &&
+						!empty( $tarif_package['weight'] ) &&
+						!empty( $tarif_package['length'] ) &&
+						!empty( $tarif_package['width'] ) &&
+						!empty( $tarif_package['height'] ) &&
+						filter_var( $tarif_package['weight'], FILTER_VALIDATE_FLOAT ) !== false &&
+						filter_var( $tarif_package['length'], FILTER_VALIDATE_INT ) !== false &&
+						filter_var( $tarif_package['width'], FILTER_VALIDATE_INT ) !== false &&
+						filter_var( $tarif_package['height'], FILTER_VALIDATE_INT ) !== false ) {
 
-						$weight = $tarif_package['weight'];
-						$length = $tarif_package['length'];
-						$width  = $tarif_package['width'];
-						$height = $tarif_package['height'];
+							$weight = $tarif_package['weight'];
+							$length = $tarif_package['length'];
+							$width  = $tarif_package['width'];
+							$height = $tarif_package['height'];
 
-						$result = $this->get_tarification($package, $weight, $length, $width, $height);
+							$result = $this->get_tarification($package, $weight, $length, $width, $height);
 
-						// add the rate to the final_tarification
-						if ( count( $final_tarification ) == 0 ) {
-							$final_tarification = $result;
-						} else {
-							foreach ( $result as $key => $value ) {
-							// for every available service add the rate of this item (already multiplied with the quantity) to the final rate
-								$final_tarification[$key][2] += $value[2];
+							// add the rate to the final_tarification
+							if ( count( $final_tarification ) == 0 ) {
+								$final_tarification = $result;
+							} else {
+								foreach ( $result as $key => $value ) {
+								// for every available service add the rate of this item (already multiplied with the quantity) to the final rate
+									$final_tarification[$key][2] += $value[2];
+								}
 							}
 						}
 					}
+				} else {
+					$final_tarification = false;
 				}
 
 				if ( true === WP_DEBUG ) {
