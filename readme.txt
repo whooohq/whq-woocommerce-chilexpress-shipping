@@ -93,7 +93,7 @@ Ayuda y aportes (vía Pull Requests, aceptando la [guía de contribución](https
 3. Configuración del plugin.
 
 == Changelog ==
-= 1.4.1 =
+= 1.4.2 =
 * Mejora: posibilidad de sobre-escribir el tipo algoritmo utilizado para el cálculo del paquete. Agradecimientos a @PatrickCaneloDigital por el trabajo aquí.
 * Mejora: posibilidad de sobre-escribir el origen de los paquetes. Ver [issue #97](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/97).
 
