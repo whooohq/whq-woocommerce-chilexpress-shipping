@@ -32,18 +32,18 @@ function whq_wcchp_init_class() {
 				$this->init_settings();
 
 				// Define user set variables
-				$this->enabled                       = $this->get_option( 'enabled' );
-				$this->title                         = $this->get_option( 'title' );
-				$this->shipping_origin               = apply_filters( 'whq_wcchp_shipping_origin', $this->get_option( 'shipping_origin' ) );
-				$this->packaging_heuristic           = $this->get_option( 'packaging_heuristic' );
-				$this->shipments_types               = $this->get_option( 'shipments_types' );
-				$this->locations_cache               = $this->get_option( 'locations_cache' );
-				$this->extra_wrapper                 = $this->get_option( 'extra_wrapper' );
-				$this->soap_login                    = $this->get_option( 'soap_login' );
-				$this->soap_password                 = $this->get_option( 'soap_password' );
-				$this->shipping_zones_support        = $this->get_option( 'shipping_zones_support' );
-				$this->disable_shipping_zones        = $this->get_option( 'disable_shipping_zones' );
-				$this->availability                  = true;
+				$this->enabled                = $this->get_option( 'enabled' );
+				$this->title                  = $this->get_option( 'title' );
+				$this->shipping_origin        = apply_filters( 'whq_wcchp_shipping_origin', $this->get_option( 'shipping_origin' ) );
+				$this->packaging_heuristic    = $this->get_option( 'packaging_heuristic' );
+				$this->shipments_types        = $this->get_option( 'shipments_types' );
+				$this->locations_cache        = $this->get_option( 'locations_cache' );
+				$this->extra_wrapper          = $this->get_option( 'extra_wrapper' );
+				$this->soap_login             = $this->get_option( 'soap_login' );
+				$this->soap_password          = $this->get_option( 'soap_password' );
+				$this->shipping_zones_support = $this->get_option( 'shipping_zones_support' );
+				$this->disable_shipping_zones = $this->get_option( 'disable_shipping_zones' );
+				$this->availability           = true;
 
 				if( $this->get_chilexpress_option( 'shipping_zones_support' ) == 'yes' ) {
 					/*$this->supports = array(
@@ -361,7 +361,7 @@ function whq_wcchp_init_class() {
 					}
 				} else {
 					//Override packaging calculation
-					$this->calculate_shipping_override( $override_packaging_heuristic , $package );
+					$this->calculate_shipping_override( $package, $override_packaging_heuristic );
 				}
 			}
 
@@ -594,12 +594,11 @@ function whq_wcchp_init_class() {
 			*
 			* @param  array  $package Package data
 			*/
-			public function calculate_shipping_override( $override_packaging_heuristic= '', $package = array() ) {
+			public function calculate_shipping_override( $package = array(), $override_packaging_heuristic = '' ) {
 				write_log( 'Packaging heuristic to being used: ' . $override_packaging_heuristic );
 
 				$final_tarification        = array();
-				$packages_for_tarification = array();
-				$packages_for_tarification = apply_filters( 'whq_wcchp_override_packages_for_tarification', $packages_for_tarification, array( $override_packaging_heuristic, $package ) );
+				$packages_for_tarification = apply_filters( 'whq_wcchp_override_packages_for_tarification', array(), array( $package, $override_packaging_heuristic ) );
 
 				foreach ( $packages_for_tarification as $tarif_package ) {
 					if ( count( $tarif_package ) >= 4 &&
