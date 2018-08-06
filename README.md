@@ -32,6 +32,8 @@ La conexión a la API de Chilexpress se realiza a través de SOAP. Por lo tanto,
 
 ### Cálculo de precio de envío
 El cálculo del precio de envío se hace utilizando directamente la API de Chilexpress. Para que la API de Chilexpress entregue los valores correctos, los productos en tu tienda deben tener medidas asignadas (alto, ancho, largo, en cm.) y peso (kg.). De lo contrario, la API de Chilexpress no podrá calcular el precio de envío correctamente.
+En el Checkout, el plugin necesita que primero se completen los campos de Región y Ciudad/Localidad para que Chilexpress pueda calcular el precio del envío.
+Por otra parte, WooCommerce requiere que uno complete datos obligatorios (como nombre, apellido, fono, email, etc) dentro del Checkout, para recién delegar y realizar el cálculo del envío (independiente del plugin que usen para envíos). Por favor, prueba rellenando primero todos los campos dentro del Checkout, antes de reportar un bug.
 
 
 ### ¿Chilexpress caído? (Chilexpress no disponible)
