@@ -603,10 +603,10 @@ function whq_wcchp_init_class() {
 				if( ! empty( $packages_for_tarification ) || is_array( $packages_for_tarification ) ) {
 					foreach ( $packages_for_tarification as $tarif_package ) {
 						if ( count( $tarif_package ) >= 4 &&
-						!empty( $tarif_package['weight'] ) &&
-						!empty( $tarif_package['length'] ) &&
-						!empty( $tarif_package['width'] ) &&
-						!empty( $tarif_package['height'] ) &&
+						! empty( $tarif_package['weight'] ) &&
+						! empty( $tarif_package['length'] ) &&
+						! empty( $tarif_package['width'] ) &&
+						! empty( $tarif_package['height'] ) &&
 						filter_var( $tarif_package['weight'], FILTER_VALIDATE_FLOAT ) !== false &&
 						filter_var( $tarif_package['length'], FILTER_VALIDATE_INT ) !== false &&
 						filter_var( $tarif_package['width'], FILTER_VALIDATE_INT ) !== false &&

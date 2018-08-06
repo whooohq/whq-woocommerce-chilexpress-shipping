@@ -30,7 +30,8 @@ function whq_wcchp_enqueue_scripts() {
 			wp_enqueue_script( 'whq_wcchp_cart', $whq_wcchp_default['plugin_url'] . 'assets/js/whq_wcchp_cart.js', array('jquery', 'woocommerce', 'jquery-blockui', 'select2'), $whq_wcchp_default['plugin_version'], true );
 		}
 
-		if( is_checkout() ) {
+		// https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/104
+		if( is_checkout() && ! is_wc_endpoint_url( 'order-pay' ) ) {
 			wp_enqueue_script( 'whq_wcchp_checkout', $whq_wcchp_default['plugin_url'] . 'assets/js/whq_wcchp_checkout.js', array('jquery', 'woocommerce', 'jquery-blockui', 'select2'), $whq_wcchp_default['plugin_version'], true );
 		}
 	}
