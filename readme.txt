@@ -1,7 +1,7 @@
 === WooCommerce Chilexpress Shipping ===
 Contributors: whooo, jhoynerk, tcattd
 Tags: woocommerce, shipping, chile, chilexpress
-Stable tag: 1.4.4
+Stable tag: 1.4.5
 Requires at least: 4.4
 Tested up to: 4.9
 Requires PHP: 5.6
@@ -97,6 +97,10 @@ Ayuda y aportes (vía Pull Requests, aceptando la [guía de contribución](https
 3. Configuración del plugin.
 
 == Changelog ==
+= 1.4.5 =
+* Mejora: compatibilidad con [plugin comercial](https://codecanyon.net/item/woocommerce-shipping-calculator-on-product-page/11496815) para mostrar calculadora de precios en página de producto. Opción recomendada para Shipping Method Input: Display All Shipping With Price (No compatible con opción "Radio"). Advertencia: no hay soporte, por nuestra parte, para el plugin de terceros.
+* Mejora: filtros whq_wcchp_shipments_types y whq_wcchp_tarification_rates para cambiar nombres de tipos de envíos. Ver [issue #61](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/61).
+
 = 1.4.4 =
 * Bugfix: resuelve la imposibilidad de pagar por un pedido pendiente desde la lista de pedidos. Ver [issue #104](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/104). Muchas gracias @truchosky por el aviso ;)
 * Mejora: posibilidad de sobre-escribir el tipo algoritmo utilizado para el cálculo del paquete. Agradecimientos a @PatrickCaneloDigital por el trabajo aquí.

@@ -231,7 +231,7 @@ function whq_wcchp_init_class() {
 					5 => 'Tercer día',
 				];
 
-				return $shipments_types;
+				return apply_filters( 'whq_wcchp_shipments_types', $shipments_types );
 			}
 
 			/**
@@ -727,7 +727,7 @@ function whq_wcchp_init_class() {
 							$rates[ $service_id ] = array( $service_id, $service_label, $service_value );
 						}
 
-						return $rates;
+						// Return outside the conditional (for filtering)
 					} else {
 						if ( false === $chp_cost ) {
 							$service_id    = $this->id . ':0';
@@ -743,8 +743,12 @@ function whq_wcchp_init_class() {
 
 						$rates[ $service_id ] = array( $service_id, $service_label, $service_value );
 
-						return $rates;
+						// Return outside the conditional (for filtering)
 					}
+
+					$rates = apply_filters( 'whq_wcchp_tarification_rates', $rates );
+
+					return $rates;
 				}
 			}
 
