@@ -18,13 +18,14 @@ function whq_wcchp_add_action_links ( $links ) {
  */
 add_action( 'admin_init', 'whq_wcchp_incompatible_plugins_check' );
 function whq_wcchp_incompatible_plugins_check() {
+	global $pagenow;
+
 	$show_notice = false;
 
 	$incompatible_plugins = array(
 		'woocommerce-checkout-field-editor/woocommerce-checkout-field-editor.php',
 		'woo-checkout-field-editor-pro/checkout-form-designer.php',
 		'comunas-de-chile-para-woocommerce/woocoomerce-comunas.php',
-		'woocommerce-chilean-peso-currency/woocommerce-chilean-peso.php',
 		'calculo-de-despacho-via-starken-para-woocommerce/calculo-starken-woocommerce.php',
 	);
 
@@ -38,7 +39,7 @@ function whq_wcchp_incompatible_plugins_check() {
 		}
 	}
 
-	if ( true === $show_notice ) {
+	if ( true === $show_notice && ( $pagenow == 'plugins.php' || ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == 'wc-settings' ) && ( isset( $_REQUEST['section'] ) && $_REQUEST['section'] == 'chilexpress' ) ) ) {
 		add_action( 'admin_notices', 'whq_wcchp_incompatible_plugins' );
 	}
 }
@@ -109,3 +110,13 @@ function whq_wcchp_detect_plugin_activation( $plugin, $network_activation ) {
 }
 add_action( 'activated_plugin', 'whq_wcchp_detect_plugin_activation', 10, 2 );
 
+/**
+ * Fix for some incompatible plugins (just the ones that can be fixed from here)
+ */
+function whq_wcchp_remove_incompatible_actions_and_filters() {
+	// Fix for https://wordpress.org/plugins/woocommerce-chilean-peso-currency/
+	if( is_plugin_active( 'woocommerce-chilean-peso-currency/woocommerce-chilean-peso.php' ) && function_exists( 'custom_woocommerce_states' ) ) {
+		remove_filter( 'woocommerce_states', 'custom_woocommerce_states' );
+	}
+}
+add_action( 'init', 'whq_wcchp_remove_incompatible_actions_and_filters', 20 );

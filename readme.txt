@@ -97,6 +97,10 @@ Ayuda y aportes (vía Pull Requests, aceptando la [guía de contribución](https
 3. Configuración del plugin.
 
 == Changelog ==
+= 1.4.6 =
+* Mejora: arreglo de compatibilidad con plugin [WooCommerce Chilean Peso](https://wordpress.org/plugins/woocommerce-chilean-peso-currency/), plugin que permite el uso de PayPal en Chile.
+* Mejora: aviso de incompatibilidad ahora solo es mostrado en página de Plugins y configuración del Plugin. Ver [issue #103](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/103).
+
 = 1.4.5 =
 * Mejora: compatibilidad con [plugin comercial](https://codecanyon.net/item/woocommerce-shipping-calculator-on-product-page/11496815) para mostrar calculadora de precios en página de producto. Opción recomendada para Shipping Method Input: Display All Shipping With Price (No compatible con opción "Radio"). Advertencia: no hay soporte, por nuestra parte, para el plugin de terceros.
 * Mejora: filtros whq_wcchp_shipments_types y whq_wcchp_tarification_rates para cambiar nombres de tipos de envíos. Ver [issue #61](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/61).
