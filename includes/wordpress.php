@@ -115,8 +115,13 @@ add_action( 'activated_plugin', 'whq_wcchp_detect_plugin_activation', 10, 2 );
  */
 function whq_wcchp_remove_incompatible_actions_and_filters() {
 	// Fix for https://wordpress.org/plugins/woocommerce-chilean-peso-currency/
-	if( is_plugin_active( 'woocommerce-chilean-peso-currency/woocommerce-chilean-peso.php' ) && function_exists( 'custom_woocommerce_states' ) ) {
-		remove_filter( 'woocommerce_states', 'custom_woocommerce_states' );
+	if ( function_exists( 'ctala_install_cleancache' ) ) {
+		//Make sure that woocommerce-chilean-peso-currency plugin is active
+		include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+
+		if( is_plugin_active( 'woocommerce-chilean-peso-currency/woocommerce-chilean-peso.php' ) ) {
+			remove_filter( 'woocommerce_states', 'custom_woocommerce_states' );
+		}
 	}
 }
 add_action( 'init', 'whq_wcchp_remove_incompatible_actions_and_filters', 20 );
