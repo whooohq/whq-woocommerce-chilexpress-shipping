@@ -32,7 +32,7 @@ function whq_wcchp_incompatible_plugins_check() {
 	if ( current_user_can( 'activate_plugins' ) && ( ! wp_doing_ajax() ) ) {
 		if ( is_array( $incompatible_plugins ) && ! empty( $incompatible_plugins ) ) {
 			foreach ($incompatible_plugins as $plugin) {
-				if ( is_plugin_active( $plugin ) ) {
+				if ( is_plugin_active( $plugin ) || is_plugin_active_for_network( $plugin ) ) {
 					$show_notice = true;
 				}
 			}
@@ -116,10 +116,18 @@ add_action( 'activated_plugin', 'whq_wcchp_detect_plugin_activation', 10, 2 );
 function whq_wcchp_remove_incompatible_actions_and_filters() {
 	// Fix for https://wordpress.org/plugins/woocommerce-chilean-peso-currency/
 	if ( function_exists( 'ctala_install_cleancache' ) ) {
-		//Make sure that woocommerce-chilean-peso-currency plugin is active
-		include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+		$plugin = 'woocommerce-chilean-peso-currency/woocommerce-chilean-peso.php';
 
-		if( is_plugin_active( 'woocommerce-chilean-peso-currency/woocommerce-chilean-peso.php' ) ) {
+		//Make sure that woocommerce-chilean-peso-currency plugin is active
+		if ( ! is_multisite() && ! function_exists( 'is_plugin_active' ) ) {
+			include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+		} elseif ( is_multisite() && ! function_exists( 'is_plugin_active_for_network') ) {
+			include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+		}
+
+		if( ! is_multisite() && is_plugin_active( $plugin ) ) {
+			remove_filter( 'woocommerce_states', 'custom_woocommerce_states' );
+		} elseif ( is_multisite() && is_plugin_active_for_network( $plugin ) ) {
 			remove_filter( 'woocommerce_states', 'custom_woocommerce_states' );
 		}
 	}

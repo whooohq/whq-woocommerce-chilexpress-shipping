@@ -3,7 +3,7 @@
  * Plugin Name: WooCommerce Chilexpress Shipping
  * Plugin URI: https://github.com/whooohq/whq-woocommerce-chilexpress-shipping
  * Description: Método de envío por Chilexpress para WooCommerce, con sistema de cálculo de envíos automático utilizando la API de Chilexpress
- * Version: 1.4.7
+ * Version: 1.4.9
  * Author: Whooo & contributors
  * Author URI: https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/graphs/contributors
  * License: GPLv2 or later
@@ -30,10 +30,27 @@
 /**
  * Check if WooCommerce is active
  */
-$whq_wcchp_active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins' ) );
-if ( in_array( 'woocommerce/woocommerce.php', $whq_wcchp_active_plugins) ) {
+$whq_wcchp_woocommerce_active = false;
+
+if ( ! is_multisite() && ! function_exists( 'is_plugin_active' ) ) {
+	include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+} elseif ( is_multisite() && ! function_exists( 'is_plugin_active_for_network') ) {
+	include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+}
+
+if ( ! is_multisite() ) {
+	if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
+		$whq_wcchp_woocommerce_active = true;
+	}
+} else {
+	if ( is_plugin_active_for_network( 'woocommerce/woocommerce.php' ) ) {
+		$whq_wcchp_woocommerce_active = true;
+	}
+}
+
+if ( true === $whq_wcchp_woocommerce_active ) {
 	$whq_wcchp_default = array(
-		'plugin_version'         => '1.4.7',
+		'plugin_version'         => '1.4.9',
 		'plugin_file'            => __FILE__,
 		'plugin_basename'        => plugin_basename(__FILE__),
 		'plugin_path'            => trailingslashit( plugin_dir_path(__FILE__) ),

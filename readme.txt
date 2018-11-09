@@ -1,7 +1,7 @@
 === WooCommerce Chilexpress Shipping ===
 Contributors: whooo, jhoynerk, tcattd
 Tags: woocommerce, shipping, chile, chilexpress
-Stable tag: 1.4.7
+Stable tag: 1.4.9
 Requires at least: 4.4
 Tested up to: 4.9
 Requires PHP: 5.6
@@ -97,6 +97,10 @@ Ayuda y aportes (vía Pull Requests, aceptando la [guía de contribución](https
 3. Configuración del plugin.
 
 == Changelog ==
+= 1.4.9 =
+* Mejora: posibilidad de seleccionar ambiente de uso de la API de Chilexpress. Ver [issue #114](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/114). Agradecimientos por el aviso a @AndresReyesTech
+* Mejora: compatibilidad con WordPress Network. Ver [issue #71](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/71).
+
 = 1.4.7 =
 * Mejora: arreglo de compatibilidad con plugin [WooCommerce Chilean Peso](https://wordpress.org/plugins/woocommerce-chilean-peso-currency/), plugin que permite el uso de PayPal en Chile.
 * Mejora: aviso de incompatibilidad ahora solo es mostrado en página de Plugins y configuración del Plugin. Ver [issue #103](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/103).
