@@ -167,7 +167,7 @@ function whq_wcchp_init_class() {
 						'default'     => 0,
 					),
 					'soap_api_enviroment' => array(
-						'title'       => __( 'Ambiente de la API de Chilexpress', 'whq-wcchp' ),
+						'title'       => __( 'Chilexpress API, ambiente', 'whq-wcchp' ),
 						'type'        => 'select',
 						'default'     => 'qaws',
 						'description' => __( 'WS PROD requiere un usuario y contraseña para la API SOAP de Chilexpress. Ante la duda, mantener como WS QA.', 'whq-wcchp' ),
@@ -177,13 +177,13 @@ function whq_wcchp_init_class() {
 						),
 					),
 					'soap_login' => array(
-						'title'       => __( 'Chilexpress API Username', 'whq-wcchp' ),
+						'title'       => __( 'Chilexpress API, usuario', 'whq-wcchp' ),
 						'type'        => 'text',
 						'description' => __( '(Opcional) Usuario a utilizar en las llamadas a la API de Chilexpress. Dejar en blanco para utilizar datos de conexión por defecto (públicos) que Chilexpress provee.', 'whq-wcchp' ),
 						'default'     => '',
 					),
 					'soap_password' => array(
-						'title'       => __( 'Chilexpress API Password', 'whq-wcchp' ),
+						'title'       => __( 'Chilexpress API, contraseña', 'whq-wcchp' ),
 						'type'        => 'text', // https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/45
 						'description' => __( '(Opcional) Contraseña a utilizar en las llamadas a la API de Chilexpress. Dejar en blanco para utilizar datos de conexión por defecto (públicos) que Chilexpress provee.', 'whq-wcchp' ),
 						'default'     => '',
