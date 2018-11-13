@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WL5G3N0:definitions name="TarificaCourier" targetNamespace="http://www.chilexpress.cl/TarificaCourier/" xmlns:WL5G3N0="http://schemas.xmlsoap.org/wsdl/" xmlns:WL5G3N1="http://www.chilexpress.cl/TarificaCourier/" xmlns:WL5G3N2="http://schemas.xmlsoap.org/wsdl/soap/">
+  <WL5G3N0:types>
+    <xsd:schema targetNamespace="http://www.chilexpress.cl/TarificaCourier/" xmlns:Q1="http://www.chilexpress.cl/ESB/TarificaCourier/OpValorizarCourierRequest" xmlns:Q2="http://www.chilexpress.cl/ESB/TarificaCourier/OpValorizarCourierResponse" xmlns:Q3="http://www.chilexpress.cl/common/HeaderRequest" xmlns:Q4="http://www.chilexpress.cl/common/HeaderResponse" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.chilexpress.cl/TarificaCourier/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:import namespace="http://www.chilexpress.cl/ESB/TarificaCourier/OpValorizarCourierResponse" schemaLocation="http://ws.ssichilexpress.cl:80/TarificarCourier?SCHEMA%2FPX_CorpValorizaCourier%2FPX000040_ValorizarCourier%2FSpecification%2FWSDL%2FPX000040_OpValorizarCourierResponse"/>
+      <xsd:import namespace="http://www.chilexpress.cl/ESB/TarificaCourier/OpValorizarCourierRequest" schemaLocation="http://ws.ssichilexpress.cl:80/TarificarCourier?SCHEMA%2FPX_CorpValorizaCourier%2FPX000040_ValorizarCourier%2FSpecification%2FWSDL%2FPX000040_OpValorizarCourierRequest"/>
+      <xsd:import namespace="http://www.chilexpress.cl/common/HeaderResponse" schemaLocation="http://ws.ssichilexpress.cl:80/TarificarCourier?SCHEMA%2FUT_EsquemasComunes%2FSpecifications%2FXSD%2FCommon%2FHeaderResponse"/>
+      <xsd:import namespace="http://www.chilexpress.cl/common/HeaderRequest" schemaLocation="http://ws.ssichilexpress.cl:80/TarificarCourier?SCHEMA%2FUT_EsquemasComunes%2FSpecifications%2FXSD%2FCommon%2FHeaderRequest"/>
+      <xsd:element name="headerRequest" type="Q3:datosHeaderRequest"/>
+      <xsd:element name="headerResponse" type="Q4:datosHeaderResponse"/>
+      <xsd:element name="TarificarCourier">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="reqValorizarCourier" type="Q1:reqValorizarCourier"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="TarificarCourierResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="respValorizarCourier" type="Q2:respValorizarCourier"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </WL5G3N0:types>
+  <WL5G3N0:message name="TarificarCourierRequest">
+    <WL5G3N0:part element="WL5G3N1:TarificarCourier" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="TarificarCourierResponse">
+    <WL5G3N0:part element="WL5G3N1:TarificarCourierResponse" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="headerRequestMessage">
+    <WL5G3N0:part element="WL5G3N1:headerRequest" name="headerRequest"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="headerResponseMessage">
+    <WL5G3N0:part element="WL5G3N1:headerResponse" name="headerResponse"/>
+  </WL5G3N0:message>
+  <WL5G3N0:portType name="TarificaCourier">
+    <WL5G3N0:operation name="TarificarCourier">
+      <WL5G3N0:input message="WL5G3N1:TarificarCourierRequest"/>
+      <WL5G3N0:output message="WL5G3N1:TarificarCourierResponse"/>
+    </WL5G3N0:operation>
+  </WL5G3N0:portType>
+  <WL5G3N0:binding name="TarificaCourierSOAP" type="WL5G3N1:TarificaCourier">
+    <WL5G3N2:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <WL5G3N0:operation name="TarificarCourier">
+      <WL5G3N2:operation soapAction="http://www.chilexpress.cl/TarificaCourier/TarificarCourier"/>
+      <WL5G3N0:input>
+        <WL5G3N2:header message="WL5G3N1:headerRequestMessage" part="headerRequest" use="literal"/>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:header message="WL5G3N1:headerResponseMessage" part="headerResponse" use="literal"/>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+  </WL5G3N0:binding>
+  <WL5G3N0:service name="TarificaCourier">
+    <WL5G3N0:port binding="WL5G3N1:TarificaCourierSOAP" name="TarificaCourierSOAP">
+      <WL5G3N2:address location="http://ws.ssichilexpress.cl/TarificarCourier"/>
+    </WL5G3N0:port>
+  </WL5G3N0:service>
+</WL5G3N0:definitions>

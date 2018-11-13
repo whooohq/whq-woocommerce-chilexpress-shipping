@@ -1,7 +1,7 @@
 === WooCommerce Chilexpress Shipping ===
 Contributors: whooo, jhoynerk, tcattd
 Tags: woocommerce, shipping, chile, chilexpress
-Stable tag: 1.4.0
+Stable tag: 1.4.9
 Requires at least: 4.4
 Tested up to: 4.9
 Requires PHP: 5.6
@@ -43,6 +43,10 @@ La conexión a la API de Chilexpress se realiza a través de SOAP. Por lo tanto,
 
 = Cálculo de precio de envío =
 El cálculo del precio de envío se hace utilizando directamente la API de Chilexpress. Para que la API de Chilexpress entregue los valores correctos, los productos en tu tienda deben tener medidas asignadas (alto, ancho, largo, en cm.) y peso (kg.). De lo contrario, la API de Chilexpress no podrá calcular el precio de envío correctamente.
+
+En el Checkout, el plugin necesita que primero se completen los campos de Región y Ciudad/Localidad para que Chilexpress pueda calcular el precio del envío.
+
+Por otra parte, WooCommerce requiere que uno complete datos obligatorios (como nombre, apellido, fono, email, etc) dentro del Checkout, para recién delegar y realizar el cálculo del envío (independiente del plugin que usen para envíos). Por favor, prueba rellenando primero todos los campos dentro del Checkout, antes de reportar un bug.
 
 = ¿Chilexpress caído? (Chilexpress no disponible) =
 Primero que todo, para que un método de envío (en WC) pueda calcular el costo, WC necesita que se llenen los campos obligatorios del formulario del Checkout. Esto es: nombre, apellido, país, dirección, teléfono y correo electrónico, junto a los campos de región y localidad/ciudad (que son poblados automáticamente con los valores que Chilexpress requiere).
@@ -93,7 +97,20 @@ Ayuda y aportes (vía Pull Requests, aceptando la [guía de contribución](https
 3. Configuración del plugin.
 
 == Changelog ==
-= 1.4.0 =
+= 1.4.9 =
+* Mejora: posibilidad de seleccionar ambiente de uso de la API de Chilexpress. Ver [issue #114](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/114). Agradecimientos por el aviso a @AndresReyesTech
+* Mejora: compatibilidad con WordPress Network. Ver [issue #71](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/71). Gracias a @odayan por el aviso.
+
+= 1.4.7 =
+* Mejora: arreglo de compatibilidad con plugin [WooCommerce Chilean Peso](https://wordpress.org/plugins/woocommerce-chilean-peso-currency/), plugin que permite el uso de PayPal en Chile.
+* Mejora: aviso de incompatibilidad ahora solo es mostrado en página de Plugins y configuración del Plugin. Ver [issue #103](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/103).
+
+= 1.4.5 =
+* Mejora: compatibilidad con [plugin comercial](https://codecanyon.net/item/woocommerce-shipping-calculator-on-product-page/11496815) para mostrar calculadora de precios en página de producto. Opción recomendada para Shipping Method Input: Display All Shipping With Price (No compatible con opción "Radio"). Advertencia: no hay soporte, por nuestra parte, para el plugin de terceros.
+* Mejora: filtros whq_wcchp_shipments_types y whq_wcchp_tarification_rates para cambiar nombres de tipos de envíos. Ver [issue #61](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/61).
+
+= 1.4.4 =
+* Bugfix: resuelve la imposibilidad de pagar por un pedido pendiente desde la lista de pedidos. Ver [issue #104](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/104). Muchas gracias @truchosky por el aviso ;)
 * Mejora: posibilidad de sobre-escribir el tipo algoritmo utilizado para el cálculo del paquete. Agradecimientos a @PatrickCaneloDigital por el trabajo aquí.
 * Mejora: posibilidad de sobre-escribir el origen de los paquetes. Ver [issue #97](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/97).
 

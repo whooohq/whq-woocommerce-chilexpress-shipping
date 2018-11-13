@@ -11,7 +11,9 @@ add_action( 'wp_ajax_nopriv_whq_wcchp_regions_ajax', 'whq_wcchp_regions_ajax' );
 function whq_wcchp_regions_ajax() {
 	global $whq_wcchp_default;
 
-	$url    = $whq_wcchp_default['plugin_url'] . 'wsdl/WSDL_GeoReferencia_QA.wsdl';
+	$soap_api_enviroment = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_api_enviroment' );
+
+	$url    = $whq_wcchp_default['plugin_url'] . 'wsdl/WSDL_GeoReferencia_' . $soap_api_enviroment . '.wsdl';
 	$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
 	$route  = 'ConsultarRegiones';
 	$method = 'reqObtenerRegion';
@@ -41,7 +43,9 @@ add_action( 'wp_ajax_nopriv_whq_wcchp_cities_ajax', 'whq_wcchp_cities_ajax' );
 function whq_wcchp_cities_ajax() {
 	global $whq_wcchp_default;
 
-	$url    = $whq_wcchp_default['plugin_url'] . 'wsdl/WSDL_GeoReferencia_QA.wsdl';
+	$soap_api_enviroment = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_api_enviroment' );
+
+	$url    = $whq_wcchp_default['plugin_url'] . 'wsdl/WSDL_GeoReferencia_' . $soap_api_enviroment . '.wsdl';
 	$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
 	$route  = 'ConsultarCoberturas';
 	$method = 'reqObtenerCobertura';

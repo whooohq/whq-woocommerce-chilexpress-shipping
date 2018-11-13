@@ -32,18 +32,18 @@ function whq_wcchp_init_class() {
 				$this->init_settings();
 
 				// Define user set variables
-				$this->enabled                       = $this->get_option( 'enabled' );
-				$this->title                         = $this->get_option( 'title' );
-				$this->shipping_origin               = apply_filters( 'whq_wcchp_shipping_origin', $this->get_option( 'shipping_origin' ) );
-				$this->packaging_heuristic           = $this->get_option( 'packaging_heuristic' );
-				$this->shipments_types               = $this->get_option( 'shipments_types' );
-				$this->locations_cache               = $this->get_option( 'locations_cache' );
-				$this->extra_wrapper                 = $this->get_option( 'extra_wrapper' );
-				$this->soap_login                    = $this->get_option( 'soap_login' );
-				$this->soap_password                 = $this->get_option( 'soap_password' );
-				$this->shipping_zones_support        = $this->get_option( 'shipping_zones_support' );
-				$this->disable_shipping_zones        = $this->get_option( 'disable_shipping_zones' );
-				$this->availability                  = true;
+				$this->enabled                = $this->get_option( 'enabled' );
+				$this->title                  = $this->get_option( 'title' );
+				$this->shipping_origin        = apply_filters( 'whq_wcchp_shipping_origin', $this->get_option( 'shipping_origin' ) );
+				$this->packaging_heuristic    = $this->get_option( 'packaging_heuristic' );
+				$this->shipments_types        = $this->get_option( 'shipments_types' );
+				$this->locations_cache        = $this->get_option( 'locations_cache' );
+				$this->extra_wrapper          = $this->get_option( 'extra_wrapper' );
+				$this->soap_login             = $this->get_option( 'soap_login' );
+				$this->soap_password          = $this->get_option( 'soap_password' );
+				$this->shipping_zones_support = $this->get_option( 'shipping_zones_support' );
+				$this->disable_shipping_zones = $this->get_option( 'disable_shipping_zones' );
+				$this->availability           = true;
 
 				if( $this->get_chilexpress_option( 'shipping_zones_support' ) == 'yes' ) {
 					/*$this->supports = array(
@@ -166,14 +166,24 @@ function whq_wcchp_init_class() {
 						'description' => __( '(En centímetros) El plugin permite que añadas X centímetros extra al paquete que enviarás a Chilexpress, esto, para permitirte contabilizar el posible uso de una caja (y el espacio extra que necesitarás para evitar que lo que envias se dañe). Si ya usas ese estimado extra al momento de ingresar el tamaño de los productos a tu tienda, y no deseas utilizar este extra, simplemente deja el valor en cero.', 'whq-wcchp' ),
 						'default'     => 0,
 					),
+					'soap_api_enviroment' => array(
+						'title'       => __( 'Chilexpress API, ambiente', 'whq-wcchp' ),
+						'type'        => 'select',
+						'default'     => 'qaws',
+						'description' => __( 'WS PROD requiere un usuario y contraseña para la API SOAP de Chilexpress. Ante la duda, mantener como WS QA.', 'whq-wcchp' ),
+						'options'     => array(
+									'QA'   => 'WS QA',
+									'PROD' => 'WS PROD',
+						),
+					),
 					'soap_login' => array(
-						'title'       => __( 'Chilexpress API Username', 'whq-wcchp' ),
+						'title'       => __( 'Chilexpress API, usuario', 'whq-wcchp' ),
 						'type'        => 'text',
 						'description' => __( '(Opcional) Usuario a utilizar en las llamadas a la API de Chilexpress. Dejar en blanco para utilizar datos de conexión por defecto (públicos) que Chilexpress provee.', 'whq-wcchp' ),
 						'default'     => '',
 					),
 					'soap_password' => array(
-						'title'       => __( 'Chilexpress API Password', 'whq-wcchp' ),
+						'title'       => __( 'Chilexpress API, contraseña', 'whq-wcchp' ),
 						'type'        => 'text', // https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/45
 						'description' => __( '(Opcional) Contraseña a utilizar en las llamadas a la API de Chilexpress. Dejar en blanco para utilizar datos de conexión por defecto (públicos) que Chilexpress provee.', 'whq-wcchp' ),
 						'default'     => '',
@@ -231,7 +241,7 @@ function whq_wcchp_init_class() {
 					5 => 'Tercer día',
 				];
 
-				return $shipments_types;
+				return apply_filters( 'whq_wcchp_shipments_types', $shipments_types );
 			}
 
 			/**
@@ -242,7 +252,9 @@ function whq_wcchp_init_class() {
 			private function get_cities( $type = 1 ) {
 				global $whq_wcchp_default;
 
-				$url    = $whq_wcchp_default['plugin_url'] . 'wsdl/WSDL_GeoReferencia_QA.wsdl';
+				$soap_api_enviroment = $this->get_chilexpress_option('soap_api_enviroment');
+
+				$url    = $whq_wcchp_default['plugin_url'] . 'wsdl/WSDL_GeoReferencia_' . $soap_api_enviroment . '.wsdl';
 				$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
 				$route  = 'ConsultarCoberturas';
 				$method = 'reqObtenerCobertura';
@@ -285,7 +297,9 @@ function whq_wcchp_init_class() {
 			private function get_states() {
 				global $whq_wcchp_default;
 
-				$url    = $whq_wcchp_default['plugin_url'] . 'wsdl/WSDL_GeoReferencia_QA.wsdl';
+				$soap_api_enviroment = $this->get_chilexpress_option('soap_api_enviroment');
+
+				$url    = $whq_wcchp_default['plugin_url'] . 'wsdl/WSDL_GeoReferencia_' .$soap_api_enviroment . '.wsdl';
 				$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
 				$route  = 'ConsultarRegiones';
 				$method = 'reqObtenerRegion';
@@ -361,7 +375,7 @@ function whq_wcchp_init_class() {
 					}
 				} else {
 					//Override packaging calculation
-					$this->calculate_shipping_override( $override_packaging_heuristic , $package );
+					$this->calculate_shipping_override( $package, $override_packaging_heuristic );
 				}
 			}
 
@@ -594,41 +608,44 @@ function whq_wcchp_init_class() {
 			*
 			* @param  array  $package Package data
 			*/
-			public function calculate_shipping_override( $override_packaging_heuristic= '', $package = array() ) {
+			public function calculate_shipping_override( $package = array(), $override_packaging_heuristic = '' ) {
 				write_log( 'Packaging heuristic to being used: ' . $override_packaging_heuristic );
 
 				$final_tarification        = array();
-				$packages_for_tarification = array();
-				$packages_for_tarification = apply_filters( 'whq_wcchp_override_packages_for_tarification', $packages_for_tarification, array( $override_packaging_heuristic, $package ) );
+				$packages_for_tarification = apply_filters( 'whq_wcchp_override_packages_for_tarification', array(), array( $package, $override_packaging_heuristic ) );
 
-				foreach ( $packages_for_tarification as $tarif_package ) {
-					if ( count( $tarif_package ) >= 4 &&
-					!empty( $tarif_package['weight'] ) &&
-					!empty( $tarif_package['length'] ) &&
-					!empty( $tarif_package['width'] ) &&
-					!empty( $tarif_package['height'] ) &&
-					filter_var( $tarif_package['weight'], FILTER_VALIDATE_FLOAT ) !== false &&
-					filter_var( $tarif_package['length'], FILTER_VALIDATE_INT ) !== false &&
-					filter_var( $tarif_package['width'], FILTER_VALIDATE_INT ) !== false &&
-					filter_var( $tarif_package['height'], FILTER_VALIDATE_INT ) !== false ) {
+				if( ! empty( $packages_for_tarification ) || is_array( $packages_for_tarification ) ) {
+					foreach ( $packages_for_tarification as $tarif_package ) {
+						if ( count( $tarif_package ) >= 4 &&
+						! empty( $tarif_package['weight'] ) &&
+						! empty( $tarif_package['length'] ) &&
+						! empty( $tarif_package['width'] ) &&
+						! empty( $tarif_package['height'] ) &&
+						filter_var( $tarif_package['weight'], FILTER_VALIDATE_FLOAT ) !== false &&
+						filter_var( $tarif_package['length'], FILTER_VALIDATE_INT ) !== false &&
+						filter_var( $tarif_package['width'], FILTER_VALIDATE_INT ) !== false &&
+						filter_var( $tarif_package['height'], FILTER_VALIDATE_INT ) !== false ) {
 
-						$weight = $tarif_package['weight'];
-						$length = $tarif_package['length'];
-						$width  = $tarif_package['width'];
-						$height = $tarif_package['height'];
+							$weight = $tarif_package['weight'];
+							$length = $tarif_package['length'];
+							$width  = $tarif_package['width'];
+							$height = $tarif_package['height'];
 
-						$result = $this->get_tarification($package, $weight, $length, $width, $height);
+							$result = $this->get_tarification($package, $weight, $length, $width, $height);
 
-						// add the rate to the final_tarification
-						if ( count( $final_tarification ) == 0 ) {
-							$final_tarification = $result;
-						} else {
-							foreach ( $result as $key => $value ) {
-							// for every available service add the rate of this item (already multiplied with the quantity) to the final rate
-								$final_tarification[$key][2] += $value[2];
+							// add the rate to the final_tarification
+							if ( count( $final_tarification ) == 0 ) {
+								$final_tarification = $result;
+							} else {
+								foreach ( $result as $key => $value ) {
+								// for every available service add the rate of this item (already multiplied with the quantity) to the final rate
+									$final_tarification[$key][2] += $value[2];
+								}
 							}
 						}
 					}
+				} else {
+					$final_tarification = false;
 				}
 
 				if ( true === WP_DEBUG ) {
@@ -724,7 +741,7 @@ function whq_wcchp_init_class() {
 							$rates[ $service_id ] = array( $service_id, $service_label, $service_value );
 						}
 
-						return $rates;
+						// Return outside the conditional (for filtering)
 					} else {
 						if ( false === $chp_cost ) {
 							$service_id    = $this->id . ':0';
@@ -740,8 +757,12 @@ function whq_wcchp_init_class() {
 
 						$rates[ $service_id ] = array( $service_id, $service_label, $service_value );
 
-						return $rates;
+						// Return outside the conditional (for filtering)
 					}
+
+					$rates = apply_filters( 'whq_wcchp_tarification_rates', $rates );
+
+					return $rates;
 				}
 			}
 

@@ -91,8 +91,10 @@ function whq_wcchp_call_soap($ns, $url, $route, $method, $data = '') {
 function whq_wcchp_get_tarification($destination, $origin, $weight, $length, $width, $height) {
 	global $whq_wcchp_default;
 
+	$soap_api_enviroment = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_api_enviroment' );
+
+	$url    = $whq_wcchp_default['plugin_url'] . 'wsdl/WSDL_Tarificacion_' . $soap_api_enviroment . '.wsdl';
 	$ns     = $whq_wcchp_default['chilexpress_url'] . '/TarificaCourier/';
-	$url    = $whq_wcchp_default['plugin_url'] . 'wsdl/WSDL_Tarificacion_QA.wsdl';
 	$route  = 'TarificarCourier';
 	$method = 'reqValorizarCourier';
 	$parameters = [ 'CodCoberturaOrigen' => $origin,

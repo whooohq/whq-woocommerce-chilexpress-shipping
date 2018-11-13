@@ -13,7 +13,7 @@ var whq_wcchp_chilexpress_noservice_text;
 
 jQuery(document).ready(function( $ ) {
 	//Only on WooCommerce's Cart
-	if( jQuery('.woocommerce-cart').length ) {
+	if( jQuery('.woocommerce-cart').length || ( jQuery('.single-product').length && whq_wcchp_shipping_calc_on_product == '1' ) ) {
 		if( whq_wcchp_jsdebug ) {
 			console.log('[WCCHP] in cart');
 		}
@@ -23,6 +23,17 @@ jQuery(document).ready(function( $ ) {
 			if( jQuery('input[value^="chilexpress"]').is(':checked') && jQuery('#calc_shipping_country').val() == 'CL' ) {
 				if( whq_wcchp_jsdebug ) {
 					console.log('[WCCHP] Chile detected by initial value');
+				}
+
+				whq_wcchp_cart_chile_detected();
+			}
+		}
+
+		//CL detection on single product page
+		if( whq_wcchp_shipping_calc_on_product == '1' && jQuery('.single-product').length ) {
+			if( jQuery('#calc_shipping_country').val() == 'CL' ) {
+				if( whq_wcchp_jsdebug ) {
+					console.log('[WCCHP] Chile detected in single product page');
 				}
 
 				whq_wcchp_cart_chile_detected();
@@ -177,6 +188,16 @@ function whq_wcchp_cart_chile_detected() {
 		console.log('[WCCHP] requesting regions, action: whq_wcchp_regions_ajax');
 	}
 
+	if( whq_wcchp_shipping_calc_on_product == '1' && jQuery('.single-product').length ) {
+		jQuery('#rp_shipping_calculator').block({
+			message: null,
+			overlayCSS: {
+				background: '#fff',
+				opacity: 0.6
+			}
+		});
+	}
+
 	jQuery.ajax({
 		url: woocommerce_params.ajax_url,
 		data: {
@@ -245,6 +266,10 @@ function whq_wcchp_cart_chile_detected() {
 					jQuery('#calc_shipping_whq_city_select').prop('disabled', false).empty().append('<option value=""></option>');
 				}
 			}
+
+			if( whq_wcchp_shipping_calc_on_product == '1' && jQuery('.single-product').length ) {
+				jQuery('#rp_shipping_calculator').unblock();
+			}
 		}
 	});
 }
@@ -260,6 +285,16 @@ function whq_wcchp_cart_load_cities( region_code ) {
 
 	if( whq_wcchp_jsdebug ) {
 		console.log('[WCCHP] requesting cities, action: whq_wcchp_cities_ajax');
+	}
+
+	if( whq_wcchp_shipping_calc_on_product == '1' && jQuery('.single-product').length ) {
+		jQuery('#rp_shipping_calculator').block({
+			message: null,
+			overlayCSS: {
+				background: '#fff',
+				opacity: 0.6
+			}
+		});
 	}
 
 	jQuery.ajax({
@@ -352,6 +387,10 @@ function whq_wcchp_cart_load_cities( region_code ) {
 				}
 
 				jQuery('#calc_shipping_city_field').unblock();
+			}
+
+			if( whq_wcchp_shipping_calc_on_product == '1' && jQuery('.single-product').length ) {
+				jQuery('#rp_shipping_calculator').unblock();
 			}
 		}
 	});

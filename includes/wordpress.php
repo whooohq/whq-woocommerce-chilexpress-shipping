@@ -18,27 +18,28 @@ function whq_wcchp_add_action_links ( $links ) {
  */
 add_action( 'admin_init', 'whq_wcchp_incompatible_plugins_check' );
 function whq_wcchp_incompatible_plugins_check() {
+	global $pagenow;
+
 	$show_notice = false;
 
 	$incompatible_plugins = array(
 		'woocommerce-checkout-field-editor/woocommerce-checkout-field-editor.php',
 		'woo-checkout-field-editor-pro/checkout-form-designer.php',
 		'comunas-de-chile-para-woocommerce/woocoomerce-comunas.php',
-		'woocommerce-chilean-peso-currency/woocommerce-chilean-peso.php',
 		'calculo-de-despacho-via-starken-para-woocommerce/calculo-starken-woocommerce.php',
 	);
 
 	if ( current_user_can( 'activate_plugins' ) && ( ! wp_doing_ajax() ) ) {
 		if ( is_array( $incompatible_plugins ) && ! empty( $incompatible_plugins ) ) {
 			foreach ($incompatible_plugins as $plugin) {
-				if ( is_plugin_active( $plugin ) ) {
+				if ( is_plugin_active( $plugin ) || is_plugin_active_for_network( $plugin ) ) {
 					$show_notice = true;
 				}
 			}
 		}
 	}
 
-	if ( true === $show_notice ) {
+	if ( true === $show_notice && ( $pagenow == 'plugins.php' || ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == 'wc-settings' ) && ( isset( $_REQUEST['section'] ) && $_REQUEST['section'] == 'chilexpress' ) ) ) {
 		add_action( 'admin_notices', 'whq_wcchp_incompatible_plugins' );
 	}
 }
@@ -109,3 +110,26 @@ function whq_wcchp_detect_plugin_activation( $plugin, $network_activation ) {
 }
 add_action( 'activated_plugin', 'whq_wcchp_detect_plugin_activation', 10, 2 );
 
+/**
+ * Fix for some incompatible plugins (just the ones that can be fixed from here)
+ */
+function whq_wcchp_remove_incompatible_actions_and_filters() {
+	// Fix for https://wordpress.org/plugins/woocommerce-chilean-peso-currency/
+	if ( function_exists( 'ctala_install_cleancache' ) ) {
+		$plugin = 'woocommerce-chilean-peso-currency/woocommerce-chilean-peso.php';
+
+		//Make sure that woocommerce-chilean-peso-currency plugin is active
+		if ( ! is_multisite() && ! function_exists( 'is_plugin_active' ) ) {
+			include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+		} elseif ( is_multisite() && ! function_exists( 'is_plugin_active_for_network') ) {
+			include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+		}
+
+		if( ! is_multisite() && is_plugin_active( $plugin ) ) {
+			remove_filter( 'woocommerce_states', 'custom_woocommerce_states' );
+		} elseif ( is_multisite() && is_plugin_active_for_network( $plugin ) ) {
+			remove_filter( 'woocommerce_states', 'custom_woocommerce_states' );
+		}
+	}
+}
+add_action( 'init', 'whq_wcchp_remove_incompatible_actions_and_filters', 20 );
