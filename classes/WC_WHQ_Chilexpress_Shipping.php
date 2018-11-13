@@ -39,6 +39,7 @@ function whq_wcchp_init_class() {
 				$this->shipments_types        = $this->get_option( 'shipments_types' );
 				$this->locations_cache        = $this->get_option( 'locations_cache' );
 				$this->extra_wrapper          = $this->get_option( 'extra_wrapper' );
+				$this->extra_wrapper          = $this->get_option( 'soap_api_enviroment' );
 				$this->soap_login             = $this->get_option( 'soap_login' );
 				$this->soap_password          = $this->get_option( 'soap_password' );
 				$this->shipping_zones_support = $this->get_option( 'shipping_zones_support' );
@@ -169,7 +170,7 @@ function whq_wcchp_init_class() {
 					'soap_api_enviroment' => array(
 						'title'       => __( 'Chilexpress API, ambiente', 'whq-wcchp' ),
 						'type'        => 'select',
-						'default'     => 'qaws',
+						'default'     => 'QA',
 						'description' => __( 'WS PROD requiere un usuario y contraseña para la API SOAP de Chilexpress. Ante la duda, mantener como WS QA.', 'whq-wcchp' ),
 						'options'     => array(
 									'QA'   => 'WS QA',
