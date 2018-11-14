@@ -132,12 +132,14 @@ function whq_wcchp_init_class() {
 					'shipping_origin' => array(
 						'title'       => __( 'Origen de los envios', 'whq-wcchp' ),
 						'type'        => 'select',
+						'class'   => 'wc-enhanced-select',
 						'description' => __( 'Ciudad/Localidad de origen, desde donde se realiza el envío', 'whq-wcchp' ),
 						'options'     => $this->get_cities(),
 					),
 					'packaging_heuristic' => array(
 						'title'       => __( 'Método para cálculo de costo de envío (embalaje)', 'whq-wcchp' ),
 						'type'        => 'select',
+						'class'   => 'wc-enhanced-select',
 						'description' => __( 'Heurística utilizada para calcular el precio a base del ensamblaje de varios productos en un mismo pedido (paquete).<br/>
 							<ul>
 								<li>- Unir lados angostos: un solo paquete uniendo los lados más angostos, recomendable cuando son productos pequeños (método por defecto).</li>
@@ -182,6 +184,7 @@ function whq_wcchp_init_class() {
 					'soap_api_enviroment' => array(
 						'title'       => __( 'Chilexpress API, ambiente', 'whq-wcchp' ),
 						'type'        => 'select',
+						'class'   => 'wc-enhanced-select',
 						'default'     => 'QA',
 						'description' => __( 'WS PROD requiere un usuario y contraseña para la API SOAP de Chilexpress. Ante la duda, mantener como WS QA.', 'whq-wcchp' ),
 						'options'     => array(
