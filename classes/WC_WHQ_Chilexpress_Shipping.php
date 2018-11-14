@@ -39,6 +39,7 @@ function whq_wcchp_init_class() {
 				$this->shipments_types        = $this->get_option( 'shipments_types' );
 				$this->locations_cache        = $this->get_option( 'locations_cache' );
 				$this->extra_wrapper          = $this->get_option( 'extra_wrapper' );
+				$this->tax_status             = $this->get_option( 'tax_status' );
 				$this->soap_api_enviroment    = $this->get_option( 'soap_api_enviroment' );
 				$this->soap_login             = $this->get_option( 'soap_login' );
 				$this->soap_password          = $this->get_option( 'soap_password' );
@@ -166,6 +167,17 @@ function whq_wcchp_init_class() {
 						'type'        => 'number',
 						'description' => __( '(En centímetros) El plugin permite que añadas X centímetros extra al paquete que enviarás a Chilexpress, esto, para permitirte contabilizar el posible uso de una caja (y el espacio extra que necesitarás para evitar que lo que envias se dañe). Si ya usas ese estimado extra al momento de ingresar el tamaño de los productos a tu tienda, y no deseas utilizar este extra, simplemente deja el valor en cero.', 'whq-wcchp' ),
 						'default'     => 0,
+					),
+					'tax_status' => array(
+						'title'   => __( 'Tax status', 'woocommerce' ),
+						'type'    => 'select',
+						'class'   => 'wc-enhanced-select',
+						'description' => __( 'Normalmente Chilexpress cobra el impuesto de su servicio de transporte, y no es un gasto que debieras declarar por tu parte.', 'whq-wcchp' ),
+						'default' => 'none',
+						'options' => array(
+							'taxable' => __( 'Taxable', 'woocommerce' ),
+							'none'    => _x( 'None', 'Tax status', 'woocommerce' ),
+						),
 					),
 					'soap_api_enviroment' => array(
 						'title'       => __( 'Chilexpress API, ambiente', 'whq-wcchp' ),
