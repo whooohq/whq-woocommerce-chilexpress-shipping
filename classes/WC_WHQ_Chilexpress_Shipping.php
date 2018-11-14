@@ -39,7 +39,7 @@ function whq_wcchp_init_class() {
 				$this->shipments_types        = $this->get_option( 'shipments_types' );
 				$this->locations_cache        = $this->get_option( 'locations_cache' );
 				$this->extra_wrapper          = $this->get_option( 'extra_wrapper' );
-				$this->extra_wrapper          = $this->get_option( 'soap_api_enviroment' );
+				$this->soap_api_enviroment    = $this->get_option( 'soap_api_enviroment' );
 				$this->soap_login             = $this->get_option( 'soap_login' );
 				$this->soap_password          = $this->get_option( 'soap_password' );
 				$this->shipping_zones_support = $this->get_option( 'shipping_zones_support' );
@@ -253,7 +253,7 @@ function whq_wcchp_init_class() {
 			private function get_cities( $type = 1 ) {
 				global $whq_wcchp_default;
 
-				$soap_api_enviroment = $this->get_chilexpress_option('soap_api_enviroment');
+				$soap_api_enviroment = $this->get_chilexpress_option( 'soap_api_enviroment' );
 
 				$url    = $whq_wcchp_default['plugin_url'] . 'wsdl/WSDL_GeoReferencia_' . $soap_api_enviroment . '.wsdl';
 				$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
@@ -298,7 +298,7 @@ function whq_wcchp_init_class() {
 			private function get_states() {
 				global $whq_wcchp_default;
 
-				$soap_api_enviroment = $this->get_chilexpress_option('soap_api_enviroment');
+				$soap_api_enviroment = $this->get_chilexpress_option( 'soap_api_enviroment' );
 
 				$url    = $whq_wcchp_default['plugin_url'] . 'wsdl/WSDL_GeoReferencia_' .$soap_api_enviroment . '.wsdl';
 				$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
