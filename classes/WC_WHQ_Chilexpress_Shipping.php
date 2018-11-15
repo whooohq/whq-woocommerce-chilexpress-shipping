@@ -268,7 +268,11 @@ function whq_wcchp_init_class() {
 			private function get_cities( $type = 1 ) {
 				global $whq_wcchp_default;
 
-				$soap_api_enviroment = $this->get_chilexpress_option( 'soap_api_enviroment' );
+				$soap_api_enviroment = $this->soap_api_enviroment;
+
+				if ( empty( $soap_api_enviroment ) ) {
+					$soap_api_enviroment = 'QA';
+				}
 
 				$url    = $whq_wcchp_default['plugin_url'] . 'wsdl/WSDL_GeoReferencia_' . $soap_api_enviroment . '.wsdl';
 				$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
@@ -313,7 +317,11 @@ function whq_wcchp_init_class() {
 			private function get_states() {
 				global $whq_wcchp_default;
 
-				$soap_api_enviroment = $this->get_chilexpress_option( 'soap_api_enviroment' );
+				$soap_api_enviroment = $this->soap_api_enviroment;
+
+				if ( empty( $soap_api_enviroment ) ) {
+					$soap_api_enviroment = 'QA';
+				}
 
 				$url    = $whq_wcchp_default['plugin_url'] . 'wsdl/WSDL_GeoReferencia_' .$soap_api_enviroment . '.wsdl';
 				$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
