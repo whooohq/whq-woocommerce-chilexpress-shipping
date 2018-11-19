@@ -39,7 +39,8 @@ function whq_wcchp_init_class() {
 				$this->shipments_types        = $this->get_option( 'shipments_types' );
 				$this->locations_cache        = $this->get_option( 'locations_cache' );
 				$this->extra_wrapper          = $this->get_option( 'extra_wrapper' );
-				$this->extra_wrapper          = $this->get_option( 'soap_api_enviroment' );
+				$this->tax_status             = $this->get_option( 'tax_status' );
+				$this->soap_api_enviroment    = $this->get_option( 'soap_api_enviroment' );
 				$this->soap_login             = $this->get_option( 'soap_login' );
 				$this->soap_password          = $this->get_option( 'soap_password' );
 				$this->shipping_zones_support = $this->get_option( 'shipping_zones_support' );
@@ -131,12 +132,14 @@ function whq_wcchp_init_class() {
 					'shipping_origin' => array(
 						'title'       => __( 'Origen de los envios', 'whq-wcchp' ),
 						'type'        => 'select',
+						'class'   => 'wc-enhanced-select',
 						'description' => __( 'Ciudad/Localidad de origen, desde donde se realiza el envío', 'whq-wcchp' ),
 						'options'     => $this->get_cities(),
 					),
 					'packaging_heuristic' => array(
 						'title'       => __( 'Método para cálculo de costo de envío (embalaje)', 'whq-wcchp' ),
 						'type'        => 'select',
+						'class'   => 'wc-enhanced-select',
 						'description' => __( 'Heurística utilizada para calcular el precio a base del ensamblaje de varios productos en un mismo pedido (paquete).<br/>
 							<ul>
 								<li>- Unir lados angostos: un solo paquete uniendo los lados más angostos, recomendable cuando son productos pequeños (método por defecto).</li>
@@ -167,9 +170,21 @@ function whq_wcchp_init_class() {
 						'description' => __( '(En centímetros) El plugin permite que añadas X centímetros extra al paquete que enviarás a Chilexpress, esto, para permitirte contabilizar el posible uso de una caja (y el espacio extra que necesitarás para evitar que lo que envias se dañe). Si ya usas ese estimado extra al momento de ingresar el tamaño de los productos a tu tienda, y no deseas utilizar este extra, simplemente deja el valor en cero.', 'whq-wcchp' ),
 						'default'     => 0,
 					),
+					'tax_status' => array(
+						'title'   => __( 'Tax status', 'woocommerce' ),
+						'type'    => 'select',
+						'class'   => 'wc-enhanced-select',
+						'description' => __( 'Normalmente Chilexpress cobra el impuesto de su servicio de transporte, y no es un gasto que debieras declarar por tu parte.', 'whq-wcchp' ),
+						'default' => 'none',
+						'options' => array(
+							'taxable' => __( 'Taxable', 'woocommerce' ),
+							'none'    => _x( 'None', 'Tax status', 'woocommerce' ),
+						),
+					),
 					'soap_api_enviroment' => array(
 						'title'       => __( 'Chilexpress API, ambiente', 'whq-wcchp' ),
 						'type'        => 'select',
+						'class'   => 'wc-enhanced-select',
 						'default'     => 'QA',
 						'description' => __( 'WS PROD requiere un usuario y contraseña para la API SOAP de Chilexpress. Ante la duda, mantener como WS QA.', 'whq-wcchp' ),
 						'options'     => array(
@@ -253,7 +268,11 @@ function whq_wcchp_init_class() {
 			private function get_cities( $type = 1 ) {
 				global $whq_wcchp_default;
 
-				$soap_api_enviroment = $this->get_chilexpress_option('soap_api_enviroment');
+				$soap_api_enviroment = $this->soap_api_enviroment;
+
+				if ( empty( $soap_api_enviroment ) ) {
+					$soap_api_enviroment = 'QA';
+				}
 
 				$url    = $whq_wcchp_default['plugin_url'] . 'wsdl/WSDL_GeoReferencia_' . $soap_api_enviroment . '.wsdl';
 				$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
@@ -298,7 +317,11 @@ function whq_wcchp_init_class() {
 			private function get_states() {
 				global $whq_wcchp_default;
 
-				$soap_api_enviroment = $this->get_chilexpress_option('soap_api_enviroment');
+				$soap_api_enviroment = $this->soap_api_enviroment;
+
+				if ( empty( $soap_api_enviroment ) ) {
+					$soap_api_enviroment = 'QA';
+				}
 
 				$url    = $whq_wcchp_default['plugin_url'] . 'wsdl/WSDL_GeoReferencia_' .$soap_api_enviroment . '.wsdl';
 				$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
