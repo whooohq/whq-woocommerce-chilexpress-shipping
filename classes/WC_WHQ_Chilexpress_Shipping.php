@@ -274,7 +274,7 @@ function whq_wcchp_init_class() {
 					$soap_api_enviroment = 'QA';
 				}
 
-				$url    = ($soap_api_enviroment=='QA'?'http://testservices.wschilexpress.com/GeoReferencia?wsdl':'http://ws.ssichilexpress.cl/GeoReferencia?wsdl');
+				$url 	= $whq_wcchp_default['chilexpress_soap_wsdl_' . $soap_api_enviroment] . '/GeoReferencia?wsdl';
 				$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
 				$route  = 'ConsultarCoberturas';
 				$method = 'reqObtenerCobertura';
@@ -323,7 +323,7 @@ function whq_wcchp_init_class() {
 					$soap_api_enviroment = 'QA';
 				}
 
-				$url    = ($soap_api_enviroment=='QA'?'http://testservices.wschilexpress.com/GeoReferencia?wsdl':'http://ws.ssichilexpress.cl/GeoReferencia?wsdl');
+				$url 	= $whq_wcchp_default['chilexpress_soap_wsdl_' . $soap_api_enviroment] . '/GeoReferencia?wsdl';
 				$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
 				$route  = 'ConsultarRegiones';
 				$method = 'reqObtenerRegion';
