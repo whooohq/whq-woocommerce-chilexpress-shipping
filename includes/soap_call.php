@@ -97,7 +97,7 @@ function whq_wcchp_get_tarification($destination, $origin, $weight, $length, $wi
 		$soap_api_enviroment = 'QA';
 	}
 
-	$url    = $whq_wcchp_default['plugin_url'] . 'wsdl/WSDL_Tarificacion_' . $soap_api_enviroment . '.wsdl';
+	$url    = ($soap_api_enviroment=='QA'?'http://testservices.wschilexpress.com/TarificarCourier?wsdl':'http://ws.ssichilexpress.cl/TarificarCourier?wsdl');
 	$ns     = $whq_wcchp_default['chilexpress_url'] . '/TarificaCourier/';
 	$route  = 'TarificarCourier';
 	$method = 'reqValorizarCourier';
