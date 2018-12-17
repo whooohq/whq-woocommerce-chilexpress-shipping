@@ -3,7 +3,7 @@
  * Plugin Name: WooCommerce Chilexpress Shipping
  * Plugin URI: https://github.com/whooohq/whq-woocommerce-chilexpress-shipping
  * Description: Método de envío por Chilexpress para WooCommerce, con sistema de cálculo de envíos automático utilizando la API de Chilexpress
- * Version: 1.4.12
+ * Version: 1.4.15
  * Author: Whooo & contributors
  * Author URI: https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/graphs/contributors
  * License: GPLv2 or later
@@ -50,14 +50,16 @@ if ( ! is_multisite() ) {
 
 if ( true === $whq_wcchp_woocommerce_active ) {
 	$whq_wcchp_default = array(
-		'plugin_version'         => '1.4.12',
-		'plugin_file'            => __FILE__,
-		'plugin_basename'        => plugin_basename(__FILE__),
-		'plugin_path'            => trailingslashit( plugin_dir_path(__FILE__) ),
-		'plugin_url'             => trailingslashit( plugin_dir_url(__FILE__) ),
-		'chilexpress_url'        => 'http://www.chilexpress.cl',
-		'chilexpress_soap_login' => 'UsrTestServicios',
-		'chilexpress_soap_pass'  => 'U$$vr2$tS2T',
+		'plugin_version'             => '1.4.15',
+		'plugin_file'                => __FILE__,
+		'plugin_basename'            => plugin_basename(__FILE__),
+		'plugin_path'                => trailingslashit( plugin_dir_path(__FILE__) ),
+		'plugin_url'                 => trailingslashit( plugin_dir_url(__FILE__) ),
+		'chilexpress_url'            => 'http://www.chilexpress.cl',
+		'chilexpress_soap_login'     => 'UsrTestServicios',
+		'chilexpress_soap_pass'      => 'U$$vr2$tS2T',
+		'chilexpress_soap_wsdl_QA'   => 'http://testservices.wschilexpress.com',
+		'chilexpress_soap_wsdl_PROD' => 'http://ws.ssichilexpress.cl',
 	);
 
 	if ( file_exists( $whq_wcchp_default['plugin_path'] . 'includes/helpers.php' ) ) {

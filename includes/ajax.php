@@ -17,7 +17,7 @@ function whq_wcchp_regions_ajax() {
 		$soap_api_enviroment = 'QA';
 	}
 
-	$url    = $whq_wcchp_default['plugin_url'] . 'wsdl/WSDL_GeoReferencia_' . $soap_api_enviroment . '.wsdl';
+	$url 	= $whq_wcchp_default['chilexpress_soap_wsdl_' . $soap_api_enviroment] . '/GeoReferencia?wsdl';
 	$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
 	$route  = 'ConsultarRegiones';
 	$method = 'reqObtenerRegion';
@@ -53,7 +53,7 @@ function whq_wcchp_cities_ajax() {
 		$soap_api_enviroment = 'QA';
 	}
 
-	$url    = $whq_wcchp_default['plugin_url'] . 'wsdl/WSDL_GeoReferencia_' . $soap_api_enviroment . '.wsdl';
+	$url    = $whq_wcchp_default['chilexpress_soap_wsdl_' . $soap_api_enviroment] . '/GeoReferencia?wsdl';
 	$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
 	$route  = 'ConsultarCoberturas';
 	$method = 'reqObtenerCobertura';

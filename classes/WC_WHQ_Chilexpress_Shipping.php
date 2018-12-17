@@ -195,13 +195,13 @@ function whq_wcchp_init_class() {
 					'soap_login' => array(
 						'title'       => __( 'Chilexpress API, usuario', 'whq-wcchp' ),
 						'type'        => 'text',
-						'description' => __( '(Opcional) Usuario a utilizar en las llamadas a la API de Chilexpress. Dejar en blanco para utilizar datos de conexión por defecto (públicos) que Chilexpress provee.', 'whq-wcchp' ),
+						'description' => __( '(Opcional) Usuario a utilizar en las llamadas a la API de Chilexpress. Ante la duda, mantener en blanco.', 'whq-wcchp' ),
 						'default'     => '',
 					),
 					'soap_password' => array(
 						'title'       => __( 'Chilexpress API, contraseña', 'whq-wcchp' ),
 						'type'        => 'text', // https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/45
-						'description' => __( '(Opcional) Contraseña a utilizar en las llamadas a la API de Chilexpress. Dejar en blanco para utilizar datos de conexión por defecto (públicos) que Chilexpress provee.', 'whq-wcchp' ),
+						'description' => __( '(Opcional) Contraseña a utilizar en las llamadas a la API de Chilexpress. Ante la duda, mantener en blanco.', 'whq-wcchp' ),
 						'default'     => '',
 						'desc_tip'    => false,
 					),
@@ -274,7 +274,7 @@ function whq_wcchp_init_class() {
 					$soap_api_enviroment = 'QA';
 				}
 
-				$url    = ($soap_api_enviroment=='QA'?'http://testservices.wschilexpress.com/GeoReferencia?wsdl':'http://ws.ssichilexpress.cl/GeoReferencia?wsdl');
+				$url 	= $whq_wcchp_default['chilexpress_soap_wsdl_' . $soap_api_enviroment] . '/GeoReferencia?wsdl';
 				$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
 				$route  = 'ConsultarCoberturas';
 				$method = 'reqObtenerCobertura';
@@ -323,7 +323,7 @@ function whq_wcchp_init_class() {
 					$soap_api_enviroment = 'QA';
 				}
 
-				$url    = ($soap_api_enviroment=='QA'?'http://testservices.wschilexpress.com/GeoReferencia?wsdl':'http://ws.ssichilexpress.cl/GeoReferencia?wsdl');
+				$url 	= $whq_wcchp_default['chilexpress_soap_wsdl_' . $soap_api_enviroment] . '/GeoReferencia?wsdl';
 				$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
 				$route  = 'ConsultarRegiones';
 				$method = 'reqObtenerRegion';
