@@ -83,5 +83,8 @@ Ayuda y aportes (vía Pull Requests, aceptando la [guía de contribución](https
 
 ¡Gracias!
 
+### Changelog (registro de cambios)
+[Disponible acá](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/blob/master/CHANGELOG.md).
+
 ### Licencia
 [GPLv2 or later](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/blob/master/LICENSE)

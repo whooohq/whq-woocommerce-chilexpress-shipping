@@ -268,7 +268,7 @@ function whq_wcchp_init_class() {
 			private function get_cities( $type = 1 ) {
 				global $whq_wcchp_default;
 
-				$soap_api_enviroment = $this->soap_api_enviroment;
+				$soap_api_enviroment = $this->get_chilexpress_option( 'soap_api_enviroment' );
 
 				if ( empty( $soap_api_enviroment ) ) {
 					$soap_api_enviroment = 'QA';
@@ -317,7 +317,7 @@ function whq_wcchp_init_class() {
 			private function get_states() {
 				global $whq_wcchp_default;
 
-				$soap_api_enviroment = $this->soap_api_enviroment;
+				$soap_api_enviroment = $this->get_chilexpress_option( 'soap_api_enviroment' );
 
 				if ( empty( $soap_api_enviroment ) ) {
 					$soap_api_enviroment = 'QA';
@@ -424,7 +424,7 @@ function whq_wcchp_init_class() {
 					$_product = $values['data'];
 
 					//Calculates the final package weight.
-					$weight   = round( $weight + $_product->get_weight() * $values['quantity'],3 );
+					$weight = round( $weight + $_product->get_weight() * $values['quantity'], 3 );
 
 					//Generates the package for the current product.
 					$length = round( $_product->get_length(), 1 );
@@ -726,7 +726,7 @@ function whq_wcchp_init_class() {
 						//DÍA HÁBIL SUBSIGUIENTE:4
 						//TERCER DÍA:5
 
-						$supported_shipments_types = $this->get_chilexpress_option('shipments_types');
+						$supported_shipments_types = $this->get_chilexpress_option( 'shipments_types' );
 
 						if ( false === $supported_shipments_types ) {
 							//We need some default values in case the admin hasn't configured this yet
