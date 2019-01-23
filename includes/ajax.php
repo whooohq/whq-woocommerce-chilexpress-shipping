@@ -11,7 +11,13 @@ add_action( 'wp_ajax_nopriv_whq_wcchp_regions_ajax', 'whq_wcchp_regions_ajax' );
 function whq_wcchp_regions_ajax() {
 	global $whq_wcchp_default;
 
-	$url    = $whq_wcchp_default['plugin_url'] . 'wsdl/WSDL_GeoReferencia_QA.wsdl';
+	$soap_api_enviroment = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_api_enviroment' );
+
+	if ( empty( $soap_api_enviroment ) ) {
+		$soap_api_enviroment = 'QA';
+	}
+
+	$url 	= $whq_wcchp_default['chilexpress_soap_wsdl_' . $soap_api_enviroment] . '/GeoReferencia?wsdl';
 	$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
 	$route  = 'ConsultarRegiones';
 	$method = 'reqObtenerRegion';
@@ -41,7 +47,13 @@ add_action( 'wp_ajax_nopriv_whq_wcchp_cities_ajax', 'whq_wcchp_cities_ajax' );
 function whq_wcchp_cities_ajax() {
 	global $whq_wcchp_default;
 
-	$url    = $whq_wcchp_default['plugin_url'] . 'wsdl/WSDL_GeoReferencia_QA.wsdl';
+	$soap_api_enviroment = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_api_enviroment' );
+
+	if ( empty( $soap_api_enviroment ) ) {
+		$soap_api_enviroment = 'QA';
+	}
+
+	$url    = $whq_wcchp_default['chilexpress_soap_wsdl_' . $soap_api_enviroment] . '/GeoReferencia?wsdl';
 	$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
 	$route  = 'ConsultarCoberturas';
 	$method = 'reqObtenerCobertura';
@@ -61,7 +73,7 @@ function whq_wcchp_cities_ajax() {
 	}
 
 	if( false === $cities || NULL === $cities ) {
-		$cities = new WC_WHQ_Cities_CL();
+		$cities = new WC_WHQ_States_Cities_CL();
 
 		if( false !== $cities && ! empty( $cities ) ) {
 			wp_send_json_success( $cities->delivery );
@@ -79,6 +91,30 @@ function whq_wcchp_cities_ajax() {
 add_action( 'wp_ajax_whq_wcchp_incompatible_plugins_dismiss_ajax', 'whq_wcchp_dismiss_admin_notice' );
 function whq_wcchp_dismiss_admin_notice() {
 	update_option( 'whq_wcchp_incompatible_plugins', 'dismissed', 'no' );
+
+	echo '1';
+	die();
+}
+
+/**
+ * Disable Shipping Zones support
+ */
+add_action( 'wp_ajax_whq_wcchp_disable_shipping_zones_support_ajax', 'whq_wcchp_disable_shipping_zones_support' );
+function whq_wcchp_disable_shipping_zones_support() {
+	global $wpdb;
+
+	$instance_id = absint( $_POST['instance_id'] );
+
+	$wcchp_options                           = get_option( 'woocommerce_chilexpress_settings' );
+	$wcchp_options['shipping_zones_support'] = 'no';
+	update_option( 'woocommerce_chilexpress_settings', $wcchp_options );
+
+	$zone = new WC_Shipping_Zone();
+	$zone->delete_shipping_method( $instance_id );
+
+	$wpdb->delete( $wpdb->prefix . 'woocommerce_shipping_zone_methods', array( 'instance_id' => $instance_id ) );
+
+	delete_option( 'woocommerce_chilexpress_' . $instance_id . '_settings' );
 
 	echo '1';
 	die();

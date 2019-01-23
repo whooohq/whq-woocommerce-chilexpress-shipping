@@ -1,5 +1,5 @@
 <?php
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	die();
 }
 
@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) {
  * Cities CL Class for WooCommerce
  */
 
-class WC_WHQ_Cities_CL {
+class WC_WHQ_States_Cities_CL {
 	/**
 	* Constructor cities class
 	*
@@ -15,6 +15,24 @@ class WC_WHQ_Cities_CL {
 	* @return void
 	*/
 	public function __construct() {
+		$this->states = [
+			'R15' => 'ARICA Y PARINACOTA',
+			'R1'  => 'TARAPACA',
+			'R2'  => 'ANTOFAGASTA',
+			'R3'  => 'ATACAMA',
+			'R4'  => 'COQUIMBO',
+			'R5'  => 'VALPARAISO',
+			'RM'  => 'METROPOLITANA DE SANTIAGO',
+			'R6'  => 'LIBERTADOR GRAL BERNARDO O HIGGINS',
+			'R7'  => 'MAULE',
+			'R8'  => 'BIOBIO',
+			'R9'  => 'ARAUCANIA',
+			'R14' => 'LOS RIOS',
+			'R10' => 'LOS LAGOS',
+			'R11' => 'AISEN DEL GRAL. C. IBANEZ DEL CAMPO',
+			'R12' => 'MAGALLANES Y LA ANTARTICA CHILENA',
+		];
+
 		//1, Admission
 		//2, Delivery
 		//3, Both
