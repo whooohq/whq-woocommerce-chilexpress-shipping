@@ -17,6 +17,7 @@ var whq_wcchp_cities_hardcoded = false;
 var whq_wcchp_object_to_array;
 var whq_wcchp_chilexpress_noservice;
 var whq_wcchp_chilexpress_noservice_text;
+var whq_wcchp_jsdebug = false;
 
 jQuery(document).ready(function( $ ) {
 	//Only on WooCommerce's Checkout
@@ -58,7 +59,7 @@ jQuery(document).ready(function( $ ) {
 			}
 		});
 
-		//Manage billing regions and load cities
+		// Manage billing regions and load cities
 		jQuery('body').on('change', '#billing_whq_region_select', function() {
 			if( whq_wcchp_jsdebug ) {
 				console.log('[WCCHP] change detected in #billing_whq_region_select');
@@ -386,7 +387,7 @@ function whq_wcchp_checkout_chile_detected() {
 					jQuery('#shipping_whq_city_select').prop('disabled', false).empty().append('<option value=""></option>');
 				}
 
-				//Unblock the UI
+				// Unblock the UI
 				jQuery('#billing_state_field, #shipping_state_field').unblock();
 
 				//Copy values to the hidden Inputs, for Chrome auto-complete
@@ -585,6 +586,18 @@ function whq_wcchp_checkout_inputs_replace() {
 			}
 		});
 
+		// https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/151
+		if( jQuery("#shipping_city").is("select") ) {
+			if( whq_wcchp_jsdebug ) {
+				console.log( 'City select is not compatible. Replacing...' );
+			}
+
+			jQuery("#shipping_city").remove();
+			setTimeout(function(){
+				jQuery("#shipping_whq_city").before('<input type="text" class="input-text" value="" placeholder="" name="shipping_city" id="shipping_city" autocomplete="address-level1" style="display: none;">')
+			}, 100);
+		}
+
 		if( ! jQuery('#billing_whq_city_select, #shipping_whq_city_select').hasClass('select2-hidden-accessible') ) {
 			jQuery('#billing_whq_city_select, #shipping_whq_city_select').select2({
 				placeholder: 'Selecciona la Comuna o Ciudad.'
@@ -624,6 +637,18 @@ function whq_wcchp_checkout_inputs_replace() {
 			jQuery('#billing_whq_region_select, #shipping_whq_region_select').select2({
 				placeholder: 'Selecciona la Región primero.'
 			});
+		}
+
+		// https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/151
+		if( jQuery("#billing_state").is("select") ) {
+			if( whq_wcchp_jsdebug ) {
+				console.log( 'State select is not compatible. Replacing...' );
+			}
+
+			jQuery("#billing_state").remove();
+			setTimeout(function(){
+				jQuery("#billing_whq_region").before('<input type="text" class="input-text" value="" placeholder="" name="billing_state" id="billing_state" autocomplete="address-level1" style="display: none;">')
+			}, 100);
 		}
 
 		//Inserts our trigger class in body
