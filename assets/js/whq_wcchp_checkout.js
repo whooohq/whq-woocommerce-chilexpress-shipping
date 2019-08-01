@@ -17,7 +17,6 @@ var whq_wcchp_cities_hardcoded = false;
 var whq_wcchp_object_to_array;
 var whq_wcchp_chilexpress_noservice;
 var whq_wcchp_chilexpress_noservice_text;
-var whq_wcchp_jsdebug = true;
 
 jQuery(document).ready(function( $ ) {
 	//Only on WooCommerce's Checkout
