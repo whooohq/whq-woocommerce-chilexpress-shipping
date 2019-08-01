@@ -17,6 +17,7 @@ var whq_wcchp_cities_hardcoded = false;
 var whq_wcchp_object_to_array;
 var whq_wcchp_chilexpress_noservice;
 var whq_wcchp_chilexpress_noservice_text;
+var whq_wcchp_jsdebug = true;
 
 jQuery(document).ready(function( $ ) {
 	//Only on WooCommerce's Checkout
@@ -81,7 +82,7 @@ jQuery(document).ready(function( $ ) {
 			whq_wcchp_checkout_load_cities( whq_wcchp_region_billing_array[0], 'billing' );
 		});
 
-		//Manage shipping regions and load cities
+		// Manage shipping regions and load cities
 		jQuery('body').on('change', '#shipping_whq_region_select', function() {
 			if( whq_wcchp_jsdebug ) {
 				console.log('[WCCHP] change detected in #shipping_whq_region_select');
@@ -90,10 +91,16 @@ jQuery(document).ready(function( $ ) {
 			whq_wcchp_region_shipping_select = jQuery('#shipping_whq_region_select').val();
 			whq_wcchp_region_shipping_array  = whq_wcchp_region_shipping_select.split('|');
 
-			jQuery('#shipping_state').val( whq_wcchp_region_shipping_array[1] );
-			jQuery('#shipping_whq_region').val( whq_wcchp_region_shipping_array[0] );
+			// https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/151
+			if ( jQuery('#shipping_state').length ) {
+				jQuery('#shipping_state').val( whq_wcchp_region_shipping_array[1] );
+				jQuery('#shipping_whq_region').val( whq_wcchp_region_shipping_array[0] );
+			} else {
+				jQuery('#billing_state').val( whq_wcchp_region_shipping_array[1] );
+				jQuery('#billing_whq_region').val( whq_wcchp_region_shipping_array[0] );
+			}
 
-			jQuery('#shipping_city_field').block({
+			jQuery('#shipping_city_field, #billing_city_field').block({
 				message: null,
 				overlayCSS: {
 					background: '#fff',
@@ -104,7 +111,7 @@ jQuery(document).ready(function( $ ) {
 			whq_wcchp_checkout_load_cities( whq_wcchp_region_shipping_array[0], 'shipping' );
 		});
 
-		//Manage billing cities
+		// Manage billing cities
 		jQuery('body').on('change', '#billing_whq_city_select', function() {
 			if( whq_wcchp_jsdebug ) {
 				console.log('[WCCHP] change detected in #billing_whq_city_select');
@@ -117,7 +124,7 @@ jQuery(document).ready(function( $ ) {
 			jQuery('#billing_whq_city').val( whq_wcchp_city_array[0] );
 		});
 
-		//Manage shipping cities
+		// Manage shipping cities
 		jQuery('body').on('change', '#shipping_whq_city_select', function() {
 			if( whq_wcchp_jsdebug ) {
 				console.log('[WCCHP] change detected in #shipping_whq_city_select');
@@ -130,14 +137,14 @@ jQuery(document).ready(function( $ ) {
 			jQuery('#shipping_whq_city').val( whq_wcchp_city_array[0] );
 		});
 
-		//Fix Select2 width
+		// Fix Select2 width
 		jQuery('#ship-to-different-address-checkbox').click(function() {
 			if ( jQuery('#ship-to-different-address-checkbox').is(':checked') ) {
 				jQuery('.select2-container').css('width', '100%');
 			}
 		});
 
-		//No Chilexpress API available?
+		// No Chilexpress API available?
 		jQuery('body').on('click', '.shipping_method', function() {
 			if( ! jQuery('body').hasClass('wc-chilexpress-enabled') ) {
 				if( whq_wcchp_jsdebug ) {
@@ -304,7 +311,7 @@ function whq_wcchp_checkout_chile_detected() {
 					console.log( '[WCCHP] chilexpress api down' );
 				}
 
-				//Chilexpress API down? error?
+				// Chilexpress API down? error?
 				whq_wcchp_checkout_inputs_restore();
 			} else {
 				if( whq_wcchp_jsdebug ) {
@@ -315,10 +322,17 @@ function whq_wcchp_checkout_chile_detected() {
 
 				whq_wcchp_region_billing_name  = jQuery('#billing_state').val();
 				whq_wcchp_region_billing_code  = '';
-				whq_wcchp_region_shipping_name = jQuery('#shipping_state').val();
-				whq_wcchp_region_shipping_code = '';
 
-				//Loop every region
+				// https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/151
+				if ( jQuery('#shipping_state').length ) {
+					whq_wcchp_region_shipping_name = jQuery('#shipping_state').val();
+					whq_wcchp_region_shipping_code = '';
+				} else {
+					whq_wcchp_region_shipping_name = jQuery('#billing_state').val();
+					whq_wcchp_region_shipping_code = '';
+				}
+
+				// Loop every region
 				jQuery(response.data).each(function( i ) {
 					if( whq_wcchp_jsdebug ) {
 						console.log( '[WCCHP] loop regions' );
@@ -343,7 +357,7 @@ function whq_wcchp_checkout_chile_detected() {
 					}
 				});
 
-				//Load cities for billing
+				// Load cities for billing
 				if( whq_wcchp_region_billing_code !== '' ) {
 					if( whq_wcchp_jsdebug ) {
 						console.log( 'loading cities for billing' );
@@ -358,7 +372,7 @@ function whq_wcchp_checkout_chile_detected() {
 					jQuery('#billing_whq_city_select').prop('disabled', false).empty().append('<option value=""></option>');
 				}
 
-				//Load cities for shipping
+				// Load cities for shipping
 				if( whq_wcchp_region_shipping_code !== '' ) {
 					if( whq_wcchp_jsdebug ) {
 						console.log( 'loading cities for shipping' );
@@ -389,21 +403,33 @@ function whq_wcchp_checkout_chile_detected() {
 				whq_wcchp_region_billing_select = jQuery('#billing_whq_region_select').val();
 				whq_wcchp_region_billing_array  = whq_wcchp_region_billing_select.split('|');
 
-				if( whq_wcchp_region_billing_select !== false ) {
+				if ( whq_wcchp_region_billing_select !== false ) {
 					jQuery('#billing_state').val( whq_wcchp_region_billing_array[1] );
 					jQuery('#billing_whq_region').val( whq_wcchp_region_billing_array[0] );
 				}
 
-				whq_wcchp_city_select = jQuery('#shipping_whq_city_select').val();
-				whq_wcchp_city_array  = whq_wcchp_city_select.split('|');
+				// https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/151
+				if ( jQuery('#shipping_state').length ) {
+					whq_wcchp_city_select = jQuery('#shipping_whq_city_select').val();
+					whq_wcchp_city_array  = whq_wcchp_city_select.split('|');
+				} else {
+					whq_wcchp_city_select = jQuery('#billing_whq_city_select').val();
+					whq_wcchp_city_array  = whq_wcchp_city_select.split('|');
+				}
 
-				if( whq_wcchp_city_select !== false ) {
+				if ( whq_wcchp_city_select !== false ) {
 					jQuery('#shipping_city').val( whq_wcchp_city_array[1] );
 					jQuery('#shipping_whq_city').val( whq_wcchp_city_array[0] );
 				}
 
-				whq_wcchp_region_shipping_select = jQuery('#shipping_whq_region_select').val();
-				whq_wcchp_region_shipping_array  = whq_wcchp_region_shipping_select.split('|');
+				// https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/151
+				if ( jQuery('#shipping_state').length ) {
+					whq_wcchp_region_shipping_select = jQuery('#shipping_whq_region_select').val();
+					whq_wcchp_region_shipping_array  = whq_wcchp_region_shipping_select.split('|');
+				} else {
+					whq_wcchp_region_shipping_select = jQuery('#billing_whq_region_select').val();
+					whq_wcchp_region_shipping_array  = whq_wcchp_region_shipping_select.split('|');
+				}
 
 				if( whq_wcchp_region_shipping_select !== false ) {
 					jQuery('#shipping_state').val( whq_wcchp_region_shipping_array[1] );
@@ -537,15 +563,19 @@ function whq_wcchp_checkout_inputs_replace() {
 			console.log( 'replacing city' );
 		}
 
-		//Inserts new fields for manipulation and select
+		// Inserts new fields for manipulation and select
 		jQuery("#billing_city").after('<input type="text" class="input-text" name="billing_whq_city" id="billing_whq_city" />');
 		jQuery("#billing_whq_city").after('<select id="billing_whq_city_select" name="billing_whq_city_select" disabled="disabled"><option value="">Selecciona la región primero.</option></select>');
 		jQuery('#billing_city').hide();
 		jQuery('#billing_whq_city').hide();
-		jQuery("#shipping_city").after('<input type="text" class="input-text" name="shipping_whq_city" id="shipping_whq_city" />');
-		jQuery("#shipping_whq_city").after('<select id="shipping_whq_city_select" name="shipping_whq_city_select" disabled="disabled"><option value="">Selecciona la región primero.</option></select>');
-		jQuery('#shipping_city').hide();
-		jQuery('#shipping_whq_city').hide();
+
+		// https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/151
+		if ( jQuery('#shipping_state').length ) {
+			jQuery("#shipping_city").after('<input type="text" class="input-text" name="shipping_whq_city" id="shipping_whq_city" />');
+			jQuery("#shipping_whq_city").after('<select id="shipping_whq_city_select" name="shipping_whq_city_select" disabled="disabled"><option value="">Selecciona la región primero.</option></select>');
+			jQuery('#shipping_city').hide();
+			jQuery('#shipping_whq_city').hide();
+		}
 
 		//Block UI
 		jQuery('#billing_city_field, #shipping_city_field').block({
@@ -568,15 +598,19 @@ function whq_wcchp_checkout_inputs_replace() {
 			console.log( 'replacing region' );
 		}
 
-		//Inserts new fields for manipulation and select
+		// Inserts new fields for manipulation and select
 		jQuery("#billing_state").after('<input type="text" class="input-text" name="billing_whq_region" id="billing_whq_region" />');
 		jQuery("#billing_whq_region").after('<select id="billing_whq_region_select" name="billing_whq_region_select" disabled="disabled"></select>');
 		jQuery('#billing_state').hide();
 		jQuery('#billing_whq_region').hide();
-		jQuery("#shipping_state").after('<input type="text" class="input-text" name="shipping_whq_region" id="shipping_whq_region" />');
-		jQuery("#shipping_whq_region").after('<select id="shipping_whq_region_select" name="shipping_whq_region_select" disabled="disabled"></select>');
-		jQuery('#shipping_state').hide();
-		jQuery('#shipping_whq_region').hide();
+
+		// https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/151
+		if( jQuery('#shipping_state').length ) {
+			jQuery("#shipping_state").after('<input type="text" class="input-text" name="shipping_whq_region" id="shipping_whq_region" />');
+			jQuery('#shipping_state').hide();
+			jQuery("#shipping_whq_region").after('<select id="shipping_whq_region_select" name="shipping_whq_region_select" disabled="disabled"></select>');
+			jQuery('#shipping_whq_region').hide();
+		}
 
 		//Block UI
 		jQuery('#billing_state_field, #shipping_state_field').block({
@@ -612,7 +646,7 @@ function whq_wcchp_checkout_inputs_restore() {
 			console.log( 'restoring fields' );
 		}
 
-		//Remove inserted fields
+		// Remove inserted fields
 		if( jQuery('#billing_whq_city_select, #shipping_whq_city_select').is('select') ) {
 			jQuery("#billing_whq_city").remove();
 			jQuery("#billing_whq_city_select").next('.select2-container').remove();
@@ -631,17 +665,17 @@ function whq_wcchp_checkout_inputs_restore() {
 			jQuery("#shipping_whq_region_select").remove();
 		}
 
-		//Deselect Chilexpress
+		// De-select Chilexpress
 		jQuery('.shipping_method').not('input[value^="chilexpress"]:first').click();
 
-		//Show the old ones
+		// Show the old ones
 		jQuery('#billing_state, #billing_city, #shipping_state, #shipping_city').show();
 
-		//Unblock the UI
+		// Unblock the UI
 		jQuery('#shipping_city_field, #shipping_state_field').unblock();
 		jQuery('#billing_city_field, #billing_state_field').unblock();
 
-		//Remove our trigger class from body
+		// Remove our trigger class from body
 		jQuery('body').removeClass('wc-chilexpress-enabled');
 	}
 

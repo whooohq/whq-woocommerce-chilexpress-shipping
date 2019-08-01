@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.4.17
+
+* Bugix: arreglo para tiendas que fuerzan envíos a dirección de facturación. Ver [issue #151](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/151). Gracias @juanitagonzalez por el aviso.
+
 ### 1.4.16
 
 * Probada compatibilidad con WordPress 5

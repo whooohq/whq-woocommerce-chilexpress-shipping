@@ -3,7 +3,7 @@
  * Plugin Name: WooCommerce Chilexpress Shipping
  * Plugin URI: https://github.com/whooohq/whq-woocommerce-chilexpress-shipping
  * Description: Método de envío por Chilexpress para WooCommerce, con sistema de cálculo de envíos automático utilizando la API de Chilexpress
- * Version: 1.4.16
+ * Version: 1.4.17
  * Author: Whooo & contributors
  * Author URI: https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/graphs/contributors
  * License: GPLv2 or later
@@ -11,8 +11,8 @@
  *
  * Text Domain: whq-wcchp
  *
- * WC requires at least: 3.4.0
- * WC tested up to: 3.5.0
+ * WC requires at least: 3.6.0
+ * WC tested up to: 3.6.0
  */
 
 /**
@@ -50,7 +50,7 @@ if ( ! is_multisite() ) {
 
 if ( true === $whq_wcchp_woocommerce_active ) {
 	$whq_wcchp_default = array(
-		'plugin_version'             => '1.4.16',
+		'plugin_version'             => '1.4.17',
 		'plugin_file'                => __FILE__,
 		'plugin_basename'            => plugin_basename(__FILE__),
 		'plugin_path'                => trailingslashit( plugin_dir_path(__FILE__) ),
