@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.4.18
+
+* Bugix: arreglo para tiendas que venden en más de un país. Ver [issue #151](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/154). Gracias @garretonfco por el aviso.
+
 ### 1.4.17
 
 * Bugix: arreglo para tiendas que fuerzan envíos a dirección de facturación. Ver [issue #151](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/151). Gracias @juanitagonzalez por el aviso.
