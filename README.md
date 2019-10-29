@@ -1,4 +1,4 @@
-# WooCommerce Chilexpress Shipping
+# Chilexpress Shipping for WooCommerce
 
 ## Descripción
 Añade a Chilexpress como método de envío para WooCommerce.

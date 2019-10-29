@@ -690,7 +690,7 @@ function whq_wcchp_init_class() {
 			 */
 			private function get_tarification( $package, $weight, $length, $width, $height ) {
 				if ( isset( $_POST['s_city'] ) && ! is_null( $_POST['s_city'] ) ) {
-					$city = $_POST['s_city'];
+					$city = sanitize_text_field( $_POST['s_city'] );
 				} else {
 					//And what about WC()->customer->get_shipping_city() ?
 					$city = $package['destination']['city'];
