@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.4.19
+* Cambio de nombre requerido por el equipo de revisión de plugins de WordPress.
+
 ### 1.4.18
 
 * Bugix: arreglo para tiendas que venden en más de un país. Ver [issue #151](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/154). Gracias @garretonfco por el aviso.
