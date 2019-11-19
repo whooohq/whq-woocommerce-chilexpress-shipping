@@ -154,7 +154,7 @@ function whq_wcchp_init_class() {
 					'shipments_types' => array(
 						'title'       => __( 'Tipos de envíos soportados', 'whq-wcchp' ),
 						'type'        => 'multiselect',
-						'description' => __( 'Selecciona los tipos de envíos a soportar.<br/>Considera que dependiendo de la ubicación de origen de tus envíos, algunas localidades extremas podrían no contar con un tipo de envío normal (día hábil siguiente), y solo tener disponible envío al tercer día, por lo que lo recomendado es que selecciones al menos "día hábil siguiente", "día hábil subsiguiente" y "tercer día".<br/>Ten presente que los envíos Ultra Rápidos y Overnight están disponibles solo en ciertas ciudades de origen y para algunos destinos.<br/>También <strong>debes tener en cuenta que el envío Ultra Rápido debería ser despachado inmediatamente por tu tienda para cumplir con las espectativas del comprador</strong>.<br/>Conoce más sobre estos <a href="http://www.chilexpress.cl/tiempos-de-entrega-envios-paquetes-documentos" target="_blank" rel="noopener noreferrer">tipos de envíos, acá</a>.', 'whq-wcchp' ),
+						'description' => __( 'Selecciona los tipos de envíos a soportar.<br/>Considera que dependiendo de la ubicación de origen de tus envíos, algunas localidades extremas podrían no contar con un tipo de envío normal (día hábil siguiente), y solo tener disponible envío al tercer día, por lo que <strong>lo recomendado es que selecciones al menos "día hábil siguiente", "día hábil subsiguiente" y "tercer día"</strong>.<br/>Ten presente que los envíos Ultra Rápidos y Overnight están disponibles solo en ciertas ciudades de origen y para algunos destinos.<br/>También <strong>debes tener en cuenta que el envío Ultra Rápido debería ser despachado inmediatamente por tu tienda para cumplir con las espectativas del comprador</strong>.<br/>Conoce más sobre estos <a href="http://www.chilexpress.cl/tiempos-de-entrega-envios-paquetes-documentos" target="_blank" rel="noopener noreferrer">tipos de envíos, acá</a>.', 'whq-wcchp' ),
 						'options'     => $this->get_shipments_types(),
 						'default'     => array( 3, 4, 5 ),
 					),
@@ -728,10 +728,14 @@ function whq_wcchp_init_class() {
 
 						$supported_shipments_types = $this->get_chilexpress_option( 'shipments_types' );
 
-						// https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/164
-						if ( false === $supported_shipments_types || ! is_array( $supported_shipments_types ) ) {
+						if ( false === $supported_shipments_types ) {
 							//We need some default values in case the admin hasn't configured this yet
 							$supported_shipments_types = array( 2, 3, 4, 5 );
+						}
+
+						// https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/164
+						if ( ! is_array( $supported_shipments_types ) ) {
+							$supported_shipments_types = array( $supported_shipments_types );
 						}
 
 						write_log( $supported_shipments_types );
