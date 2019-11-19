@@ -728,9 +728,10 @@ function whq_wcchp_init_class() {
 
 						$supported_shipments_types = $this->get_chilexpress_option( 'shipments_types' );
 
-						if ( false === $supported_shipments_types ) {
+						// https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/164
+						if ( false === $supported_shipments_types || ! is_array( $supported_shipments_types ) ) {
 							//We need some default values in case the admin hasn't configured this yet
-							$supported_shipments_types = array( 2, 3, 4 );
+							$supported_shipments_types = array( 2, 3, 4, 5 );
 						}
 
 						write_log( $supported_shipments_types );

@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.4.20
+* Bugix: arreglo en caso de configuración no válida en tipos de envío soportados. Ver [issue #164](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/164). Gracias @Fenomenoide21 por el aviso.
+
 ### 1.4.19
 * Cambio de nombre requerido por el equipo de revisión de plugins de WordPress.
 
