@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.4.21
+* Probada compatibilidad con WooCommerce 4.0
+
 ### 1.4.20
 * Bugix: arreglo en caso de configuración no válida en tipos de envío soportados. Ver [issue #164](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/164). Gracias @Fenomenoide21 por el aviso.
 

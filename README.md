@@ -23,7 +23,7 @@ Ver página oficial del plugin en [WordPress.org](https://wordpress.org/plugins/
 ## Preguntas Frecuentes
 
 ### ¿Puedo ver el plugin funcionando en vivo?
-Claro. Visita [WPChilexpress](http://wpchilexpress.whooohq.com).
+Claro. Visita [WPChilexpress](https://wpchilexpress.whooohq.com).
 
 
 ### Extensión SOAP requerida.
