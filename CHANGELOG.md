@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.4.22
+* Resuelto bug con WordPress Multisite. Ver [issue #71](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/71#issuecomment-653269512). Gracias @LisetteHR por el aviso.
+* Probada compatibilidad con WooCommerce 4.2
+
 ### 1.4.21
 * Probada compatibilidad con WooCommerce 4.0
 
