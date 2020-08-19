@@ -88,7 +88,7 @@ jQuery(document).ready(function( $ ) {
 			whq_wcchp_cart_load_cities( whq_wcchp_region_array[0] );
 		});
 
-		//Manage cities
+		// Manage cities
 		jQuery('body').on('change', '#calc_shipping_whq_city_select', function() {
 			if( whq_wcchp_jsdebug ) {
 				console.log('[WCCHP] change detected in #calc_shipping_whq_city_select');
@@ -104,14 +104,14 @@ jQuery(document).ready(function( $ ) {
 		whq_wcchp_chilexpress_down = setInterval(function() {
 			if( jQuery('body').hasClass('wc-chilexpress-down') && jQuery('input[value^="chilexpress"]').length ) {
 				if( ! jQuery('#wc-chilexpress-verify').length ) {
-					//Disables chilexpress shipping option
+					// Disables chilexpress shipping option
 					jQuery('input[value^="chilexpress"]').next('label').children('.amount').remove();
 					jQuery('input[value^="chilexpress"]').prop('disabled', true);
 
-					//Adds the option to check Chilexpress availability
+					// Adds the option to check Chilexpress availability
 					jQuery('input[value^="chilexpress"]').next('label').after('<span id="wc-chilexpress-verify">: No disponible (<a class="wc-chilexpress-verify" href="#">Reintentar</a>)</span>');
 				}
-				//Displays an error message to the user
+				// Displays an error message to the user
 				if( ! jQuery('body').hasClass('wc-chilexpress-errormsg') ) {
 					jQuery('form.woocommerce-cart-form').prepend('<ul class="woocommerce-error whq_wcchp_chilexpress_error"><li><strong>Chilexpress no se encuentra disponible por el momento. Por favor inténtalo más tarde.</li></ul>');
 					jQuery('html, body').animate({ scrollTop: 0 }, 'normal');
@@ -125,17 +125,17 @@ jQuery(document).ready(function( $ ) {
 			}
 		}, 250);
 
-		//Retry button for Chilexpress
+		// Retry button for Chilexpress
 		jQuery('#wc-chilexpress-verify').on('click', '.wc-chilexpress-verify', function() {
 			whq_wcchp_cart_chilexpress_verify();
 		});
 
-		//Restores original fields when clicking Calc Shipping
+		// Restores original fields when clicking Calc Shipping
 		jQuery('body').on('click', 'button[name="calc_shipping"]', function() {
 			whq_wcchp_cart_inputs_restore();
 		});
 
-		//No service for certain location detection
+		// No service for certain location detection
 		whq_wcchp_chilexpress_noservice = setInterval(function() {
 			whq_wcchp_chilexpress_noservice_text = jQuery('input[value^="chilexpress:"]').next('label').text();
 		 	if ( whq_wcchp_chilexpress_noservice_text.toLowerCase().indexOf('sin servicio') >= 0 ) {
@@ -151,17 +151,22 @@ function whq_wcchp_cart_watcher() {
 		console.group( '[WCCHP] whq_wcchp_cart_watcher' );
 	}
 
-	if( jQuery('input[value^="chilexpress"]').length ) {
-		//CL detection
-		if( jQuery('input[value^="chilexpress"]').is(':checked') && jQuery('#calc_shipping_country').val() == 'CL' ) {
-			if( whq_wcchp_jsdebug ) {
-				console.log('Chile detected, executing whq_wcchp_cart_chile_detected()');
-			}
-
-			whq_wcchp_cart_chile_detected();
-		} else {
-			whq_wcchp_cart_inputs_restore();
+	if(jQuery('#calc_shipping_country').val() != 'CL') {
+		if( whq_wcchp_jsdebug ) {
+			console.log( 'No Chile selected' );
 		}
+
+		whq_wcchp_cart_inputs_restore();
+
+		return false;
+	}
+
+	if( jQuery('input[value^="chilexpress"]').length || jQuery('input[value^="chilexpress"]').is(':checked') == 'CL' ) {
+		if( whq_wcchp_jsdebug ) {
+			console.log( 'Chile detected, executing whq_wcchp_cart_chile_detected()' );
+		}
+
+		whq_wcchp_cart_chile_detected();
 	}
 
 	if( whq_wcchp_jsdebug ) {
