@@ -169,7 +169,7 @@ function whq_wcchp_init_class()
                     'shipments_types_names' => array(
                         'title'       => __('Renombrar tipos de envíos', 'whq-wcchp'),
                         'type'        => 'text',
-                        'description' => __('<strong>Lista separada por comas</strong>. Permite cambiar los textos por defecto de Chilexpress para tus tipos de envío: <i>Ultra Rápido, Overnight, Día Hábil Siguiente, Día Hábil Subsiguiente, Tercer día</i>. <strong>En ese orden</strong>. Dejar en blanco para usar los valores que Chilexpress devuelve por defecto.<br/>Ejemplo:<br/><i>Rápido,Noche,Día Siguiente,Día subsiguiente,Durante la Semana</i>', 'whq-wcchp'),
+                        'description' => __('<strong>Lista separada por comas</strong>. Permite cambiar los textos por defecto de Chilexpress para tus tipos de envío: <i>Ultra Rápido, Overnight, Día Hábil Siguiente, Día Hábil Subsiguiente, Tercer día</i>. <strong>En ese orden, e incluyendo todos los típos de envío</strong> (aunque no los utilices). Dejar en blanco para usar los valores que Chilexpress devuelve por defecto.<br/>Ejemplo:<br/><i>Rápido,Noche,Día Siguiente,Día subsiguiente,Durante la Semana</i>', 'whq-wcchp'),
                         'default'     => 30,
                     ),
                     'locations_cache' => array(
