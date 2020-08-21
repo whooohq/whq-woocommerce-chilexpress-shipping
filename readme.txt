@@ -83,9 +83,10 @@ Por el contrario, si luego de todos esos pasos el inconveniente ya no se present
 
 Se agradece enormemente si, una vez que encuentres el conflicto que resuelve tu inconveniente, lo compartes con nosotros en un [nuevo issue en GitHub](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues). Así estarás ayudando a muchos otros que podrían encontrarse con tu problema a futuro.
 
-= ¿Errores? ¿Sugerencias? ¿Soporte? =
+= Errores, Soporte, Sugerencias =
 Reportar errores y enviar sugerencias directamente en [GitHub](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues), por favor.
-Todo el soporte del plugin se realiza directo en GitHub. No en los foros de WordPress. No por email. Por favor. Agradecemos la comprensión.
+
+Todo el soporte del plugin se realiza directo en GitHub. No en los foros de WordPress. No por email. No por teléfono. Por favor. Agradecemos la comprensión.
 
 Ayuda y aportes (vía Pull Requests, aceptando la [guía de contribución](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/blob/master/CONTRIBUTING.md)) son bienvenidos.
 
