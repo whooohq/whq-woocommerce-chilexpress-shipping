@@ -27,6 +27,7 @@ function whq_wcchp_incompatible_plugins_check() {
 		'woo-checkout-field-editor-pro/checkout-form-designer.php',
 		'comunas-de-chile-para-woocommerce/woocoomerce-comunas.php',
 		'calculo-de-despacho-via-starken-para-woocommerce/calculo-starken-woocommerce.php',
+		'masterbip-woocommerce-regiones-pesos-y-comunas-de-chile/masterbip-woocommerce-regiones-pesos-comunas-chile.php',
 	);
 
 	if ( current_user_can( 'activate_plugins' ) && ( ! wp_doing_ajax() ) ) {

@@ -1,9 +1,10 @@
 # Changelog
 
-### 1.4.24
+### 1.4.25
 * Agregada posibilidad de cambiar los nombres de los tipos de envío. Ver [issue #61](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/61).
 * Agregada posibilidad de color un costo extra por paquete al precio de envío. Ver [issue #108](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/108).
 * Resuelto problema en el carrito cuando solo existe un método de envío. Ver [issue #180](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/180). Gracias @alvrsmp por el aviso.
+* Actualizada lista de [plugins incompatibles](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/18).
 
 ### 1.4.22
 * Resuelto bug con WordPress Multisite. Ver [issue #71](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/71#issuecomment-653269512). Gracias @LisetteHR por el aviso.
@@ -117,7 +118,7 @@
 
 ### 1.1.20
 
-* Agregado nuevo plugin en lista de incompatibilidad ([#25](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/25))
+* Agregado nuevo plugin en lista de incompatibilidad ([#25](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/25)).
 * Mejora: utilizados placeholders de select2 (¡gracias @albetix por la idea!)
 
 ### 1.1.17
