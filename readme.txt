@@ -1,7 +1,7 @@
 === Chilexpress Shipping for WooCommerce ===
 Contributors: whooo, jhoynerk, tcattd
 Tags: woocommerce, shipping, chile, chilexpress
-Stable tag: 1.4.25
+Stable tag: 1.4.26
 Requires at least: 5.0
 Tested up to: 5.5
 Requires PHP: 7.2
@@ -47,6 +47,9 @@ El cálculo del precio de envío se hace utilizando directamente la API de Chile
 En el Checkout, el plugin necesita que primero se completen los campos de Región y Ciudad/Localidad para que Chilexpress pueda calcular el precio del envío.
 
 Por otra parte, WooCommerce requiere que uno complete datos obligatorios (como nombre, apellido, fono, email, etc) dentro del Checkout, para recién delegar y realizar el cálculo del envío (independiente del plugin que usen para envíos). Por favor, prueba rellenando primero todos los campos dentro del Checkout, antes de reportar un bug.
+
+= No se muestran todas las ciudades dentro de una región =
+Ver [Issue 128](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/128).
 
 = ¿Chilexpress caído? (Chilexpress no disponible) =
 Primero que todo, para que un método de envío (en WC) pueda calcular el costo, WC necesita que se llenen los campos obligatorios del formulario del Checkout. Esto es: nombre, apellido, país, dirección, teléfono y correo electrónico, junto a los campos de región y localidad/ciudad (que son poblados automáticamente con los valores que Chilexpress requiere).
