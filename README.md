@@ -38,7 +38,7 @@ En el Checkout, el plugin necesita que primero se completen los campos de Regió
 Por otra parte, WooCommerce requiere que uno complete datos obligatorios (como nombre, apellido, fono, email, etc) dentro del Checkout, para recién delegar y realizar el cálculo del envío (independiente del plugin que usen para envíos). Por favor, prueba rellenando primero todos los campos dentro del Checkout, antes de reportar un bug.
 
 ### No se muestran todas las ciudades dentro de una región.
-Ver [Issue 128](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/128).
+Ver [issue #128](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/128).
 
 
 ### ¿Chilexpress caído? (Chilexpress no disponible)
