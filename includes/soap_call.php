@@ -96,7 +96,7 @@ function whq_wcchp_get_tarification($destination, $origin, $weight, $length, $wi
     $soap_api_enviroment = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option('soap_api_enviroment');
 
     if (empty($soap_api_enviroment)) {
-        $soap_api_enviroment = 'QA';
+        $soap_api_enviroment = 'PROD';
     }
 
     $url 	= $whq_wcchp_default['chilexpress_soap_wsdl_' . $soap_api_enviroment] . '/TarificarCourier?wsdl';
