@@ -1,7 +1,7 @@
 === Chilexpress Shipping for WooCommerce ===
 Contributors: whooo, jhoynerk, tcattd
 Tags: woocommerce, shipping, chile, chilexpress
-Stable tag: 1.4.27
+Stable tag: 1.4.28
 Requires at least: 5.0
 Tested up to: 5.5
 Requires PHP: 7.2

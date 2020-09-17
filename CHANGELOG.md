@@ -1,6 +1,6 @@
 # Changelog
 
-### 1.4.27
+### 1.4.28
 * Agregada posibilidad de cambiar los nombres de los tipos de envío. Ver [issue #61](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/61).
 * Agregada posibilidad de color un costo extra por paquete al precio de envío. Ver [issue #108](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/108).
 * Resuelto problema en el carrito cuando solo existe un método de envío. Ver [issue #180](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/180). Gracias @alvrsmp por el aviso.

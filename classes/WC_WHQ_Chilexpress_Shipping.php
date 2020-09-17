@@ -206,7 +206,7 @@ function whq_wcchp_init_class()
                         'type'        => 'select',
                         'class'   => 'wc-enhanced-select',
                         'default'     => 'PROD',
-                        'description' => __('WS PROD requiere un usuario y contraseña para la API SOAP de Chilexpress. Ante la duda, mantener como WS QA.', 'whq-wcchp'),
+                        'description' => __('WS PROD requiere un usuario y contraseña para la API SOAP de Chilexpress. Ante la duda, mantener como WS PROD, sin utilizar usuario ni contraseña.', 'whq-wcchp'),
                         'options'     => array(
                                     'QA'   => 'WS QA',
                                     'PROD' => 'WS PROD',
