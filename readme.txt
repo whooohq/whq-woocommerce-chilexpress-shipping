@@ -1,7 +1,7 @@
 === Chilexpress Shipping for WooCommerce ===
 Contributors: whooo, jhoynerk, tcattd
 Tags: woocommerce, shipping, chile, chilexpress
-Stable tag: 1.4.28
+Stable tag: 1.4.29
 Requires at least: 5.0
 Tested up to: 5.5
 Requires PHP: 7.2
@@ -50,6 +50,9 @@ Por otra parte, WooCommerce requiere que uno complete datos obligatorios (como n
 
 = No se muestran todas las ciudades dentro de una región =
 Ver [issue #128](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/128).
+
+= Plugins incompatibles =
+Ver [issue #18](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/18).
 
 = ¿Chilexpress caído? (Chilexpress no disponible) =
 Primero que todo, para que un método de envío (en WC) pueda calcular el costo, WC necesita que se llenen los campos obligatorios del formulario del Checkout. Esto es: nombre, apellido, país, dirección, teléfono y correo electrónico, junto a los campos de región y localidad/ciudad (que son poblados automáticamente con los valores que Chilexpress requiere).
