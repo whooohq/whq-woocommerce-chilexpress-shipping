@@ -162,14 +162,14 @@ function whq_wcchp_init_class()
                     'shipments_types' => array(
                         'title'       => __('Tipos de envíos soportados', 'whq-wcchp'),
                         'type'        => 'multiselect',
-                        'description' => __('Selecciona los tipos de envíos a soportar.<br/>Considera que dependiendo de la ubicación de origen de tus envíos, algunas localidades extremas podrían no contar con un tipo de envío normal (día hábil siguiente), y solo tener disponible envío al tercer día, por lo que <strong>lo recomendado es que selecciones al menos "día hábil siguiente", "día hábil subsiguiente" y "tercer día"</strong>.<br/>Ten presente que los envíos Ultra Rápidos y Overnight están disponibles solo en ciertas ciudades de origen y para algunos destinos.<br/>También <strong>debes tener en cuenta que el envío Ultra Rápido debería ser despachado inmediatamente por tu tienda para cumplir con las espectativas del comprador</strong>.<br/>Conoce más sobre estos <a href="http://www.chilexpress.cl/tiempos-de-entrega-envios-paquetes-documentos" target="_blank" rel="noopener noreferrer">tipos de envíos, acá</a>.', 'whq-wcchp'),
+                        'description' => __('Selecciona los tipos de envíos a soportar.<br/>Considera que dependiendo de la ubicación de origen de tus envíos, algunas localidades extremas podrían no contar con un tipo de envío normal (día hábil siguiente), y solo tener disponible envío al tercer día, por lo que <strong>lo recomendado es que selecciones al menos "Prioritario", "Express" y "Extendido"</strong>.<br/>Ten presente que los envíos Ultra Rápidos y Overnight están disponibles solo en ciertas ciudades de origen y para algunos destinos.<br/>También <strong>debes tener en cuenta que el envío Ultra Rápido debería ser despachado inmediatamente por tu tienda para cumplir con las espectativas del comprador</strong>.<br/>Conoce más sobre estos <a href="http://www.chilexpress.cl/tiempos-de-entrega-envios-paquetes-documentos" target="_blank" rel="noopener noreferrer">tipos de envíos, acá</a>.', 'whq-wcchp'),
                         'options'     => $this->get_shipments_types(),
                         'default'     => array( 3, 4, 5 ),
                     ),
                     'shipments_types_names' => array(
                         'title'       => __('Renombrar tipos de envíos', 'whq-wcchp'),
                         'type'        => 'text',
-                        'description' => __('<strong>Lista separada por comas</strong>. Permite cambiar los textos por defecto de Chilexpress para tus tipos de envío: <i>Ultra Rápido, Overnight, Día Hábil Siguiente, Día Hábil Subsiguiente, Tercer día</i>. <strong>En ese orden, e incluyendo todos los típos de envío</strong> (aunque no los utilices). Dejar en blanco para usar los valores que Chilexpress devuelve por defecto.<br/>Ejemplos:<br/><i>Rápido,Noche,Día Siguiente,Día subsiguiente,Durante la Semana</i><br/><i>1,2,3,4,5</i>', 'whq-wcchp'),
+                        'description' => __('<strong>Lista separada por comas</strong>. Permite cambiar los textos por defecto de Chilexpress para tus tipos de envío: <i>Ultra Rápido, Overnight, Prioritario, Express, Extendido</i>. <strong>En ese orden, e incluyendo todos los típos de envío</strong> (aunque no los utilices). Dejar en blanco para usar los valores que Chilexpress devuelve por defecto.<br/>Ejemplos:<br/><i>Rápido,Noche,Día Siguiente,Día subsiguiente,Durante la Semana</i><br/><i>1,2,3,4,5</i>', 'whq-wcchp'),
                         'default'     => '',
                     ),
                     'locations_cache' => array(
@@ -265,18 +265,26 @@ function whq_wcchp_init_class()
 
             private function get_shipments_types()
             {
+                // 2019:
                 // ULTRA RÁPIDO:1
                 // OVERNIGHT:2
                 // DÍA HÁBIL SIGUIENTE:3
                 // DÍA HÁBIL SUBSIGUIENTE:4
                 // TERCER DÍA:5
 
+                // 2020:
+                // ULTRA RAPIDO
+                // OVERNIGHT
+                // PRIORITARIO
+                // EXPRESS
+                // EXTENDIDO
+
                 $shipments_types = [
                     1 => 'Ultra rápido',
                     2 => 'Overnight',
-                    3 => 'Día hábil siguiente',
-                    4 => 'Día hábil subsiguiente',
-                    5 => 'Tercer día',
+                    3 => 'Prioritario',
+                    4 => 'Express',
+                    5 => 'Extendido',
                 ];
 
                 return apply_filters('whq_wcchp_shipments_types', $shipments_types);
@@ -842,16 +850,24 @@ function whq_wcchp_init_class()
             private function add_rates($rates)
             {
                 foreach ($rates as $key => $values) {
+                    // 2019:
                     // ULTRA RÁPIDO:1
                     // OVERNIGHT:2
                     // DÍA HÁBIL SIGUIENTE:3
                     // DÍA HÁBIL SUBSIGUIENTE:4
                     // TERCER DÍA:5
+                    //
+                    // 2020:
+                    // ULTRA RAPIDO
+                    // OVERNIGHT
+                    // PRIORITARIO
+                    // EXPRESS
+                    // EXTENDIDO
 
-                    if (!empty($this->shipments_types_names)) {
-                        $renames = explode(',', $this->shipments_types_names);
+                    if ( ! empty( $this->shipments_types_names ) ) {
+                        $renames = explode( ',', $this->shipments_types_names );
 
-                        if (count($renames) == 5) {
+                        if ( count( $renames ) == 5 ) {
                             if (stripos($values[1], 'ultra rapido') !== false) {
                                 $values[1] = $this->title . ' (' . $renames[0] . ')';
                             }
@@ -860,21 +876,21 @@ function whq_wcchp_init_class()
                                 $values[1] = $this->title . ' (' . $renames[1] . ')';
                             }
 
-                            if (stripos($values[1], 'dia habil siguiente') !== false) {
+                            if (stripos($values[1], 'prioritario') !== false) {
                                 $values[1] = $this->title . ' (' . $renames[2] . ')';
                             }
 
-                            if (stripos($values[1], 'dia habil subsiguiente') !== false) {
+                            if (stripos($values[1], 'express') !== false) {
                                 $values[1] = $this->title . ' (' . $renames[3] . ')';
                             }
 
-                            if (stripos($values[1], 'tercer dia') !== false) {
+                            if (stripos($values[1], 'extendido') !== false) {
                                 $values[1] = $this->title . ' (' . $renames[4] . ')';
                             }
                         }
                     }
 
-                    $values[1] = apply_filters('whq_wcchp_rates_label', $values[1]);
+                    $values[1] = apply_filters( 'whq_wcchp_rates_label', $values[1] );
 
                     $this->add_rate(array(
                         'id'    => $values[0], // service_id

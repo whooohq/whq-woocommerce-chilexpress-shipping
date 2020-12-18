@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.4.30
+* Arreglado el renombrado de métodos de envío, debido a cambio de nomenclatura usada por Chilexpress, desde el formato anterior "día hábil", "día hábil subsiguiente" y "tercer día" a nueva nomenclatura: "prioritario", "express" y "extendido".
+
 ### 1.4.29
 * Agregada posibilidad de cambiar los nombres de los tipos de envío. Ver [issue #61](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/61).
 * Agregada posibilidad de color un costo extra por paquete al precio de envío. Ver [issue #108](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/108).
