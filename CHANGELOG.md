@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.4.31
+* Arreglado (nuevamente) el renombrado de métodos de envío. Ver [issue #209](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/209). Gracias a @PatrickCaneloDigital por el fix.
+
 ### 1.4.30
 * Arreglado el renombrado de métodos de envío, debido a cambio de nomenclatura usada por Chilexpress, desde el formato anterior "día hábil", "día hábil subsiguiente" y "tercer día" a nueva nomenclatura: "prioritario", "express" y "extendido".
 

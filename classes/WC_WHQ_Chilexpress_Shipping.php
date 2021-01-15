@@ -169,7 +169,7 @@ function whq_wcchp_init_class()
                     'shipments_types_names' => array(
                         'title'       => __('Renombrar tipos de envíos', 'whq-wcchp'),
                         'type'        => 'text',
-                        'description' => __('<strong>Lista separada por comas</strong>. Permite cambiar los textos por defecto de Chilexpress para tus tipos de envío: <i>Ultra Rápido, Overnight, Prioritario, Express, Extendido</i>. <strong>En ese orden, e incluyendo todos los típos de envío</strong> (aunque no los utilices). Dejar en blanco para usar los valores que Chilexpress devuelve por defecto.<br/>Ejemplos:<br/><i>Rápido,Noche,Día Siguiente,Día subsiguiente,Durante la Semana</i><br/><i>1,2,3,4,5</i>', 'whq-wcchp'),
+                        'description' => __('<strong>Lista separada por comas</strong>. Permite cambiar los textos por defecto de Chilexpress para tus tipos de envío: <i>Ultra Rápido, Overnight, Prioritario, Express, Extendido, Extremos</i>. <strong>En ese orden, e incluyendo todos los típos de envío</strong> (aunque no los utilices). Dejar en blanco para usar los valores que Chilexpress devuelve por defecto.<br/>Ejemplos:<br/><i>Rápido,Noche,Día Siguiente,Día subsiguiente,Durante la Semana,Extremos</i><br/><i>1,2,3,4,5,6</i>', 'whq-wcchp'),
                         'default'     => '',
                     ),
                     'locations_cache' => array(
@@ -867,26 +867,48 @@ function whq_wcchp_init_class()
                     if ( ! empty( $this->shipments_types_names ) ) {
                         $renames = explode( ',', $this->shipments_types_names );
 
-                        if ( count( $renames ) == 5 ) {
+                        if ( count( $renames ) == 7 || count( $renames ) == 5 ) {
+                            // If someone upgrades from prior version, we need some defaults here
+                            if ( count( $renames ) < 7 ) {
+                                $renames[5] = 'Extremos';
+                                $renames[6] = 'SIN SERVICIO';
+                            }
+
                             if (stripos($values[1], 'ultra rapido') !== false) {
+                                write_log('ultra rapido !== false');
                                 $values[1] = $this->title . ' (' . $renames[0] . ')';
                             }
 
-                            if (stripos($values[1], 'overnight') !== false) {
+                            elseif (stripos($values[1], 'overnight') !== false) {
+                                write_log('overnight !== false');
                                 $values[1] = $this->title . ' (' . $renames[1] . ')';
                             }
 
-                            if (stripos($values[1], 'prioritario') !== false) {
+                            elseif (stripos($values[1], 'prioritario') !== false) {
+                                write_log('prioritario !== false');
                                 $values[1] = $this->title . ' (' . $renames[2] . ')';
                             }
 
-                            if (stripos($values[1], 'express') !== false) {
+                            elseif (stripos($values[1], 'express') !== false) {
+                                write_log('express !== false');
                                 $values[1] = $this->title . ' (' . $renames[3] . ')';
                             }
 
-                            if (stripos($values[1], 'extendido') !== false) {
+                            elseif (stripos($values[1], 'extendido') !== false) {
+                                write_log('extendido !== false');
                                 $values[1] = $this->title . ' (' . $renames[4] . ')';
                             }
+
+                            elseif (stripos($values[1], 'extremos') !== false) {
+                                write_log('extremos !== false');
+                                $values[1] = $this->title . ' (' . $renames[5] . ')';
+                            }
+
+                            elseif (stripos($values[1], 'sin servicio') !== false) {
+                                write_log('sin servicio !== false');
+                                $values[1] = $this->title . ' (' . $renames[6] . ')';
+                            }
+
                         }
                     }
 
