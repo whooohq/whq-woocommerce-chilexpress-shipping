@@ -889,11 +889,6 @@ function whq_wcchp_init_class()
                                 $values[1] = $this->title . ' (' . $renames[2] . ')';
                             }
 
-                            elseif (stripos($values[1], 'express') !== false) {
-                                write_log('express !== false');
-                                $values[1] = $this->title . ' (' . $renames[3] . ')';
-                            }
-
                             elseif (stripos($values[1], 'extendido') !== false) {
                                 write_log('extendido !== false');
                                 $values[1] = $this->title . ' (' . $renames[4] . ')';
@@ -907,6 +902,12 @@ function whq_wcchp_init_class()
                             elseif (stripos($values[1], 'sin servicio') !== false) {
                                 write_log('sin servicio !== false');
                                 $values[1] = $this->title . ' (' . $renames[6] . ')';
+                            }
+
+                            // https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/209#issuecomment-761226721
+                            elseif (stripos($values[1], 'express') !== false) {
+                                write_log('express !== false');
+                                $values[1] = $this->title . ' (' . $renames[3] . ')';
                             }
 
                         }
