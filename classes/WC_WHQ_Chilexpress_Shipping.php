@@ -868,7 +868,7 @@ function whq_wcchp_init_class()
                         $renames = explode( ',', $this->shipments_types_names );
 
                         if ( count( $renames ) == 7 || count( $renames ) == 5 ) {
-                            // We need some defaults here in case someone upgrades from prior version
+                            // We need some defaults here in case someone upgrades from prior versions
                             if ( count( $renames ) < 7 ) {
                                 $renames[5] = 'Extremos';
                                 $renames[6] = 'SIN SERVICIO';
