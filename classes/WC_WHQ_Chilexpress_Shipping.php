@@ -179,9 +179,9 @@ function whq_wcchp_init_class()
 						'default'     => 30,
 					),
 					'fixed_packing_price' => array(
-						'title'       => __('Costo extra por embalaje', 'whq-wcchp'),
+						'title'       => __('Costo extra (o negativo) por embalaje', 'whq-wcchp'),
 						'type'        => 'number',
-						'description' => __('Precio extra por costo de embalaje. Este costo (en CLP) será agregado <strong>por producto</strong> al precio de envío que Chilexpress devuelva (vía API). Si no deseas realizar un cobro extra por paquete/embalaje, dejar en blanco o cero.', 'whq-wcchp'),
+						'description' => __('Precio extra (o negativo) por costo de embalaje. Este costo (en CLP) será agregado (o restado) <strong>por producto</strong> al precio de envío que Chilexpress devuelva (vía API). Si no deseas realizar un cobro extra por paquete/embalaje, dejar en blanco o en cero.', 'whq-wcchp'),
 						'default'     => 0,
 					),
 					'extra_wrapper' => array(
@@ -804,8 +804,13 @@ function whq_wcchp_init_class()
 							}
 
 							// Add extra fixed_packing_price cost per item
-							if(!empty($this->fixed_packing_price) && $this->fixed_packing_price > 0) {
-								$service_value = $service_value + absint($this->fixed_packing_price);
+							if ( !empty( $this->fixed_packing_price ) && $this->fixed_packing_price > 0 ) {
+								$service_value = $service_value + absint( $this->fixed_packing_price );
+							}
+
+							// Subtract fixed_packing_price cost per item
+							if ( ! empty( $this->fixed_packing_price ) && $this->fixed_packing_price < 0 ) {
+								$service_value = $service_value - $this->fixed_packing_price;
 							}
 
 							$rates[ $service_id ] = array( $service_id, $service_label, $service_value );
@@ -824,8 +829,13 @@ function whq_wcchp_init_class()
 						}
 
 						// Add extra fixed_packing_price cost per item
-						if(!empty($this->fixed_packing_price) && $this->fixed_packing_price > 0) {
-							$service_value = $service_value + absint($this->fixed_packing_price);
+						if ( ! empty( $this->fixed_packing_price ) && $this->fixed_packing_price > 0 ) {
+							$service_value = $service_value + absint( $this->fixed_packing_price );
+						}
+
+						// Subtract fixed_packing_price cost per item
+						if ( ! empty( $this->fixed_packing_price ) && $this->fixed_packing_price < 0 ) {
+							$service_value = $service_value - $this->fixed_packing_price;
 						}
 
 						$rates = array();

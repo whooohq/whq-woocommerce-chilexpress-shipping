@@ -1,6 +1,7 @@
 # Changelog
 
 ### 1.4.34
+* Posibilidad de agregar un valor negativo al costo "extra" por embalaje en las opciones del plugin. ¿Descuentos?. Ver [issue #219](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/219).
 * Arreglado (nuevamente) el renombrado de métodos de envío. Ver [issue #209](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/209). Gracias a @PatrickCaneloDigital por el fix.
 
 ### 1.4.30
