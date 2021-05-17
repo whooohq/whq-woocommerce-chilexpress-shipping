@@ -1,6 +1,6 @@
 # Changelog
 
-### 1.4.33
+### 1.4.34
 * Arreglado (nuevamente) el renombrado de métodos de envío. Ver [issue #209](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/209). Gracias a @PatrickCaneloDigital por el fix.
 
 ### 1.4.30

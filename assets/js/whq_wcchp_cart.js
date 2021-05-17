@@ -138,7 +138,7 @@ jQuery(document).ready(function( $ ) {
 		// No service for certain location detection
 		whq_wcchp_chilexpress_noservice = setInterval(function() {
 			whq_wcchp_chilexpress_noservice_text = jQuery('input[value^="chilexpress:"]').next('label').text();
-		 	if ( whq_wcchp_chilexpress_noservice_text.toLowerCase().indexOf('sin servicio') >= 0 ) {
+			if ( whq_wcchp_chilexpress_noservice_text.toLowerCase().indexOf('sin servicio') >= 0 ) {
 				whq_wcchp_chilexpress_noservice_text = jQuery('input[value^="chilexpress:"]').next('label').text().replace('(SIN SERVICIO)', '');
 				jQuery('input[value^="chilexpress"]').next('label').text(whq_wcchp_chilexpress_noservice_text);
 			}
