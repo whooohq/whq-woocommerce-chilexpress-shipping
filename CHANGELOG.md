@@ -1,8 +1,9 @@
 # Changelog
 
-### 1.4.34
+### 1.4.35
 * Posibilidad de agregar un valor negativo al costo "extra" por embalaje en las opciones del plugin. ¿Descuentos?. Ver [issue #219](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/219).
 * Arreglado (nuevamente) el renombrado de métodos de envío. Ver [issue #209](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/209). Gracias a @PatrickCaneloDigital por el fix.
+* Agregado filtro al costo de cada tipo de envío (filtro: whq_wcchp_rates_cost). Ver [discussion #222](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/discussions/222).
 
 ### 1.4.30
 * Arreglado el renombrado de métodos de envío, debido a cambio de nomenclatura usada por Chilexpress, desde el formato anterior "día hábil", "día hábil subsiguiente" y "tercer día" a nueva nomenclatura: "prioritario", "express" y "extendido".

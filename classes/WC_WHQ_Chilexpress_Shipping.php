@@ -924,6 +924,7 @@ function whq_wcchp_init_class()
 					}
 
 					$values[1] = apply_filters( 'whq_wcchp_rates_label', $values[1] );
+					$values[2] = apply_filters( 'whq_wcchp_rates_cost', $values[2] );
 
 					$this->add_rate(array(
 						'id'    => $values[0], // service_id
