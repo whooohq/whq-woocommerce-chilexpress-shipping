@@ -19,6 +19,25 @@ var whq_wcchp_chilexpress_noservice;
 var whq_wcchp_chilexpress_noservice_text;
 var whq_wcchp_jsdebug = false;
 
+var whq_wcchp_states_map = {
+	'CL-TA': 'R1',
+	'CL-AN': 'R2',
+	'CL-AT': 'R3',
+	'CL-CO': 'R4',
+	'CL-VS': 'R5',
+	'CL-LI': 'R6',
+	'CL-ML': 'R7',
+	'CL-BI': 'R8',
+	'CL-AR': 'R9',
+	'CL-RM': 'RM',
+	'CL-LL': 'R10',
+	'CL-AI': 'R11',
+	'CL-MA': 'R12',
+	'CL-LR': 'R14',
+	'CL-AP': 'R15',
+	'CL-NB': 'R16'
+};
+
 jQuery(document).ready(function( $ ) {
 	//Only on WooCommerce's Checkout
 	if( jQuery('.woocommerce-checkout').length ) {
@@ -60,16 +79,22 @@ jQuery(document).ready(function( $ ) {
 		});
 
 		// Manage billing regions and load cities
-		jQuery('body').on('change', '#billing_whq_region_select', function() {
+		jQuery('body').on('change', '#billing_state, #billing_whq_region_select', function() {
 			if( whq_wcchp_jsdebug ) {
-				console.log('[WCCHP] change detected in #billing_whq_region_select');
+				console.log('[WCCHP] change detected in #billing_state, #billing_whq_region_select');
 			}
 
-			whq_wcchp_region_billing_select = jQuery('#billing_whq_region_select').val();
-			whq_wcchp_region_billing_array  = whq_wcchp_region_billing_select.split('|');
+			whq_wcchp_region_billing_select = jQuery('#billing_state').val();
+			//whq_wcchp_region_billing_array  = whq_wcchp_region_billing_select.split('|');
+			whq_wcchp_region_billing_value_for_chxp = whq_wcchp_states_map[whq_wcchp_region_billing_select];
 
-			jQuery('#billing_state').val( whq_wcchp_region_billing_array[1] );
-			jQuery('#billing_whq_region').val( whq_wcchp_region_billing_array[0] );
+			if ( whq_wcchp_jsdebug ) {
+				console.log( '[WCCHP] WC region code: ' + whq_wcchp_region_billing_select );
+				console.log( '[WCCHP] CHXP region code: ' + whq_wcchp_region_billing_value_for_chxp );
+			}
+
+			//jQuery('#billing_state').val( whq_wcchp_region_billing_array[1] );
+			//jQuery('#billing_whq_region').val( whq_wcchp_region_billing_array[0] );
 
 			jQuery('#billing_city_field').block({
 				message: null,
@@ -79,26 +104,32 @@ jQuery(document).ready(function( $ ) {
 				}
 			});
 
-			whq_wcchp_checkout_load_cities( whq_wcchp_region_billing_array[0], 'billing' );
+			whq_wcchp_checkout_load_cities( whq_wcchp_region_billing_value_for_chxp, 'billing' );
 		});
 
 		// Manage shipping regions and load cities
-		jQuery('body').on('change', '#shipping_whq_region_select', function() {
+		jQuery('body').on('change', '#shipping_state, #shipping_whq_region_select', function() {
 			if( whq_wcchp_jsdebug ) {
-				console.log('[WCCHP] change detected in #shipping_whq_region_select');
+				console.log('[WCCHP] change detected in #shipping_state, #shipping_whq_region_select');
 			}
 
-			whq_wcchp_region_shipping_select = jQuery('#shipping_whq_region_select').val();
-			whq_wcchp_region_shipping_array  = whq_wcchp_region_shipping_select.split('|');
+			whq_wcchp_region_shipping_select = jQuery('#shipping_state').val();
+			//whq_wcchp_region_shipping_array  = whq_wcchp_region_shipping_select.split('|');
+			whq_wcchp_region_shipping_value_for_chxp = whq_wcchp_states_map[whq_wcchp_region_shipping_select];
+
+			if ( whq_wcchp_jsdebug ) {
+				console.log( '[WCCHP] WC region code: ' + whq_wcchp_region_shipping_select );
+				console.log( '[WCCHP] CHXP region code: ' + whq_wcchp_region_shipping_value_for_chxp );
+			}
 
 			// https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/151
-			if ( jQuery('#shipping_state').length ) {
+			/*if ( jQuery('#shipping_state').length ) {
 				jQuery('#shipping_state').val( whq_wcchp_region_shipping_array[1] );
 				jQuery('#shipping_whq_region').val( whq_wcchp_region_shipping_array[0] );
 			} else {
 				jQuery('#billing_state').val( whq_wcchp_region_shipping_array[1] );
 				jQuery('#billing_whq_region').val( whq_wcchp_region_shipping_array[0] );
-			}
+			}*/
 
 			jQuery('#shipping_city_field, #billing_city_field').block({
 				message: null,
@@ -108,7 +139,7 @@ jQuery(document).ready(function( $ ) {
 				}
 			});
 
-			whq_wcchp_checkout_load_cities( whq_wcchp_region_shipping_array[0], 'shipping' );
+			whq_wcchp_checkout_load_cities( whq_wcchp_region_shipping_value_for_chxp, 'shipping' );
 		});
 
 		// Manage billing cities
@@ -289,7 +320,7 @@ function whq_wcchp_checkout_chile_detected() {
 
 	whq_wcchp_checkout_inputs_replace();
 
-	if( whq_wcchp_jsdebug ) {
+	/*if( whq_wcchp_jsdebug ) {
 		console.log('[WCCHP] requesting regions, action: whq_wcchp_regions_ajax');
 	}
 
@@ -437,7 +468,7 @@ function whq_wcchp_checkout_chile_detected() {
 				}
 			}
 		}
-	});
+	});*/
 }
 
 function whq_wcchp_checkout_load_cities( region_code, billorship ) {
@@ -605,7 +636,7 @@ function whq_wcchp_checkout_inputs_replace() {
 		}
 	}
 
-	if( ! jQuery('#billing_whq_region_select, #shipping_whq_region_select').is('select') ) {
+	/*if( ! jQuery('#billing_whq_region_select, #shipping_whq_region_select').is('select') ) {
 		if( whq_wcchp_jsdebug ) {
 			console.log( 'replacing region' );
 		}
@@ -660,7 +691,10 @@ function whq_wcchp_checkout_inputs_replace() {
 
 		//Inserts our trigger class in body
 		jQuery('body').addClass('wc-chilexpress-enabled');
-	}
+	}*/
+
+	//Inserts our trigger class in body
+	jQuery('body').addClass('wc-chilexpress-enabled');
 
 	if( whq_wcchp_jsdebug ) {
 		console.groupEnd();
@@ -690,7 +724,7 @@ function whq_wcchp_checkout_inputs_restore() {
 			jQuery("#shipping_whq_city_select").remove();
 		}
 
-		if( jQuery('#billing_whq_region_select, #shipping_whq_region_select').is('select') ) {
+		/*if( jQuery('#billing_whq_region_select, #shipping_whq_region_select').is('select') ) {
 			if( whq_wcchp_jsdebug ) {
 				console.log( 'Removing inserted fields, Region' );
 			}
@@ -700,7 +734,7 @@ function whq_wcchp_checkout_inputs_restore() {
 			jQuery("#shipping_whq_region").remove();
 			jQuery("#shipping_whq_region_select").next('.select2-container').remove();
 			jQuery("#shipping_whq_region_select").remove();
-		}
+		}*/
 
 		// De-select Chilexpress
 		jQuery('.shipping_method').not('input[value^="chilexpress"]:first').click();

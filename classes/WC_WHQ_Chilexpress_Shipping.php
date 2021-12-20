@@ -319,7 +319,7 @@ function whq_wcchp_init_class()
 				//$cities = false; //Simulate API down
 
 				if (false === $cities) {
-					//Retrieve the hard-coded ones
+					// Retrieve the hard-coded ones
 					$cities       = new WC_WHQ_States_Cities_CL();
 					$cities_array = $cities->admission;
 				} else {
@@ -364,7 +364,7 @@ function whq_wcchp_init_class()
 				//$regions = false; //Simulate API down
 
 				if (false === $regions) {
-					//Retrieve the hard-coded ones
+					// Retrieve the hard-coded ones
 					$regions       = new WC_WHQ_States_Cities_CL();
 					$regions_array = $regions->states;
 				} else {
