@@ -1,6 +1,6 @@
 # Changelog
 
-### 1.4.41
+### 1.4.42
 * Resuelto problema de compatibilidad con WooCommerce 6.0. WooCommerce ahora incluye las regiones de Chile por defecto, sin necesidad de utilizar un plugin externo para ello. Ver [issue #228](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/228). Gracias a @novusfusion por el aviso.
 * Resuelto problema de datos guardados en Transients luego de actualización a 1.4.40 por cambio de nombres de regiones en WooCommerce 6.0. Ver [issue #230](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/230). Gracias a @2xffwd por el aviso.
 

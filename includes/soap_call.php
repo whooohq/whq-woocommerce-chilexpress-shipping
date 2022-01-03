@@ -41,8 +41,12 @@ function whq_wcchp_call_soap( $ns, $url, $route, $method, $data = '' ) {
 		$transient_duration = HOUR_IN_SECONDS; //One hour
 	}
 
+	// Version to String
+	$transient_version = trim( str_ireplace( '.', '', $whq_wcchp_default['plugin_version'] ) );
+	$transient_version = $transient_version . '_' . md5( json_encode( $data ) );
+
 	// Transient ID
-	$transient_id = 'whq_wcchp_' . $route . '_' . $method . '_' . md5( $whq_wcchp_default['plugin_version'] . json_encode( $data ) ); // https://stackoverflow.com/a/7723730/920648
+	$transient_id = 'whq_wcchp_' . $route . '_' . $method . '_' . $transient_version; // https://stackoverflow.com/a/7723730/920648
 
 	if ( false === ( $result = get_transient( $transient_id ) ) ) {
 		try {
