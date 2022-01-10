@@ -1,3 +1,4 @@
+var whq_wcchp_jsdebug = false;
 var whq_wcchp_chilexpress_down;
 var whq_wcchp_chilexpress_down_noselect;
 var whq_wcchp_chilexpress_cost;
@@ -17,7 +18,7 @@ var whq_wcchp_cities_hardcoded = false;
 var whq_wcchp_object_to_array;
 var whq_wcchp_chilexpress_noservice;
 var whq_wcchp_chilexpress_noservice_text;
-var whq_wcchp_jsdebug = false;
+var whq_wcchp_region_shipping_value_for_chxp;
 
 var whq_wcchp_states_map = {
 	'CL-TA': 'R1',
@@ -39,13 +40,13 @@ var whq_wcchp_states_map = {
 };
 
 jQuery(document).ready(function( $ ) {
-	//Only on WooCommerce's Checkout
+	// Only on WooCommerce's Checkout
 	if( jQuery('.woocommerce-checkout').length ) {
 		if( whq_wcchp_jsdebug ) {
 			console.log('[WCCHP] in checkout');
 		}
 
-		//CL detection
+		// CL detection
 		if(jQuery('#billing_country').val() == 'CL' || jQuery('#shipping_country').val() == 'CL') {
 			if( whq_wcchp_jsdebug ) {
 				console.log('[WCCHP] Chile detected by initial value');
@@ -211,8 +212,8 @@ jQuery(document).ready(function( $ ) {
 		}, 250);
 		//clearInterval( whq_wcchp_chilexpress_down_noselect );
 
-		//Shipping cost zero?
-		//https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/13
+		// Shipping cost zero?
+		// https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/13
 		jQuery('body').on('click', '#place_order', function() {
 			if( jQuery('body').hasClass('wc-chilexpress-enabled') && jQuery('input[value^="chilexpress"]').length ) {
 				whq_wcchp_chilexpress_cost = jQuery('input[value^="chilexpress"]').next('label').children('.amount').text();
@@ -231,7 +232,7 @@ jQuery(document).ready(function( $ ) {
 			}
 		});
 
-		//No service for certain location detection
+		// No service for certain location detection
 		whq_wcchp_chilexpress_noservice = setInterval(function() {
 			whq_wcchp_chilexpress_noservice_text = jQuery('input[value^="chilexpress:"]').next('label').text();
 
@@ -245,7 +246,7 @@ jQuery(document).ready(function( $ ) {
 			}
 		}, 250);
 
-		//No service for certain location detection, on click
+		// No service for certain location detection, on click
 		jQuery('body').on('click', 'input[value^="chilexpress:"]', function() {
 			if( whq_wcchp_jsdebug ) {
 				console.log('[WCCHP] chilexpress input clicked');
@@ -259,7 +260,7 @@ jQuery(document).ready(function( $ ) {
 			}
 		});
 
-		//Stop checkout post if only Chilexpress is present, and has no service
+		// Stop checkout post if only Chilexpress is present, and has no service
 		jQuery('body').on('submit', '.woocommerce-checkout', function(e) {
 			e.preventDefault();
 			whq_wcchp_submit_check();
@@ -274,7 +275,7 @@ jQuery(document).ready(function( $ ) {
 function whq_wcchp_show_error_msg() {
 	jQuery('form.woocommerce-checkout').prepend('<div class="whq_wcchp_chilexpress_error woocommerce-NoticeGroup woocommerce-NoticeGroup-checkout"><ul class="woocommerce-error"><li><strong>Chilexpress no se encuentra disponible en este momento. Por favor, selecciona otro método de envío (si existiese), o iténtalo nuevamente en unos minutos.</li></ul></div>');
 
-	jQuery('html, body').animate({ scrollTop: 0 }, 'normal');
+	//jQuery('html, body').animate({ scrollTop: 0 }, 'normal');
 
 	setTimeout(function() {
 		jQuery('.whq_wcchp_chilexpress_error').fadeOut(500, function() {
@@ -473,11 +474,11 @@ function whq_wcchp_checkout_chile_detected() {
 
 function whq_wcchp_checkout_load_cities( region_code, billorship ) {
 	if( whq_wcchp_jsdebug ) {
-		console.log( '[WCCHP] whq_wcchp_checkout_load_cities()' );
+		console.log( '[WCCHP] whq_wcchp_checkout_load_cities() with region_code: ' + region_code );
 	}
 
 	if( region_code === '' ) {
-		region_code = '99'; //Bring it on!
+		region_code = '99'; // Bring it on!
 	}
 
 	if( billorship === '' ) {
@@ -508,7 +509,7 @@ function whq_wcchp_checkout_load_cities( region_code, billorship ) {
 					console.log( '[WCCHP] chilexpress api down' );
 				}
 
-				//Chilexpress API down? error?
+				// Chilexpress API down? error?
 				whq_wcchp_checkout_inputs_restore();
 			} else {
 				if( whq_wcchp_jsdebug ) {
@@ -520,8 +521,12 @@ function whq_wcchp_checkout_load_cities( region_code, billorship ) {
 				whq_wcchp_city_name = jQuery('#' + billorship + '_city').val();
 				whq_wcchp_city_code = '';
 
-				//Hard-coded list (Chilexpress API down?)
+				// Hard-coded list (Chilexpress API down?)
 				if ( typeof response.data === 'object' && Object.keys(response.data).length >= 239 ) {
+					if( whq_wcchp_jsdebug ) {
+						console.log( '[WCCHP] hardcoded' );
+					}
+
 					whq_wcchp_cities_hardcoded   = true;
 					whq_wcchp_object_to_array = Object.keys( response.data ).map( function( key ) {
 						return [ key, response.data[ key ] ];
@@ -530,15 +535,18 @@ function whq_wcchp_checkout_load_cities( region_code, billorship ) {
 				}
 
 				if( jQuery.isArray( response.data ) ) {
+					if( whq_wcchp_jsdebug ) {
+						console.log( '[WCCHP] from API' );
+					}
 
 					jQuery(response.data).each(function( i, value ) {
 						//Map the hard-coded values back
 						if( whq_wcchp_cities_hardcoded === true ) {
-							response.data[i].CodComuna = response.data[i][0];
-							response.data[i].GlsComuna = response.data[i][1];
+							response.data[i].CodComuna = response.data[i]['CodComuna'];
+							response.data[i].GlsComuna = response.data[i]['GlsComuna'];
 						}
 
-						//Cleanup the 2 at the end of the city's name
+						// Cleanup the 2 at the end of the city's name
 						if ( whq_wcchp_cities_hardcoded === false ) {
 							response.data[i].GlsComuna = whq_wcchp_city_name_cleanup( response.data[i].GlsComuna );
 						}
@@ -555,7 +563,7 @@ function whq_wcchp_checkout_load_cities( region_code, billorship ) {
 
 				} else {
 
-					//Cleanup the 2 at the end of the city's name
+					// Cleanup the 2 at the end of the city's name
 					if ( whq_wcchp_cities_hardcoded === false ) {
 						response.data.GlsComuna = whq_wcchp_city_name_cleanup( response.data.GlsComuna );
 					}
@@ -608,7 +616,7 @@ function whq_wcchp_checkout_inputs_replace() {
 			jQuery('#shipping_whq_city').hide();
 		}
 
-		//Block UI
+		// Block UI
 		jQuery('#billing_city_field, #shipping_city_field').block({
 			message: null,
 			overlayCSS: {
@@ -693,7 +701,7 @@ function whq_wcchp_checkout_inputs_replace() {
 		jQuery('body').addClass('wc-chilexpress-enabled');
 	}*/
 
-	//Inserts our trigger class in body
+	// Inserts our trigger class in body
 	jQuery('body').addClass('wc-chilexpress-enabled');
 
 	if( whq_wcchp_jsdebug ) {
@@ -755,7 +763,7 @@ function whq_wcchp_checkout_inputs_restore() {
 	}
 }
 
-//https://stackoverflow.com/a/6253616/920648
+// https://stackoverflow.com/a/6253616/920648
 function whq_wcchp_city_name_cleanup( city_name ) {
 	if( typeof city_name === 'undefined' ) {
 		return city_name;

@@ -38,6 +38,7 @@ function whq_wcchp_init_class()
 				$this->enabled                = $this->get_option('enabled');
 				$this->title                  = $this->get_option('title');
 				$this->shipping_origin        = apply_filters('whq_wcchp_shipping_origin', $this->get_option('shipping_origin'));
+				$this->statecity_switch       = $this->get_option('statecity_switch');
 				$this->packaging_heuristic    = $this->get_option('packaging_heuristic');
 				$this->shipments_types        = $this->get_option('shipments_types');
 				$this->shipments_types_names  = $this->get_option('shipments_types_names');
@@ -143,6 +144,12 @@ function whq_wcchp_init_class()
 						'class'   => 'wc-enhanced-select',
 						'description' => __('Ciudad/Localidad de origen, desde donde se realiza el envío', 'whq-wcchp'),
 						'options'     => $this->get_cities(),
+					),
+					'statecity_switch' => array(
+						'title'   => __('Cambio de orden de Región y Ciudad', 'whq-wcchp'),
+						'type'    => 'checkbox',
+						'label'   => __('Cambiar orden de campos Región y Ciudad. Por defecto, WooCommerce muestra primero el campo de ciudad, y luego el de región. Esto es poco intuitivo para Chile. Habilitando esta opción, WooCommerce mostrará primero el campo de región, y luego el de ciudad. Si usas algún plugin para personalizar el checkout y moverás los campos allí, o utilizas una modificación directo en tu theme para lograr esto mismo, puedes desactivar esta opción y este plugin no hará el enroque de campos.', 'whq-wcchp'),
+						'default' => 'yes',
 					),
 					'packaging_heuristic' => array(
 						'title'       => __('Método para cálculo de costo de envío (embalaje)', 'whq-wcchp'),
