@@ -19,6 +19,7 @@ var whq_wcchp_object_to_array;
 var whq_wcchp_chilexpress_noservice;
 var whq_wcchp_chilexpress_noservice_text;
 var whq_wcchp_region_shipping_value_for_chxp;
+var whq_wcchp_current_label_text;
 
 var whq_wcchp_states_map = {
 	'CL-TA': 'R1',
@@ -270,9 +271,51 @@ jQuery(document).ready(function( $ ) {
 			whq_wcchp_submit_check();
 		});
 	}
+
+	// Hide "Sin Servicio" when no address has been set
+	jQuery('body').on('update_checkout updated_checkout', function() {
+		whq_wcchp_current_label_text = jQuery('input[value^="chilexpress:"]').next('label').text();
+
+		if ( whq_wcchp_jsdebug ) {
+			console.log('[WCCHP] update_checkout triggered');
+		}
+
+		// Some shipping/billing field empty?
+		if ( jQuery('#ship-to-different-address-checkbox').is(':checked') ) {
+			if ( jQuery('#shipping_address_1').val() == '' || jQuery('#shipping_city').val() == '' || jQuery('#shipping_whq_city').val() == '' ) {
+				if ( whq_wcchp_jsdebug ) {
+					console.log('[WCCHP] empty shipping fields');
+				}
+
+				whq_wcchp_current_label_text = whq_wcchp_current_label_text.replace( /sin servicio/ig, 'Complete Dirección' );
+
+				jQuery('input[value^="chilexpress:"]').next('label').text( whq_wcchp_current_label_text );
+			}
+		} else {
+			if ( jQuery('#billing_address_1').val() == '' || jQuery('#billing_city').val() == '' || jQuery('#billing_whq_city').val() == '' ) {
+				if ( whq_wcchp_jsdebug ) {
+					console.log('[WCCHP] empty billing fields');
+				}
+
+				whq_wcchp_current_label_text = whq_wcchp_current_label_text.replace( /sin servicio/ig, 'Complete Dirección' );
+
+				jQuery('input[value^="chilexpress:"]').next('label').text( whq_wcchp_current_label_text );
+			}
+		}
+	});
 });
 
 function whq_wcchp_show_error_msg() {
+	if ( jQuery('#billing_country').val() !== 'CL' ) {
+		if ( whq_wcchp_jsdebug ) {
+			console.log('[WCCHP] whq_wcchp_show_error_msg, Chile not selected. Don\'t show error message.');
+		}
+
+		jQuery('.whq_wcchp_chilexpress_error').remove();
+
+		return false;
+	}
+
 	jQuery('form.woocommerce-checkout').prepend('<div class="whq_wcchp_chilexpress_error woocommerce-NoticeGroup woocommerce-NoticeGroup-checkout"><ul class="woocommerce-error"><li><strong>Chilexpress no se encuentra disponible en este momento. Por favor, selecciona otro método de envío (si existiese), o iténtalo nuevamente en unos minutos.</li></ul></div>');
 
 	//jQuery('html, body').animate({ scrollTop: 0 }, 'normal');
@@ -321,7 +364,8 @@ function whq_wcchp_checkout_chile_detected() {
 
 	whq_wcchp_checkout_inputs_replace();
 
-	/*if( whq_wcchp_jsdebug ) {
+	/*
+	if( whq_wcchp_jsdebug ) {
 		console.log('[WCCHP] requesting regions, action: whq_wcchp_regions_ajax');
 	}
 
@@ -469,7 +513,8 @@ function whq_wcchp_checkout_chile_detected() {
 				}
 			}
 		}
-	});*/
+	});
+	*/
 }
 
 function whq_wcchp_checkout_load_cities( region_code, billorship ) {
