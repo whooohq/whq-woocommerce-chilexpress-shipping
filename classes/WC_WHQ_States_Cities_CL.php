@@ -15,22 +15,43 @@ class WC_WHQ_States_Cities_CL {
 	* @return void
 	*/
 	public function __construct() {
+		/*
+		WC 6.0 default states for CL
+
+		CL-AI | Aisén del General Carlos Ibañez del Campo
+		CL-AN | Antofagasta
+		CL-AP | Arica y Parinacota
+		CL-AR | La Araucanía
+		CL-AT | Atacama
+		CL-BI | Biobío
+		CL-CO | Coquimbo
+		CL-LI | Libertador General Bernardo O'Higgins
+		CL-LL | Los Lagos
+		CL-LR | Los Ríos
+		CL-MA | Magallanes
+		CL-ML | Maule
+		CL-NB | Ñuble
+		CL-RM | Región Metropolitana de Santiago
+		CL-TA | Tarapacá
+		CL-VS | Valparaíso
+		*/
 		$this->states = [
-			'R15' => 'ARICA Y PARINACOTA',
-			'R1'  => 'TARAPACA',
-			'R2'  => 'ANTOFAGASTA',
-			'R3'  => 'ATACAMA',
-			'R4'  => 'COQUIMBO',
-			'R5'  => 'VALPARAISO',
-			'RM'  => 'METROPOLITANA DE SANTIAGO',
-			'R6'  => 'LIBERTADOR GRAL BERNARDO O HIGGINS',
-			'R7'  => 'MAULE',
-			'R8'  => 'BIOBIO',
-			'R9'  => 'ARAUCANIA',
-			'R14' => 'LOS RIOS',
-			'R10' => 'LOS LAGOS',
-			'R11' => 'AISEN DEL GRAL. C. IBANEZ DEL CAMPO',
-			'R12' => 'MAGALLANES Y LA ANTARTICA CHILENA',
+			'R15' => 'ARICA Y PARINACOTA', // CL-AP
+			'R1'  => 'TARAPACA', // CL-TA
+			'R2'  => 'ANTOFAGASTA', // CL-AN
+			'R3'  => 'ATACAMA', // CL-AT
+			'R4'  => 'COQUIMBO', // CL-CO
+			'R5'  => 'VALPARAISO', // CL-VS
+			'RM'  => 'METROPOLITANA DE SANTIAGO', // CL-RM
+			'R6'  => 'LIBERTADOR GRAL BERNARDO O HIGGINS', // CL-LI
+			'R7'  => 'MAULE', // CL-ML
+			'R8'  => 'BIOBIO', // CL-BI
+			'R9'  => 'ARAUCANIA', // CL-AR
+			'R14' => 'LOS RIOS', // CL-LR
+			'R10' => 'LOS LAGOS', // CL-LL
+			'R11' => 'AISEN DEL GRAL. C. IBANEZ DEL CAMPO', // CL-AI
+			'R12' => 'MAGALLANES Y LA ANTARTICA CHILENA', // CL-MA
+			'R16' => 'NUBLE', // CL-NB
 		];
 
 		//1, Admission

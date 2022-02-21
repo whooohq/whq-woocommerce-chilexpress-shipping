@@ -27,6 +27,8 @@ function whq_wcchp_incompatible_plugins_check() {
 		'woo-checkout-field-editor-pro/checkout-form-designer.php',
 		'comunas-de-chile-para-woocommerce/woocoomerce-comunas.php',
 		'calculo-de-despacho-via-starken-para-woocommerce/calculo-starken-woocommerce.php',
+		'masterbip-woocommerce-regiones-pesos-y-comunas-de-chile/masterbip-woocommerce-regiones-pesos-comunas-chile.php',
+		'regiones-de-chile-para-woocommerce/chile-woocommerce.php',
 	);
 
 	if ( current_user_can( 'activate_plugins' ) && ( ! wp_doing_ajax() ) ) {
@@ -50,7 +52,7 @@ function whq_wcchp_incompatible_plugins_check() {
 function whq_wcchp_incompatible_plugins() {
 	global $whq_wcchp_default;
 
-	//PHP minimum version
+	// PHP minimum version
 	if ( ! version_compare( PHP_VERSION, '5.6', '>=' ) OR version_compare( phpversion(), '5.6', '<' ) ) {
 		?>
 		<div class="notice error is-dismissible whq_wcchp_incompatible_plugins">
@@ -63,7 +65,7 @@ function whq_wcchp_incompatible_plugins() {
 		return;
 	}
 
-	if( empty( get_option( 'whq_wcchp_incompatible_plugins' ) ) ) {
+	if ( empty( get_option( 'whq_wcchp_incompatible_plugins' ) ) ) {
 	?>
 		<div class="notice error is-dismissible whq_wcchp_incompatible_plugins">
 			<p>Hemos detectado al menos un plugin con incompatibilidad (parcial o total) conocida, que puede afectar el funcionamiento del sistema de envíos de Chilexpress para WooCommerce.<br/>Por favor, <a href="https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/18">revisa el listado</a> antes de reportar un bug en el sistema de envíos a través de Chilexpress.</p>

@@ -1,4 +1,4 @@
-# WooCommerce Chilexpress Shipping
+# Chilexpress Shipping for WooCommerce
 
 ## Descripción
 Añade a Chilexpress como método de envío para WooCommerce.
@@ -23,7 +23,7 @@ Ver página oficial del plugin en [WordPress.org](https://wordpress.org/plugins/
 ## Preguntas Frecuentes
 
 ### ¿Puedo ver el plugin funcionando en vivo?
-Claro. Visita [WPChilexpress](http://wpchilexpress.whooohq.com).
+Claro. Visita [WPChilexpress](https://wpchilexpress.whooohq.com).
 
 
 ### Extensión SOAP requerida.
@@ -37,6 +37,11 @@ En el Checkout, el plugin necesita que primero se completen los campos de Regió
 
 Por otra parte, WooCommerce requiere que uno complete datos obligatorios (como nombre, apellido, fono, email, etc) dentro del Checkout, para recién delegar y realizar el cálculo del envío (independiente del plugin que usen para envíos). Por favor, prueba rellenando primero todos los campos dentro del Checkout, antes de reportar un bug.
 
+### No se muestran todas las ciudades dentro de una región.
+Ver [issue #128](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/128).
+
+### Plugins incompatibles
+Ver [issue #18](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/18).
 
 ### ¿Chilexpress caído? (Chilexpress no disponible)
 Primero que todo, para que un método de envío (en WC) pueda calcular el costo, WC necesita que se llenen los campos obligatorios del formulario del Checkout. Esto es: nombre, apellido, país, dirección, teléfono y correo electrónico, junto a los campos de región y localidad/ciudad (que son poblados automáticamente con los valores que Chilexpress requiere).
@@ -74,14 +79,17 @@ Por el contrario, si luego de todos esos pasos el inconveniente ya no se present
 Se agradece enormemente si, una vez que encuentres el conflicto que resuelve tu inconveniente, lo compartes con nosotros en un [nuevo issue en GitHub](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues). Así estarás ayudando a muchos otros que podrían encontrarse con tu problema a futuro.
 
 
-### ¿Errores? ¿Sugerencias? ¿Soporte?
+### Errores, Soporte, Sugerencias
 Reportar errores y enviar sugerencias directamente en [GitHub](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues), por favor.
 
-Todo el soporte del plugin se realiza directo en GitHub. No en los foros de WordPress. No por email. Por favor. Agradecemos la comprensión.
+Todo el soporte del plugin se realiza directo en GitHub. No en los foros de WordPress. No por email. No por teléfono. Por favor. Agradecemos la comprensión.
 
 Ayuda y aportes (vía Pull Requests, aceptando la [guía de contribución](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/blob/master/CONTRIBUTING.md)) son bienvenidos.
 
 ¡Gracias!
+
+### Changelog (registro de cambios)
+[Disponible acá](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/blob/master/CHANGELOG.md).
 
 ### Licencia
 [GPLv2 or later](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/blob/master/LICENSE)

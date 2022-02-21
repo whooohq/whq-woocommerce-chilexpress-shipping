@@ -1,35 +1,35 @@
 <?php
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	die();
 }
 
-function whq_wcchp_call_soap($ns, $url, $route, $method, $data = '') {
+function whq_wcchp_call_soap( $ns, $url, $route, $method, $data = '' ) {
 	global $whq_wcchp_default;
 
 	// SOAP login & password
 	$soap_login    = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_login' );
 	$soap_password = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_password' );
 
-	if( empty( $soap_login ) || false === $soap_login ) {
+	if ( empty( $soap_login ) || false === $soap_login ) {
 		$soap_login    = $whq_wcchp_default['chilexpress_soap_login'];
 	}
 
-	if( empty( $soap_password ) || false === $soap_password ) {
+	if ( empty( $soap_password ) || false === $soap_password ) {
 		$soap_password = $whq_wcchp_default['chilexpress_soap_pass'];
 	}
 
 	// Transient duration
-	if( ( $route == 'ConsultarRegiones' && $method == 'reqObtenerRegion' && $data == '' ) || ( $route == 'ConsultarCoberturas' && $method == 'reqObtenerCobertura' ) ) {
+	if ( ( $route == 'ConsultarRegiones' && $method == 'reqObtenerRegion' && $data == '' ) || ( $route == 'ConsultarCoberturas' && $method == 'reqObtenerCobertura' ) ) {
 		$locations_cache = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'locations_cache' );
 
-		if( false === $locations_cache ) {
+		if ( false === $locations_cache ) {
 			$locations_cache = 7; // Days
 		} else {
 			$locations_cache = absint( $locations_cache ); // Days
 		}
 
 		// No less than a week and more than two months
-		if( $locations_cache < 7 || $locations_cache > 60) {
+		if ( $locations_cache < 7 || $locations_cache > 60 ) {
 			$locations_cache = 7;
 		}
 
@@ -41,11 +41,14 @@ function whq_wcchp_call_soap($ns, $url, $route, $method, $data = '') {
 		$transient_duration = HOUR_IN_SECONDS; //One hour
 	}
 
+	// Version to String
+	$transient_version = trim( str_ireplace( '.', '', $whq_wcchp_default['plugin_version'] ) );
+	$transient_version = $transient_version . '_' . md5( json_encode( $data ) );
+
 	// Transient ID
-	$transient_id = 'whq_wcchp_' . $route . '_' . $method . '_' . md5( json_encode( $data ) ); // https://stackoverflow.com/a/7723730/920648
+	$transient_id = 'whq_wcchp_' . $route . '_' . $method . '_' . $transient_version; // https://stackoverflow.com/a/7723730/920648
 
 	if ( false === ( $result = get_transient( $transient_id ) ) ) {
-
 		try {
 			$client_options = array(
 				'login'    => $soap_login,
@@ -72,31 +75,30 @@ function whq_wcchp_call_soap($ns, $url, $route, $method, $data = '') {
 			}
 
 			//List of cities down
-			if( isset( $result->respObtenerCobertura->CodEstado ) && $result->respObtenerCobertura->CodEstado === -1 ) {
+			if ( isset( $result->respObtenerCobertura->CodEstado ) && $result->respObtenerCobertura->CodEstado === -1 ) {
 				return false;
 			}
 
-			if( ! empty( $result ) && false !== $result ) {
+			if ( ! empty( $result ) && false !== $result ) {
 				set_transient( $transient_id, $result, $transient_duration );
 			}
 
 			return $result;
-		} catch( SoapFault $e ) {
+		} catch ( SoapFault $e ) {
 			return false;
 		}
-
 	}
 
 	return $result;
 }
 
-function whq_wcchp_get_tarification($destination, $origin, $weight, $length, $width, $height) {
+function whq_wcchp_get_tarification( $destination, $origin, $weight, $length, $width, $height ) {
 	global $whq_wcchp_default;
 
 	$soap_api_enviroment = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_api_enviroment' );
 
 	if ( empty( $soap_api_enviroment ) ) {
-		$soap_api_enviroment = 'QA';
+		$soap_api_enviroment = 'PROD';
 	}
 
 	$url 	= $whq_wcchp_default['chilexpress_soap_wsdl_' . $soap_api_enviroment] . '/TarificarCourier?wsdl';
@@ -110,5 +112,5 @@ function whq_wcchp_get_tarification($destination, $origin, $weight, $length, $wi
 	'DimAnchoPza'                        => $width,
 	'DimLargoPza'                        => $height ];
 
-	return whq_wcchp_call_soap($ns, $url, $route, $method, $parameters);
+	return whq_wcchp_call_soap( $ns, $url, $route, $method, $parameters );
 }
