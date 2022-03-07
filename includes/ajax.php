@@ -11,7 +11,8 @@ add_action( 'wp_ajax_nopriv_whq_wcchp_regions_ajax', 'whq_wcchp_regions_ajax' );
 function whq_wcchp_regions_ajax() {
 	global $whq_wcchp_default;
 
-	$soap_api_enviroment = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_api_enviroment' );
+	//$soap_api_enviroment = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_api_enviroment' );
+	$soap_api_enviroment = whq_get_chilexpress_option( 'soap_api_enviroment' );
 
 	if ( empty( $soap_api_enviroment ) ) {
 		$soap_api_enviroment = 'QA';
@@ -51,7 +52,8 @@ add_action( 'wp_ajax_nopriv_whq_wcchp_cities_ajax', 'whq_wcchp_cities_ajax' );
 function whq_wcchp_cities_ajax() {
 	global $whq_wcchp_default;
 
-	$soap_api_enviroment = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_api_enviroment' );
+	//$soap_api_enviroment = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_api_enviroment' );
+	$soap_api_enviroment = whq_get_chilexpress_option( 'soap_api_enviroment' );
 
 	if ( empty( $soap_api_enviroment ) ) {
 		$soap_api_enviroment = 'QA';

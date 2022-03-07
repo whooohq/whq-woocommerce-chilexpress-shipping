@@ -10,7 +10,8 @@ add_action( 'wp_enqueue_scripts', 'whq_wcchp_enqueue_scripts' );
 function whq_wcchp_enqueue_scripts() {
 	global $whq_wcchp_default;
 
-	$whq_wcchp_active = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'enabled' );
+	//$whq_wcchp_active = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'enabled' );
+	$whq_wcchp_active = whq_get_chilexpress_option( 'enabled' );
 
 	if( false === $whq_wcchp_active ) {
 		$whq_wcchp_active == 'no';
@@ -41,7 +42,8 @@ add_action( 'admin_enqueue_scripts', 'whq_wcchp_admin_enqueue_scripts' );
 function whq_wcchp_admin_enqueue_scripts() {
 	global $whq_wcchp_default;
 
-	$whq_wcchp_active = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'enabled' );
+	//$whq_wcchp_active = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'enabled' );
+	$whq_wcchp_active = whq_get_chilexpress_option( 'enabled' );
 
 	if( false === $whq_wcchp_active ) {
 		$whq_wcchp_active == 'no';

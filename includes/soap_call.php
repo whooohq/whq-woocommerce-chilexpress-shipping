@@ -7,8 +7,10 @@ function whq_wcchp_call_soap( $ns, $url, $route, $method, $data = '' ) {
 	global $whq_wcchp_default;
 
 	// SOAP login & password
-	$soap_login    = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_login' );
-	$soap_password = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_password' );
+	//$soap_login    = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_login' );
+	$soap_login    = whq_get_chilexpress_option( 'soap_login' );
+	//$soap_password = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_password' );
+	$soap_password = whq_get_chilexpress_option( 'soap_password' );
 
 	if ( empty( $soap_login ) || false === $soap_login ) {
 		$soap_login    = $whq_wcchp_default['chilexpress_soap_login'];
@@ -20,7 +22,8 @@ function whq_wcchp_call_soap( $ns, $url, $route, $method, $data = '' ) {
 
 	// Transient duration
 	if ( ( $route == 'ConsultarRegiones' && $method == 'reqObtenerRegion' && $data == '' ) || ( $route == 'ConsultarCoberturas' && $method == 'reqObtenerCobertura' ) ) {
-		$locations_cache = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'locations_cache' );
+		//$locations_cache = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'locations_cache' );
+		$locations_cache = whq_get_chilexpress_option( 'locations_cache' );
 
 		if ( false === $locations_cache ) {
 			$locations_cache = 7; // Days
@@ -95,7 +98,8 @@ function whq_wcchp_call_soap( $ns, $url, $route, $method, $data = '' ) {
 function whq_wcchp_get_tarification( $destination, $origin, $weight, $length, $width, $height ) {
 	global $whq_wcchp_default;
 
-	$soap_api_enviroment = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_api_enviroment' );
+	//$soap_api_enviroment = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_api_enviroment' );
+	$soap_api_enviroment = whq_get_chilexpress_option( 'soap_api_enviroment' );
 
 	if ( empty( $soap_api_enviroment ) ) {
 		$soap_api_enviroment = 'PROD';

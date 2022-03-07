@@ -22,12 +22,12 @@ function whq_wcchp_init_class()
 			 * @access public
 			 * @return void
 			 */
-			public function __construct($instance_id = 0)
+			public function __construct( $instance_id = 0 )
 			{
 				$this->id                 = 'chilexpress';
-				$this->instance_id        = absint($instance_id);
-				$this->method_title       = __('Chilexpress', 'whq-wcchp');
-				$this->method_description = __('<p>Utiliza la API de Chilexpress para el cálculo automático de costos de envío. Sugerencias y reporte de errores en <a href="https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>', 'whq-wcchp');
+				$this->instance_id        = absint( $instance_id );
+				$this->method_title       = __( 'Chilexpress', 'whq-wcchp' );
+				$this->method_description = __( '<p>Utiliza la API de Chilexpress para el cálculo automático de costos de envío. Sugerencias y reporte de errores en <a href="https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>', 'whq-wcchp' );
 
 				// Load the settings.
 				//$this->init();
@@ -281,25 +281,25 @@ function whq_wcchp_init_class()
 				unset( $this->instance_form_fields['shipping_zones_support'] );*/
 			}
 
-			public static function get_chilexpress_option($option_name = '')
+			public static function get_chilexpress_option( $option_name = '' )
 			{
-				$options = get_option('woocommerce_chilexpress_settings');
+				$options = get_option( 'woocommerce_chilexpress_settings' );
 
 				// TODO: detect if shipping zones is enabled, and get only this option from the global array. Others needs to be called from the respective $instance_id
-				if ($option_name == 'shipping_zones_support') {
-					$options = get_option('woocommerce_chilexpress_settings');
+				if ( $option_name == 'shipping_zones_support' ) {
+					$options = get_option( 'woocommerce_chilexpress_settings' );
 				}
 
 				//https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/25
-				if (false === $options) {
+				if ( false === $options ) {
 					return false;
 				}
 
-				if (! is_array($options)) {
+				if ( ! is_array( $options ) ) {
 					return false;
 				}
 
-				if (false === array_key_exists($option_name, $options)) {
+				if ( false === array_key_exists( $option_name, $options ) ) {
 					return false;
 				}
 
@@ -1224,4 +1224,4 @@ function whq_wcchp_init_class()
 			}
 		}
 	}
-}
+} // whq_wcchp_init_class()
