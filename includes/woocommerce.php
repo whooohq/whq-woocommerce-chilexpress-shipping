@@ -1,5 +1,5 @@
 <?php
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	die();
 }
 
@@ -8,15 +8,7 @@ if (!defined('ABSPATH')) {
  */
 add_filter( 'woocommerce_shipping_methods', 'whq_wcchp_add_shipping_method' );
 function whq_wcchp_add_shipping_method( $methods ) {
-	$whq_wcchp_active = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'enabled' );
-
-	if ( false === $whq_wcchp_active ) {
-		$whq_wcchp_active == 'no';
-	}
-
-	if ( $whq_wcchp_active == 'yes' ) {
-		$methods['chilexpress'] = 'WC_WHQ_Chilexpress_Shipping';
-	}
+	$methods['chilexpress'] = 'WC_WHQ_Chilexpress_Shipping';
 
 	return $methods;
 }
@@ -26,7 +18,8 @@ function whq_wcchp_add_shipping_method( $methods ) {
  */
 add_action( 'woocommerce_init', 'whq_wcchp_cart_enable_city', 10, 1 );
 function whq_wcchp_cart_enable_city( $array ) {
-	$whq_wcchp_active = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'enabled' );
+	//$whq_wcchp_active = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'enabled' );
+	$whq_wcchp_active = whq_get_chilexpress_option( 'enabled' );
 
 	if ( false === $whq_wcchp_active ) {
 		$whq_wcchp_active == 'no';
@@ -42,7 +35,8 @@ function whq_wcchp_cart_enable_city( $array ) {
  */
 add_action( 'woocommerce_before_checkout_process', 'whq_wcchp_prevent_chilexpress_zerocost_order' );
 function whq_wcchp_prevent_chilexpress_zerocost_order() {
-	$whq_wcchp_active = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'enabled' );
+	//$whq_wcchp_active = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'enabled' );
+	$whq_wcchp_active = whq_get_chilexpress_option( 'enabled' );
 
 	if ( false === $whq_wcchp_active ) {
 		$whq_wcchp_active == 'no';
@@ -75,8 +69,10 @@ function whq_wcchp_prevent_chilexpress_zerocost_order() {
  */
 add_filter( 'woocommerce_checkout_fields', 'whq_wcchp_order_checkout_fields', 9999 );
 function whq_wcchp_order_checkout_fields( $fields ) {
-	$whq_wcchp_active = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'enabled' );
-	$statecity_switch = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'statecity_switch' );
+	//$whq_wcchp_active = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'enabled' );
+	$whq_wcchp_active = whq_get_chilexpress_option( 'enabled' );
+	//$statecity_switch = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'statecity_switch' );
+	$statecity_switch = whq_get_chilexpress_option( 'statecity_switch' );
 
 	if ( false === $whq_wcchp_active ) {
 		$whq_wcchp_active == 'no';
@@ -99,8 +95,10 @@ function whq_wcchp_order_checkout_fields( $fields ) {
 
 add_filter( 'woocommerce_default_address_fields', 'whq_wcchp_override_default_locale_fields', 9999 );
 function whq_wcchp_override_default_locale_fields( $fields ) {
-	$whq_wcchp_active = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'enabled' );
-	$statecity_switch = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'statecity_switch' );
+	//$whq_wcchp_active = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'enabled' );
+	$whq_wcchp_active = whq_get_chilexpress_option( 'enabled' );
+	//$statecity_switch = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'statecity_switch' );
+	$statecity_switch = whq_get_chilexpress_option( 'statecity_switch' );
 
 	if ( false === $whq_wcchp_active ) {
 		$whq_wcchp_active == 'no';

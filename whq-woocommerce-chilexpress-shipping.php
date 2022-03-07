@@ -3,7 +3,7 @@
  * Plugin Name: Chilexpress Shipping for WooCommerce
  * Plugin URI: https://github.com/whooohq/whq-woocommerce-chilexpress-shipping
  * Description: Método de envío por Chilexpress para WooCommerce, con sistema de cálculo de envíos automático utilizando la API de Chilexpress
- * Version: 1.4.45
+ * Version: 1.4.46
  * Author: Whooo & contributors
  * Author URI: https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/graphs/contributors
  * License: GPLv2 or later
@@ -40,7 +40,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 if ( true === $whq_wcchp_woocommerce_active ) {
 	$whq_wcchp_default = array(
-		'plugin_version'             => '1.4.45',
+		'plugin_version'             => '1.4.46',
 		'plugin_file'                => __FILE__,
 		'plugin_basename'            => plugin_basename( __FILE__ ),
 		'plugin_path'                => trailingslashit( plugin_dir_path( __FILE__ ) ),
@@ -64,10 +64,6 @@ if ( true === $whq_wcchp_woocommerce_active ) {
 		include_once $whq_wcchp_default['plugin_path'] . 'includes/wordpress.php';
 	}
 
-	if ( file_exists( $whq_wcchp_default['plugin_path'] . 'includes/woocommerce.php' ) ) {
-		include_once $whq_wcchp_default['plugin_path'] . 'includes/woocommerce.php';
-	}
-
 	if ( file_exists( $whq_wcchp_default['plugin_path'] . 'includes/scripts.php' ) ) {
 		include_once $whq_wcchp_default['plugin_path'] . 'includes/scripts.php';
 	}
@@ -87,8 +83,12 @@ if ( true === $whq_wcchp_woocommerce_active ) {
 	if ( file_exists( $whq_wcchp_default['plugin_path'] . 'classes/WC_WHQ_Chilexpress_Shipping.php' )) {
 		include_once $whq_wcchp_default['plugin_path'] . 'classes/WC_WHQ_Chilexpress_Shipping.php';
 
-		add_action( 'plugins_loaded', 'whq_wcchp_init_class' );
+		add_action( 'woocommerce_shipping_init', 'whq_wcchp_init_class' );
 		add_action( 'woocommerce_cart_calculate_fees', array( 'WC_WHQ_Chilexpress_Shipping', 'add_cart_fee' ) );
+	}
+
+	if ( file_exists( $whq_wcchp_default['plugin_path'] . 'includes/woocommerce.php' ) ) {
+		include_once $whq_wcchp_default['plugin_path'] . 'includes/woocommerce.php';
 	}
 }
 

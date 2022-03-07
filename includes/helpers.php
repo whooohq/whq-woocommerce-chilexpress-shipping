@@ -51,3 +51,30 @@ function whq_wcchp_rpship_calc_options() {
 
 	return $shipping_calc_enabled;
 }
+
+/**
+ * Get plugin options from WP's main options table
+ */
+function whq_get_chilexpress_option( $option_name = '' ) {
+	$options = get_option( 'woocommerce_chilexpress_settings' );
+
+	// TODO: detect if shipping zones is enabled, and get only this option from the global array. Others needs to be called from the respective $instance_id
+	if ( $option_name == 'shipping_zones_support' ) {
+		$options = get_option( 'woocommerce_chilexpress_settings' );
+	}
+
+	//https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/25
+	if ( false === $options ) {
+		return false;
+	}
+
+	if ( ! is_array( $options ) ) {
+		return false;
+	}
+
+	if ( false === array_key_exists( $option_name, $options ) ) {
+		return false;
+	}
+
+	return $options["$option_name"];
+}

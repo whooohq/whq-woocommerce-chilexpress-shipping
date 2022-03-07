@@ -1,9 +1,12 @@
 # Changelog
 
+### 1.4.46
+* Corregido problema de inicialización del plugin para instalaciones nuevas de WooCommerce, por cambio en API de WooCommerce desde la versión 6.0 en adelante. Gracias @NVMGFC por el aviso. Ver [issue #236](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/236).
+
 ### 1.4.45
 * Corregido problema por cambios en la API SOAP de Chilexpress. No hay forma de adelantarse a estos cambios, considerando que somos una solución no oficial. Lo siento, de verdad. Muchas gracias a la comunidad por el aviso (ver notas de versión 1.4.43), y la paciencia de todos ustedes.
 * Agregada opción para cambiar automáticamente el orden de los campos de Región y Ciudad. Ver opciones del plugin (WooCommerce > Shipping > Chilexpress).
-* Se evita mostrar "Sin Servicio" hasta que se completa dirección (billing o shipping). Ver [issue #219](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/179).
+* Se evita mostrar "Sin Servicio" hasta que se completa dirección (billing o shipping). Ver [issue #179](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/179).
 * Se evita mostrar mensaje de Chilexpress no disponible (cuando cae la API de ellos), si el país no es Chile. Ver [issue #166](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/166). Gracias @kikinangulo por el aviso.
 
 ### 1.4.43
