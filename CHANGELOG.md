@@ -1,6 +1,6 @@
 # Changelog
 
-### 1.5.0
+### 1.5.1
 * Experimental: posiblidad de seleccionar y usar la nueva API REST de Chilexpress. Se agradece enormemente el trabajo de @PatrickCaneloDigital implementando esta característica. Ver [issue #234](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/234).
 
 ### 1.4.46

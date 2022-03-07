@@ -78,3 +78,13 @@ function whq_get_chilexpress_option( $option_name = '' ) {
 
 	return $options["$option_name"];
 }
+
+function whq_is_soap_or_not() {
+	$soap_or_rest = whq_get_chilexpress_option( 'soap_or_rest' );
+
+	if ( $soap_or_rest == 'soap' ) {
+		return true;
+	} else {
+		return false;
+	}
+}

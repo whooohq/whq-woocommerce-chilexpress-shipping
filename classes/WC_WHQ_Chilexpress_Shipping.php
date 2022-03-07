@@ -354,7 +354,7 @@ function whq_wcchp_init_class()
 				}
 			}
 
-			public static function soap_or_rest() {
+			public static function is_soap_or_not() {
 				global $whq_wcchp_default;
 
 				$soap_or_rest = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_or_rest' );
@@ -476,7 +476,7 @@ function whq_wcchp_init_class()
 				//$cities = whq_wcchp_call_soap($ns, $url, $route, $method, $parameters);
 				$codregion = 99; //Bring it on!
 				$codtipocobertura = $type; //Admission
-				if ( WC_WHQ_Chilexpress_Shipping::soap_or_rest() ) {
+				if ( WC_WHQ_Chilexpress_Shipping::is_soap_or_not() ) {
 					$url = $whq_wcchp_default['chilexpress_soap_wsdl_' . $soap_api_enviroment] . '/GeoReferencia?wsdl';
 					$ns = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
 					$route = 'ConsultarCoberturas';
@@ -495,7 +495,7 @@ function whq_wcchp_init_class()
 					$cities       = new WC_WHQ_States_Cities_CL();
 					$cities_array = $cities->admission;
 				} else {
-					if ( WC_WHQ_Chilexpress_Shipping::soap_or_rest() ) {
+					if ( WC_WHQ_Chilexpress_Shipping::is_soap_or_not() ) {
 						$cities = $cities->respObtenerCobertura->Coberturas;
 
 						whq_wcchp_array_move($cities, 2, 86);

@@ -18,7 +18,7 @@ function whq_wcchp_regions_ajax() {
 		$soap_api_enviroment = 'QA';
 	}
 
-	if ( WC_WHQ_Chilexpress_Shipping::soap_or_rest() ) {
+	if ( whq_is_soap_or_not() ) {
 		$url 	= $whq_wcchp_default['chilexpress_soap_wsdl_' . $soap_api_enviroment] . '/GeoReferencia?wsdl';
 		$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
 		$route  = 'ConsultarRegiones';
@@ -62,7 +62,7 @@ function whq_wcchp_cities_ajax() {
 	$codregion        = sanitize_text_field( $_POST['codregion'] );
 	$codtipocobertura = (int) absint( $_POST['codtipocobertura'] );
 
-	if ( WC_WHQ_Chilexpress_Shipping::soap_or_rest() ) {
+	if ( whq_is_soap_or_not() ) {
 		$url    = $whq_wcchp_default['chilexpress_soap_wsdl_' . $soap_api_enviroment] . '/GeoReferencia?wsdl';
 		$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
 		$route  = 'ConsultarCoberturas';
