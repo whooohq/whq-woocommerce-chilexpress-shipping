@@ -9,7 +9,7 @@ Demo público del plugin disponible en [WPChilexpress](http://wpchilexpress.whoo
 
 Demostración en video:
 
-[![Demostración](https://img.youtube.com/vi/JaLp1wmtKlk/0.jpg)](https://www.youtube.com/watch?v=JaLp1wmtKlk)
+[![Demostración](https://img.youtube.com/vi/JaLp1wmtKlk/0.jpg)](https://www.youtube.com/watch?v=VknqtulQ0OE)
 
 El soporte al plugin se realiza directamente en [GitHub](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues).
 
