@@ -39,9 +39,9 @@ function whq_wcchp_call_soap( $ns, $url, $route, $method, $data = '' ) {
 		// Days to hours
 		$locations_cache = $locations_cache * 24;
 
-		$transient_duration = 60 * 60 * $locations_cache; //Hours
+		$transient_duration = 60 * 60 * $locations_cache; // Hours
 	} else {
-		$transient_duration = HOUR_IN_SECONDS; //One hour
+		$transient_duration = HOUR_IN_SECONDS; // One hour
 	}
 
 	// Version to String

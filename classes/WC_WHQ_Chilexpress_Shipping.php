@@ -237,34 +237,34 @@ function whq_wcchp_init_class()
 						'desc_tip'    => false,
 					),
 					'soap_or_rest' => array(
-						'title'       => __('Ocupar nueva API Rest o antigua API SOAP', 'whq-wcchp'),
+						'title'       => __('Tipo de API a utilizar', 'whq-wcchp'),
 						'type'        => 'select',
 						'class'   => 'wc-enhanced-select',
-						'description' => __('La nueva API Rest requiere de API Keys generados en https://developers.wschilexpress.com, la antigua API Soap no los requiere', 'whq-wcchp'),
+						'description' => __('La nueva API REST requiere de llaves generados en https://developers.wschilexpress.com y su uso en producción es de pago. La antigua API SOAP no requiere una llave específica, y es gratuita (mientras Chilexpress no decida cortar su uso). <strong>No podrás usar la API REST si no tienes un contrato (de pago) con Chilexpress</strong>.', 'whq-wcchp'),
 						'options'     => array(
-								'rest' => 'Ocupar la NUEVA api REST (Solo para usuarios con contrato Chilexpress. generar APi Keys en https://developers.wschilexpress.com)',
-								'soap' => 'Ocupar la ANTIGUA api SOAP (Para usuarios sin contrato Chilexpress',
+								'rest' => 'API REST',
+								'soap' => 'API SOAP',
 						),
 						'default'     => 'soap',
 					),
 					'rest_api_key_cobertura' => array(
-						'title'       => __('Chilexpress REST API Key Cobertura', 'whq-wcchp'),
+						'title'       => __('API REST, llave Cobertura', 'whq-wcchp'),
 						'type'        => 'text', // https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/45
-						'description' => __('(Mandatorio) Contraseña a utilizar en las llamadas a la API Cobertura de Chilexpress. Segun ambiente es API Key productiva o de desarrollo', 'whq-wcchp'),
+						'description' => __('(Mandatorio si se usa REST) Llave a utilizar en las llamadas a la API Cobertura de Chilexpress. Según ambiente a utilizar (productiva o desarrollo).', 'whq-wcchp'),
 						'default'     => '',
 						'desc_tip'    => false,
 					),
 					'rest_api_key_tarificacion_qa' => array(
-						'title'       => __('DESARROLLO: Chilexpress REST API Key Cotizador ', 'whq-wcchp'),
+						'title'       => __('API REST, llave Cotizador (desarrollo)', 'whq-wcchp'),
 						'type'        => 'text', // https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/45
-						'description' => __('(Mandatorio) Contraseña a utilizar en las llamadas a la API Tarificacion de Chilexpress (ambiente desarrollo). Segun ambiente es API Key productiva o de desarrollo', 'whq-wcchp'),
+						'description' => __('(Mandatorio si se usa REST) Llave a utilizar en las llamadas a la API Tarificación de Chilexpress. Según ambiente a utilizar (productiva o desarrollo).', 'whq-wcchp'),
 						'default'     => '',
 						'desc_tip'    => false,
 					),
 					'rest_api_key_tarificacion_prod' => array(
-						'title'       => __('PRODUCCION. Chilexpress REST API Key Cotizador', 'whq-wcchp'),
+						'title'       => __('API REST, llave Cotizador (producción)', 'whq-wcchp'),
 						'type'        => 'text', // https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/45
-						'description' => __('(Mandatorio) Contraseña a utilizar en las llamadas a la API Tarificacion de Chilexpress (ambiente productivo). Segun ambiente es API Key productiva o de desarrollo', 'whq-wcchp'),
+						'description' => __('(Mandatorio si se usa REST) Llave a utilizar en las llamadas a la API Tarificación de Chilexpress. Según ambiente a utilizar (productiva o desarrollo).', 'whq-wcchp'),
 						'default'     => '',
 						'desc_tip'    => false,
 					),
@@ -306,60 +306,60 @@ function whq_wcchp_init_class()
 				return $options["$option_name"];
 			}
 
-			public function is_QA(){
+			public function is_QA() {
 				global $whq_wcchp_default;
 
-				$soap_api_enviroment = $this->get_chilexpress_option('soap_api_enviroment');
+				$soap_api_enviroment = $this->get_chilexpress_option( 'soap_api_enviroment' );
 
-				if ($soap_api_enviroment == 'QA'){
+				if ( $soap_api_enviroment == 'QA' ) {
 					return true;
 				} else {
 					return false;
 				}
 			}
 
-			public function is_prod(){
+			public function is_prod() {
 				global $whq_wcchp_default;
 
-				$soap_api_enviroment = $this->get_chilexpress_option('soap_api_enviroment');
+				$soap_api_enviroment = $this->get_chilexpress_option( 'soap_api_enviroment' );
 
-				if ($soap_api_enviroment == 'PROD'){
+				if ( $soap_api_enviroment == 'PROD' ) {
 					return true;
 				} else {
 					return false;
 				}
 			}
 
-			public function is_rest(){
+			public function is_rest() {
 				global $whq_wcchp_default;
 
-				$soap_or_rest = $this->get_chilexpress_option('soap_or_rest');
+				$soap_or_rest = $this->get_chilexpress_option( 'soap_or_rest' );
 
-				if ($soap_or_rest == 'rest'){
+				if ( $soap_or_rest == 'rest' ) {
 					return true;
 				} else {
 					return false;
 				}
 			}
 
-			public function is_soap(){
+			public function is_soap() {
 				global $whq_wcchp_default;
 
-				$soap_or_rest = $this->get_chilexpress_option('soap_or_rest');
+				$soap_or_rest = $this->get_chilexpress_option( 'soap_or_rest' );
 
-				if ($soap_or_rest == 'soap'){
+				if ( $soap_or_rest == 'soap' ) {
 					return true;
 				} else {
 					return false;
 				}
 			}
 
-			public static function is_soap_static(){
+			public static function soap_or_rest() {
 				global $whq_wcchp_default;
 
-				$soap_or_rest = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option('soap_or_rest');
+				$soap_or_rest = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'soap_or_rest' );
 
-				if ($soap_or_rest == 'soap'){
+				if ( $soap_or_rest == 'soap' ) {
 					return true;
 				} else {
 					return false;
@@ -411,10 +411,11 @@ function whq_wcchp_init_class()
 				//$cities = whq_wcchp_call_soap($ns, $url, $route, $method, $parameters);
 				$codregion = 99; //Bring it on!
 				$codtipocobertura = $type; //Admission
-				if ($this->is_soap()) {
-					$url = $whq_wcchp_default['chilexpress_soap_wsdl_' . $soap_api_enviroment] . '/GeoReferencia?wsdl';
-					$ns = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
-					$route = 'ConsultarCoberturas';
+
+				if ( $this->is_soap() ) {
+					$url    = $whq_wcchp_default['chilexpress_soap_wsdl_' . $soap_api_enviroment] . '/GeoReferencia?wsdl';
+					$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
+					$route  = 'ConsultarCoberturas';
 					$method = 'reqObtenerCobertura';
 
 					$parameters = ['CodRegion' => $codregion,
@@ -430,7 +431,7 @@ function whq_wcchp_init_class()
 					$cities       = new WC_WHQ_States_Cities_CL();
 					$cities_array = $cities->admission;
 				} else {
-					if ($this->is_soap()) {
+					if ( $this->is_soap() ) {
 						$cities = $cities->respObtenerCobertura->Coberturas;
 
 						whq_wcchp_array_move($cities, 2, 86);
@@ -475,7 +476,7 @@ function whq_wcchp_init_class()
 				//$cities = whq_wcchp_call_soap($ns, $url, $route, $method, $parameters);
 				$codregion = 99; //Bring it on!
 				$codtipocobertura = $type; //Admission
-				if (WC_WHQ_Chilexpress_Shipping::is_soap_static()) {
+				if ( WC_WHQ_Chilexpress_Shipping::soap_or_rest() ) {
 					$url = $whq_wcchp_default['chilexpress_soap_wsdl_' . $soap_api_enviroment] . '/GeoReferencia?wsdl';
 					$ns = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
 					$route = 'ConsultarCoberturas';
@@ -494,7 +495,7 @@ function whq_wcchp_init_class()
 					$cities       = new WC_WHQ_States_Cities_CL();
 					$cities_array = $cities->admission;
 				} else {
-					if (WC_WHQ_Chilexpress_Shipping::is_soap_static()) {
+					if ( WC_WHQ_Chilexpress_Shipping::soap_or_rest() ) {
 						$cities = $cities->respObtenerCobertura->Coberturas;
 
 						whq_wcchp_array_move($cities, 2, 86);

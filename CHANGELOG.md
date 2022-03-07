@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.5.0
+* Experimental: posiblidad de seleccionar y usar la nueva API REST de Chilexpress. Se agradece enormemente el trabajo de @PatrickCaneloDigital implementando esta característica. Ver [issue #234](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/234).
+
 ### 1.4.46
 * Corregido problema de inicialización del plugin para instalaciones nuevas de WooCommerce, por cambio en API de WooCommerce desde la versión 6.0 en adelante. Gracias @NVMGFC por el aviso. Ver [issue #236](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/236).
 
