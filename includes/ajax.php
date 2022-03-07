@@ -18,19 +18,23 @@ function whq_wcchp_regions_ajax() {
 		$soap_api_enviroment = 'QA';
 	}
 
-	$url 	= $whq_wcchp_default['chilexpress_soap_wsdl_' . $soap_api_enviroment] . '/GeoReferencia?wsdl';
-	$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
-	$route  = 'ConsultarRegiones';
-	$method = 'reqObtenerRegion';
+	if (WC_WHQ_Chilexpress_Shipping::is_soap_static()){
+		$url 	= $whq_wcchp_default['chilexpress_soap_wsdl_' . $soap_api_enviroment] . '/GeoReferencia?wsdl';
+		$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
+		$route  = 'ConsultarRegiones';
+		$method = 'reqObtenerRegion';
 
-	$regions = whq_wcchp_call_soap($ns, $url, $route, $method);
+		$regions = whq_wcchp_call_soap($ns, $url, $route, $method);
 
-	if( false !== $regions ) {
-		$regions = $regions->respObtenerRegion->Regiones;
+		if( false !== $regions ) {
+			$regions = $regions->respObtenerRegion->Regiones;
 
-		whq_wcchp_array_move( $regions, 14, 0 );
-		whq_wcchp_array_move( $regions, 10, 6 );
-		whq_wcchp_array_move( $regions, 14, 11 );
+			whq_wcchp_array_move( $regions, 14, 0 );
+			whq_wcchp_array_move( $regions, 10, 6 );
+			whq_wcchp_array_move( $regions, 14, 11 );
+		}
+	} else {
+		$regions = whq_wcchp_get_rest_regions();
 	}
 
 	if( false === $regions || NULL === $regions ) {
@@ -55,26 +59,30 @@ function whq_wcchp_cities_ajax() {
 		$soap_api_enviroment = 'QA';
 	}
 
-	$url    = $whq_wcchp_default['chilexpress_soap_wsdl_' . $soap_api_enviroment] . '/GeoReferencia?wsdl';
-	$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
-	$route  = 'ConsultarCoberturas';
-	$method = 'reqObtenerCobertura';
-
 	$codregion        = sanitize_text_field( $_POST['codregion'] );
 	$codtipocobertura = (int) absint( $_POST['codtipocobertura'] );
-	$parameters       = [ 'CodRegion'        => $codregion,
-						  'CodTipoCobertura' => $codtipocobertura ];
+	if (WC_WHQ_Chilexpress_Shipping::is_soap_static()){
+		$url    = $whq_wcchp_default['chilexpress_soap_wsdl_' . $soap_api_enviroment] . '/GeoReferencia?wsdl';
+		$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
+		$route  = 'ConsultarCoberturas';
+		$method = 'reqObtenerCobertura';
 
-	$cities = whq_wcchp_call_soap($ns, $url, $route, $method, $parameters);
-	//$cities = false; //Simulate API down
+		$parameters       = [ 'CodRegion'        => $codregion,
+							  'CodTipoCobertura' => $codtipocobertura ];
 
-	if( false !== $cities ) {
-		$cities = $cities->respObtenerCobertura->Coberturas;
+		$cities = whq_wcchp_call_soap($ns, $url, $route, $method, $parameters);
+		//$cities = false; //Simulate API down
 
-		whq_wcchp_array_move($cities, 2, 86);
+		if( false !== $cities ) {
+			$cities = $cities->respObtenerCobertura->Coberturas;
+
+			whq_wcchp_array_move($cities, 2, 86);
+		}
+	} else {
+		$cities = whq_wcchp_get_rest_comunas($codregion, $codtipocobertura);
 	}
 
-	if( false === $cities || NULL === $cities ) {
+	if( false === $cities || NULL === $cities || (is_string($cities) && substr($cities,0,5) == 'Error') ) {
 		$cities = new WC_WHQ_States_Cities_CL();
 
 		if( false !== $cities && ! empty( $cities ) ) {
