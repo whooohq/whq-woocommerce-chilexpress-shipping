@@ -642,9 +642,9 @@ function whq_wcchp_init_class()
 			 * calculate_shipping_by_shortest_side method
 			 * @param  array  $package Package data
 			 */
-			public function calculate_shipping_by_shortest_side($package = array())
+			public function calculate_shipping_by_shortest_side( $package = array() )
 			{
-				write_log('Calculate shipping by adding shortest sides');
+				write_log( 'Calculate shipping by adding shortest sides' );
 
 				$weight                   = 0;
 				$length                   = 0;
@@ -653,35 +653,35 @@ function whq_wcchp_init_class()
 				$product_package          = array();
 				$product_package[0]       = array( 0, 0, 0, 0 );
 				$product_package_number   = 1;
-				$product_package_quantity = count($package['contents']);
+				$product_package_quantity = count( $package['contents'] );
 
 				// Generates a package for each product in the cart.
-				foreach ($package['contents'] as $item_id => $values) {
+				foreach ( $package['contents'] as $item_id => $values ) {
 					$_product = $values['data'];
 
 					// Calculates the final package weight.
-					$weight = round($weight + $_product->get_weight() * $values['quantity'], 3);
+					$weight = round( $weight + $_product->get_weight() * $values['quantity'], 3 );
 
 					// Generates the package for the current product.
-					$length = round($_product->get_length(), 1);
-					$width  = round($_product->get_width(), 1);
-					$height = round($_product->get_height(), 1);
+					$length = round( $_product->get_length(), 1 );
+					$width  = round( $_product->get_width(), 1 );
+					$height = round( $_product->get_height(), 1 );
 
-					$product_package[$product_package_number] = array(0, $length, $width, $height);
+					$product_package[ $product_package_number ] = array( 0, $length, $width, $height );
 
 					// Orders the product package dimensions in ascending order.
-					sort($product_package[$product_package_number]);
+					sort( $product_package[ $product_package_number ] );
 
 					// Multiply the smallest product package dimension by the quantity to obtain the final product package.
-					$product_package[$product_package_number][1] = round($product_package[$product_package_number][1] * $values['quantity'], 1);
+					$product_package[$product_package_number][1] = round( $product_package[$product_package_number][1] * $values['quantity'], 1 );
 
 					// Reorders the product package dimensions in ascendind order.
-					sort($product_package[$product_package_number]);
+					sort( $product_package[$product_package_number] );
 
 					// Calculates the volume of each product package.
 					$product_package[$product_package_number][0] = $product_package[$product_package_number][1] * $product_package[$product_package_number][2] * $product_package[$product_package_number][3];
 
-					write_log("PrdPkgInit({$product_package_number}): Vl={$product_package[$product_package_number][0]} Al={$product_package[$product_package_number][1]} An={$product_package[$product_package_number][2]} La={$product_package[$product_package_number][3]}");
+					write_log( "PrdPkgInit({$product_package_number}): Vl={$product_package[$product_package_number][0]} Al={$product_package[$product_package_number][1]} An={$product_package[$product_package_number][2]} La={$product_package[$product_package_number][3]}" );
 
 					$product_package_number++;
 				}
@@ -689,9 +689,9 @@ function whq_wcchp_init_class()
 				// Orders the product packages by volume descending.
 				$auxiliary_array = array( 0, 0, 0, 0 );
 
-				for ($i=1; $i < $product_package_quantity; $i++) {
-					for ($product_package_number=1; $product_package_number < $product_package_quantity; $product_package_number++) {
-						if ($product_package[$product_package_number][0] < $product_package[$product_package_number+1][0]) {
+				for ( $i=1; $i < $product_package_quantity; $i++ ) {
+					for ( $product_package_number=1; $product_package_number < $product_package_quantity; $product_package_number++ ) {
+						if ( $product_package[$product_package_number][0] < $product_package[$product_package_number+1][0] ) {
 							$auxiliary_array = $product_package[$product_package_number];
 
 							$product_package[$product_package_number] = $product_package[$product_package_number+1];
@@ -702,33 +702,33 @@ function whq_wcchp_init_class()
 				}
 
 				// To save an extra loop, we check WP_DEBUG first
-				if (true === WP_DEBUG) {
-					for ($i=1; $i <= $product_package_quantity; $i++) {
-						write_log("PrdPkgVol({$i}): Vl={$product_package[$i][0]} Al={$product_package[$i][1]} An={$product_package[$i][2]} La={$product_package[$i][3]}");
+				if ( true === WP_DEBUG ) {
+					for ( $i=1; $i <= $product_package_quantity; $i++ ) {
+						write_log( "PrdPkgVol({$i}): Vl={$product_package[$i][0]} Al={$product_package[$i][1]} An={$product_package[$i][2]} La={$product_package[$i][3]}" );
 					}
 				}
 
 				// If the product packages are more than 3 then makes a new package for every two product packages to improve the final package.
-				if ($product_package_quantity > 3) {
+				if ( $product_package_quantity > 3 ) {
 					//if the product packages are not even then generates a new empty package.
-					if (($product_package_quantity % 2) == 1) {
+					if ( ( $product_package_quantity % 2 ) == 1 ) {
 						$product_package_quantity++;
-						$product_package[$product_package_quantity] = array(0, 0, 0, 0);
+						$product_package[$product_package_quantity] = array( 0, 0, 0, 0 );
 					}
 
 					// Joins every two product packages in a new single product package.
 					$product_package_number = 1;
 
-					for ($i=1; $i < $product_package_quantity; $i+=2) {
+					for ( $i=1; $i < $product_package_quantity; $i+=2 ) {
 						$product_package[$product_package_number][1] = $product_package[$i][1] + $product_package[$i+1][1];
 
-						if ($product_package[$i][2] > $product_package[$i+1][2]) {
+						if ( $product_package[$i][2] > $product_package[$i+1][2] ) {
 							$product_package[$product_package_number][2] = $product_package[$i][2];
 						} else {
 							$product_package[$product_package_number][2] = $product_package[$i+1][2];
 						}
 
-						if ($product_package[$i][3] > $product_package[$i+1][3]) {
+						if ( $product_package[$i][3] > $product_package[$i+1][3] ) {
 							$product_package[$product_package_number][3] = $product_package[$i][3];
 						} else {
 							$product_package[$product_package_number][3] = $product_package[$i+1][3];
@@ -737,7 +737,7 @@ function whq_wcchp_init_class()
 						$product_package[$product_package_number][0] = 0;
 
 						// Reorders the new product package dimensions in ascendind order.
-						sort($product_package[$product_package_number]);
+						sort( $product_package[$product_package_number] );
 
 						// Calculates the volume for the new product package.
 						$product_package[$product_package_number][0] = $product_package[$product_package_number][1] * $product_package[$product_package_number][2] * $product_package[$product_package_number][3];
@@ -748,54 +748,54 @@ function whq_wcchp_init_class()
 					$product_package_quantity = $product_package_quantity / 2;
 
 					// To save an extra loop, we check WP_DEBUG first
-					if (true === WP_DEBUG) {
-						for ($i=1; $i <= $product_package_quantity; $i++) {
-							write_log("PrdPkgRed({$i}): Vl={$product_package[$i][0]} Al={$product_package[$i][1]} An={$product_package[$i][2]} La={$product_package[$i][3]}");
+					if ( true === WP_DEBUG ) {
+						for ( $i=1; $i <= $product_package_quantity; $i++ ) {
+							write_log( "PrdPkgRed({$i}): Vl={$product_package[$i][0]} Al={$product_package[$i][1]} An={$product_package[$i][2]} La={$product_package[$i][3]}" );
 						}
 					}
 				}
 
 				// Generates the final package.
-				for ($product_package_number=1; $product_package_number <= $product_package_quantity; $product_package_number++) {
+				for ( $product_package_number=1; $product_package_number <= $product_package_quantity; $product_package_number++ ) {
 					$product_package[0][1] = $product_package[0][1] + $product_package[$product_package_number][1];
 
-					if ($product_package[$product_package_number][2] > $product_package[0][2]) {
+					if ( $product_package[$product_package_number][2] > $product_package[0][2] ) {
 						$product_package[0][2] = $product_package[$product_package_number][2];
 					}
 
-					if ($product_package[$product_package_number][3] > $product_package[0][3]) {
+					if ( $product_package[$product_package_number][3] > $product_package[0][3] ) {
 						$product_package[0][3] = $product_package[$product_package_number][3];
 					}
 
 					// For each product package included reorders the resulting package by the smallest dimension.
-					sort($product_package[0]);
+					sort( $product_package[0] );
 
-					write_log("FinPkgPrdPkg({$product_package_number}): Al={$product_package[0][1]} An={$product_package[0][2]} La={$product_package[0][3]}");
+					write_log( "FinPkgPrdPkg({$product_package_number}): Al={$product_package[0][1]} An={$product_package[0][2]} La={$product_package[0][3]}" );
 				}
 
 				/*
 				Reorders the final package by the largest dimension, adds X cm on each dimension (for the wrapping/box),
 				Rounds up each value and trasfers the values to the final variables.
 				*/
-				sort($product_package[0]);
+				sort( $product_package[0] );
 
-				$extra_wrapper = (int) absint($this->extra_wrapper);
+				$extra_wrapper = (int) absint( $this->extra_wrapper );
 
-				if (empty($extra_wrapper) || false === $extra_wrapper || $extra_wrapper < 0) {
+				if ( empty( $extra_wrapper ) || false === $extra_wrapper || $extra_wrapper < 0 ) {
 					$extra_wrapper = 0; // No valid value returned?
 				}
 
-				$length = ceil($product_package[0][3] + $extra_wrapper);
-				$width  = ceil($product_package[0][2] + $extra_wrapper);
-				$height = ceil($product_package[0][1] + $extra_wrapper);
+				$length = ceil( $product_package[0][3] + $extra_wrapper );
+				$width  = ceil( $product_package[0][2] + $extra_wrapper );
+				$height = ceil( $product_package[0][1] + $extra_wrapper );
 				$product_package[0][0] = $length * $width * $height;
 
-				write_log("FinalPackage: Kg={$weight} Vl={$product_package[0][0]} La={$length} An={$width} Al={$height}");
+				write_log( "FinalPackage: Kg={$weight} Vl={$product_package[0][0]} La={$length} An={$width} Al={$height}" );
 
 				// Add rate to WC
-				$rates = $this->get_tarification($package, $weight, $length, $width, $height);
+				$rates = $this->get_tarification( $package, $weight, $length, $width, $height );
 
-				$this->add_rates($rates);
+				$this->add_rates( $rates );
 			}
 
 			/**
