@@ -402,17 +402,18 @@ function whq_wcchp_init_class()
 			{
 				global $whq_wcchp_default;
 
-				$soap_api_enviroment = $this->get_chilexpress_option('soap_api_enviroment');
+				$soap_api_enviroment = $this->get_chilexpress_option( 'soap_api_enviroment' );
 
-				if (empty($soap_api_enviroment)) {
+				if ( empty( $soap_api_enviroment ) ) {
 					$soap_api_enviroment = 'QA';
 				}
 
 				//$cities = whq_wcchp_call_soap($ns, $url, $route, $method, $parameters);
-				$codregion = 99; //Bring it on!
+				$codregion        = 99; //Bring it on!
 				$codtipocobertura = $type; //Admission
 
 				if ( $this->is_soap() ) {
+					// API SOAP
 					$url    = $whq_wcchp_default['chilexpress_soap_wsdl_' . $soap_api_enviroment] . '/GeoReferencia?wsdl';
 					$ns     = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
 					$route  = 'ConsultarCoberturas';
@@ -423,35 +424,37 @@ function whq_wcchp_init_class()
 
 					$cities = whq_wcchp_call_soap($ns, $url, $route, $method, $parameters);
 				} else {
+					// API REST
 					$cities = whq_wcchp_get_rest_comunas($codregion,$codtipocobertura);
 				}
 
-				if (false === $cities || substr($cities,0,5) == 'Error') {
+				$cities_array = [];
+
+				if ( ! is_object( $cities ) || false === $cities || ( is_string( $cities ) && substr( $cities, 0, 5 ) == 'Error' ) ) {
 					// Retrieve the hard-coded ones
 					$cities       = new WC_WHQ_States_Cities_CL();
 					$cities_array = $cities->admission;
 				} else {
 					if ( $this->is_soap() ) {
+						// API SOAP
 						$cities = $cities->respObtenerCobertura->Coberturas;
 
-						whq_wcchp_array_move($cities, 2, 86);
+						whq_wcchp_array_move( $cities, 2, 86 );
 
-						if (is_array($cities)) {
+						if ( is_array( $cities ) ) {
 							$cities_array = array();
-							foreach ($cities as $city) {
+							foreach ( $cities as $city ) {
 								$cities_array["$city->CodComuna"] = $city->GlsComuna;
 							}
 						} else {
-							$cities_array = array($cities);
+							$cities_array = array( $cities );
 						}
 					} else {
-						$cities = $cities;
-
-						foreach($cities as $comuna){
+						// API REST
+						foreach( $cities as $comuna ) {
 							$cities_array[$comuna->countyCode] = $comuna->coverageName . ' ('.$comuna->countyName.')';
 						}
 					}
-
 				}
 
 				//$cities = false; //Simulate API down
@@ -477,6 +480,7 @@ function whq_wcchp_init_class()
 				$codregion = 99; //Bring it on!
 				$codtipocobertura = $type; //Admission
 				if ( WC_WHQ_Chilexpress_Shipping::is_soap_or_not() ) {
+					// API SOAP
 					$url = $whq_wcchp_default['chilexpress_soap_wsdl_' . $soap_api_enviroment] . '/GeoReferencia?wsdl';
 					$ns = $whq_wcchp_default['chilexpress_url'] . '/CorpGR/';
 					$route = 'ConsultarCoberturas';
@@ -487,31 +491,33 @@ function whq_wcchp_init_class()
 
 					$cities = whq_wcchp_call_soap($ns, $url, $route, $method, $parameters);
 				} else {
+					// API REST
 					$cities = whq_wcchp_get_rest_comunas($codregion,$codtipocobertura);
 				}
 
-				if (false === $cities || substr($cities,0,5) == 'Error') {
+				if ( ! is_object( $cities ) || false === $cities || ( is_string( $cities ) && substr( $cities, 0, 5 ) == 'Error' ) ) {
 					// Retrieve the hard-coded ones
 					$cities       = new WC_WHQ_States_Cities_CL();
 					$cities_array = $cities->admission;
 				} else {
 					if ( WC_WHQ_Chilexpress_Shipping::is_soap_or_not() ) {
+						// API SOAP
 						$cities = $cities->respObtenerCobertura->Coberturas;
 
-						whq_wcchp_array_move($cities, 2, 86);
+						whq_wcchp_array_move( $cities, 2, 86 );
 
-						if (is_array($cities)) {
+						if ( is_array( $cities ) ) {
 							$cities_array = array();
-							foreach ($cities as $city) {
+
+							foreach ( $cities as $city ) {
 								$cities_array["$city->CodComuna"] = $city->GlsComuna;
 							}
 						} else {
-							$cities_array = array($cities);
+							$cities_array = array( $cities );
 						}
 					} else {
-						$cities = $cities;
-
-						foreach($cities as $comuna){
+						// API REST
+						foreach( $cities as $comuna ) {
 							$cities_array[$comuna->countyCode] = $comuna->coverageName . ' ('.$comuna->countyName.')';
 						}
 					}
@@ -927,13 +933,13 @@ function whq_wcchp_init_class()
 					$city = $package['destination']['city'];
 				}
 
-				if (!is_null($city)) {
+				if ( ! is_null( $city ) ) {
 					// Transform city name to city code
 					$cities = $this->get_cities();
 
-					if (is_array($cities)) {
-						foreach ($cities as $CodComuna => $GlsComuna) {
-							if ($city == $GlsComuna || substr($GlsComuna,0,strlen($city)) == $city) {
+					if ( is_array( $cities ) ) {
+						foreach ( $cities as $CodComuna => $GlsComuna ) {
+							if ( $city == $GlsComuna || substr( $GlsComuna, 0, strlen( $city ) ) == $city ) {
 								$city = $CodComuna;
 								break;
 							}
@@ -941,24 +947,29 @@ function whq_wcchp_init_class()
 					}
 
 					//$chp_cost = whq_wcchp_get_tarification($city, $this->shipping_origin, $weight, $length, $width, $height);
-					if ($this->is_soap()){
+					if ( $this->is_soap() ) {
+						// API SOAP
 						$chp_cost = whq_wcchp_get_tarification( $city, $this->shipping_origin, $weight, $length, $width, $height );
 					} else {
+						// API REST
 						$chp_cost = whq_wcchp_get_rest_tarification( $city, $this->shipping_origin, $weight, $length, $width, $height );
 					}
-					if (false === $chp_cost) {
+
+					if ( false === $chp_cost ) {
 						$chp_estimated = 0;
 					} else {
-						if ($this->is_soap()){
+						if ( $this->is_soap() ) {
+							// API SOAP
 							$chp_estimated = $chp_cost->respValorizarCourier->Servicios;
 						} else {
+							// API REST
 							$chp_estimated = $chp_cost;
 						}
 					}
 
 					$service_value = 0;
 
-					if (is_array($chp_estimated)) {
+					if ( is_array( $chp_estimated ) ) {
 						// ULTRA RÁPIDO:1
 						// OVERNIGHT:2
 						// DÍA HÁBIL SIGUIENTE:3
@@ -967,57 +978,57 @@ function whq_wcchp_init_class()
 
 						$supported_shipments_types = $this->get_chilexpress_option('shipments_types');
 
-						if (false === $supported_shipments_types) {
+						if ( false === $supported_shipments_types ) {
 							// We need some default values in case the admin hasn't configured this yet
 							$supported_shipments_types = array( 2, 3, 4, 5 );
 						}
 
 						// https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/164
-						if (!is_array($supported_shipments_types)) {
+						if ( ! is_array( $supported_shipments_types ) ) {
 							$supported_shipments_types = array( $supported_shipments_types );
 						}
 
-						write_log($supported_shipments_types);
+						write_log( $supported_shipments_types );
 
 						$rates = array();
 
-						foreach ($chp_estimated as $key => $value) {
-							if ($this->is_soap()){
-								$codigoServicio=$value->CodServicio;
-								$glosaServicio= $value->GlsServicio;
-								$valorServicio= $value->ValorServicio;
+						foreach ( $chp_estimated as $key => $value ) {
+							if ( $this->is_soap() ) {
+								$codigoServicio = $value->CodServicio;
+								$glosaServicio  = $value->GlsServicio;
+								$valorServicio  = $value->ValorServicio;
 							} else {
-								$codigoServicio=$value->serviceTypeCode;
-								$glosaServicio= $value->serviceDescription;
-								$valorServicio= $value->serviceValue;
+								$codigoServicio = $value->serviceTypeCode;
+								$glosaServicio  = $value->serviceDescription;
+								$valorServicio  = $value->serviceValue;
 							}
 
-							write_log('Servicio: ' . '[' . $codigoServicio . ']' . $glosaServicio . ', valor ' . $valorServicio);
+							write_log( 'Servicio: ' . '[' . $codigoServicio . ']' . $glosaServicio . ', valor ' . $valorServicio );
 
 							// We don't wan't to support other kind of shippments for now
-							if ($codigoServicio >= 6) {
+							if ( $codigoServicio >= 6 ) {
 								continue;
 							}
 
 							// Not supported by this store?
-							if (! in_array($codigoServicio, $supported_shipments_types)) {
-								write_log('[' . $codigoServicio . ']' . $glosaServicio . ' Not supported by the Store!');
+							if ( ! in_array( $codigoServicio, $supported_shipments_types ) ) {
+								write_log( '[' . $codigoServicio . ']' . $glosaServicio . ' Not supported by the Store!' );
 								continue;
 							} else {
-								write_log('[' . $codigoServicio . ']' . $glosaServicio . ' is supported');
+								write_log( '[' . $codigoServicio . ']' . $glosaServicio . ' is supported' );
 							}
 
 							$service_id    = $this->id . ':' . $codigoServicio;
 							$service_label = $this->title . ' (' . $glosaServicio . ')';
 							$service_value = $valorServicio;
 
-							if (false === $service_value || empty($service_value)) {
+							if ( false === $service_value || empty( $service_value ) ) {
 								$service_id    = $this->id . '_0';
 								$service_value = 0;
 							}
 
 							// Add extra fixed_packing_price cost per item
-							if ( !empty( $this->fixed_packing_price ) && $this->fixed_packing_price > 0 ) {
+							if ( ! empty( $this->fixed_packing_price ) && $this->fixed_packing_price > 0 ) {
 								$service_value = $service_value + absint( $this->fixed_packing_price );
 							}
 
@@ -1031,38 +1042,40 @@ function whq_wcchp_init_class()
 
 						// Return outside the conditional (for filtering)
 					} else {
-						if ($this->is_soap()) {
-							if (false === $chp_cost) {
-								$service_id = $this->id . ':0';
+						if ( $this->is_soap() ) {
+							// API SOAP
+
+							if ( false === $chp_cost ) {
+								$service_id    = $this->id . ':0';
 								$service_label = $this->title . ' (No Disponible)';
 								$service_value = 0;
 							} else {
-								$service_id = $this->id . ':' . $chp_cost->respValorizarCourier->Servicios->CodServicio;
+								$service_id    = $this->id . ':' . $chp_cost->respValorizarCourier->Servicios->CodServicio;
 								$service_label = $this->title . ' (' . $chp_cost->respValorizarCourier->Servicios->GlsServicio . ')';
 								$service_value = $chp_cost->respValorizarCourier->Servicios->ValorServicio;
 							}
 
 							// Add extra fixed_packing_price cost per item
-							if (!empty($this->fixed_packing_price) && $this->fixed_packing_price > 0) {
-								$service_value = $service_value + absint($this->fixed_packing_price);
+							if ( ! empty( $this->fixed_packing_price ) && $this->fixed_packing_price > 0 ) {
+								$service_value = $service_value + absint( $this->fixed_packing_price );
 							}
 
 							// Subtract fixed_packing_price cost per item
-							if (!empty($this->fixed_packing_price) && $this->fixed_packing_price < 0) {
+							if ( ! empty( $this->fixed_packing_price ) && $this->fixed_packing_price < 0 ) {
 								$service_value = $service_value - $this->fixed_packing_price;
 							}
 
 							$rates = array();
 
-							$rates[$service_id] = array($service_id, $service_label, $service_value);
+							$rates[ $service_id ] = array( $service_id, $service_label, $service_value );
 
 							// Return outside the conditional (for filtering)
 						}
 					}
 
-					$rates = apply_filters('whq_wcchp_tarification_rates', $rates);
+					$rates = apply_filters( 'whq_wcchp_tarification_rates', $rates );
 
-					write_log($rates);
+					write_log( $rates );
 
 					return $rates;
 				}
@@ -1072,9 +1085,9 @@ function whq_wcchp_init_class()
 			 * add_rates method, add the calculated rate to WC's cart and checkout
 			 * @param integer $rates Rate to add
 			 */
-			private function add_rates($rates)
+			private function add_rates( $rates )
 			{
-				foreach ($rates as $key => $values) {
+				foreach ( $rates as $key => $values ) {
 					// 2019:
 					// ULTRA RÁPIDO:1
 					// OVERNIGHT:2
