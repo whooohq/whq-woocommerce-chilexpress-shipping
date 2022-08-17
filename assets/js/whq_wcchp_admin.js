@@ -1,5 +1,16 @@
 jQuery(document).ready(function( $ ) {
-	//Dismiss admin notice
+	// EOL Notice
+	jQuery('body').on( 'click', '.whq-chilexpress-eolnotice > .notice-dismiss', function() {
+		var data = {
+				action: 'whq_wcchp_eolnotice_dismiss',
+		};
+
+		jQuery.post( ajaxurl, data, function() {
+			// Nothing to do
+		});
+	});
+
+	// Dismiss admin notice
 	jQuery('body').on( 'click', '.whq_wcchp_incompatible_plugins > .notice-dismiss', function() {
 		jQuery.ajax({
 			url: ajaxurl,
@@ -11,7 +22,7 @@ jQuery(document).ready(function( $ ) {
 		});
 	});
 
-	//Disable Shipping Zones support
+	// Disable Shipping Zones support
 	jQuery('body').on( 'click', '.wcchp_disable_shipping_zones_support', function() {
 		var instance_id = $(this).attr('href');
 		instance_id = instance_id.replace('#', '');
@@ -31,7 +42,7 @@ jQuery(document).ready(function( $ ) {
 		});
 	});
 
-	//Shippment type select height
+	// Shippment type select height
 	if( $('#woocommerce_chilexpress_shipments_types').length ) {
 		//$('#woocommerce_chilexpress_shipments_types').selectWoo(); //See admin_options() method
 	}

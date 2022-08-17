@@ -1,5 +1,8 @@
 # Chilexpress Shipping for WooCommerce
 
+## Información Importante
+Lamentamos informar el término del soporte de este plugin. [Leer más](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/discussions/248).
+
 ## Descripción
 Añade a Chilexpress como método de envío para WooCommerce.
 
@@ -9,7 +12,7 @@ Demo público del plugin disponible en [WPChilexpress](http://wpchilexpress.whoo
 
 Demostración en video:
 
-[![Demostración](https://img.youtube.com/vi/JaLp1wmtKlk/0.jpg)](https://www.youtube.com/watch?v=VknqtulQ0OE)
+[![Demostración](https://img.youtube.com/vi/VknqtulQ0OE/0.jpg)](https://www.youtube.com/watch?v=VknqtulQ0OE)
 
 El soporte al plugin se realiza directamente en [GitHub](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues).
 

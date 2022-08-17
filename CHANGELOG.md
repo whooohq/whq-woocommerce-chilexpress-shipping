@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.6.0
+* Fin al soporte del plugin. [Leer más](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/discussions/248).
+
 ### 1.5.2
 * Experimental: posiblidad de seleccionar y usar la nueva API REST de Chilexpress. Se agradece enormemente el trabajo de @PatrickCaneloDigital implementando esta característica. Ver [issue #234](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/234).
 * Corregidos PHP Warnings recurrentes. Gracias @linkini por el avios. Ver [issue #240](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/issues/240).

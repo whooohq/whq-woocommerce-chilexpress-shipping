@@ -45,11 +45,11 @@ function whq_wcchp_admin_enqueue_scripts() {
 	//$whq_wcchp_active = WC_WHQ_Chilexpress_Shipping::get_chilexpress_option( 'enabled' );
 	$whq_wcchp_active = whq_get_chilexpress_option( 'enabled' );
 
-	if( false === $whq_wcchp_active ) {
+	if ( false === $whq_wcchp_active ) {
 		$whq_wcchp_active == 'no';
 	}
 
-	if( $whq_wcchp_active == 'yes' ) {
+	if ( $whq_wcchp_active == 'yes' ) {
 		wp_enqueue_script( 'whq_wcchp_admin', $whq_wcchp_default['plugin_url'] . 'assets/js/whq_wcchp_admin.js', array( 'jquery' ), $whq_wcchp_default['plugin_version'], true );
 	}
 }
