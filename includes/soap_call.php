@@ -105,6 +105,11 @@ function whq_wcchp_get_tarification( $destination, $origin, $weight, $length, $w
 		$soap_api_enviroment = 'PROD';
 	}
 
+	// If $soap_api_enviroment isn't PROD or QA, then set it to PROD
+	if ( $soap_api_enviroment != 'PROD' && $soap_api_enviroment != 'QA' ) {
+		$soap_api_enviroment = 'PROD';
+	}
+
 	$url 	= $whq_wcchp_default['chilexpress_soap_wsdl_' . $soap_api_enviroment] . '/TarificarCourier?wsdl';
 	$ns     = $whq_wcchp_default['chilexpress_url'] . '/TarificaCourier/';
 	$route  = 'TarificarCourier';

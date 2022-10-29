@@ -160,7 +160,7 @@ function whq_wcchp_get_rest_comunas( $codRegion, $codTipoCobertura ) {
 	}
 }
 
-function whq_wcchp_get_rest_tarification( $destination, $origin, $weight, $length, $width, $height ){
+function whq_wcchp_get_rest_tarification( $destination, $origin, $weight, $length, $width, $height ) {
 	global $whq_wcchp_default;
 
 	write_log( '>>>> Entering REST whq_wcchp_get_rest_tarification' );
@@ -189,6 +189,7 @@ function whq_wcchp_get_rest_tarification( $destination, $origin, $weight, $lengt
 
 	if ( false === ( $result = get_transient( $transient_id ) ) ) {
 		$curl = curl_init();
+
 		$body ='{
 		"originCountyCode": "'.$origin.'",
 		"destinationCountyCode": "'.$destination.'",
@@ -203,11 +204,13 @@ function whq_wcchp_get_rest_tarification( $destination, $origin, $weight, $lengt
 		"declaredWorth":0,
 		"deliveryTime": 0
 		}';
+
 		$headers = array(
 			'Content-type: application/json',
 			'Cache-Control: no-cache',
 			'Ocp-Apim-Subscription-Key: '.$rest_api_key_tarificacion,
 		);
+
 		curl_setopt( $curl, CURLOPT_POST, 1 );
 		curl_setopt( $curl, CURLOPT_POSTFIELDS, $body );
 		curl_setopt( $curl, CURLOPT_HTTPHEADER, $headers );

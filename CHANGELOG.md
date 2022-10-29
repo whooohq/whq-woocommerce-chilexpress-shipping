@@ -1,6 +1,6 @@
 # Changelog
 
-### 1.6.0
+### 1.6.1
 * Fin al soporte del plugin. [Leer más](https://github.com/whooohq/whq-woocommerce-chilexpress-shipping/discussions/248).
 
 ### 1.5.2
