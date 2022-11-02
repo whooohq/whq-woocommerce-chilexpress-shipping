@@ -65,8 +65,8 @@ function whq_wcchp_debug() {
 	$shipping_calc_enabled = whq_wcchp_rpship_calc_options();
 	?>
 		<script type="text/javascript">
-			var whq_wcchp_jsdebug                  = '<?php echo $jsdebug; ?>';
-			var whq_wcchp_shipping_calc_on_product = '<?php echo $shipping_calc_enabled; ?>';
+			var whq_wcchp_jsdebug                  = '<?php echo esc_js( $jsdebug ); ?>';
+			var whq_wcchp_shipping_calc_on_product = '<?php echo esc_js( $shipping_calc_enabled ); ?>';
 		</script>
 	<?php
 }
